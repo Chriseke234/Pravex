@@ -3,17 +3,11 @@ import { NextResponse, type NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 import { locales, defaultLocale } from './config/i18n'
 
-const intlMiddleware = createIntlMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: 'never'
-})
-
 export async function middleware(request: NextRequest) {
-  // 1. Get the intl response
-  const response = intlMiddleware(request)
+  // Start with a standard response
+  const response = NextResponse.next()
 
-  // 2. Initialize Supabase client, modifying the intl response
+  // Initialize Supabase client
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -26,8 +20,6 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
-          // Note: We don't overwrite the entire response here.
-          // We update the existing intl response with new cookies.
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           )
@@ -36,23 +28,18 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // 3. Refresh session if needed
+  // Refresh session if needed
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // 4. Protected routes logic
-  // Since we use next-intl with locale prefixes (default), 
-  // we check if the pathname contains the segment.
+  // Protected routes logic
   const path = request.nextUrl.pathname
-  const isDashboardPage = path.includes('/dashboard')
-  const isAdminPage = path.includes('/admin')
-  const isLoginPage = path.includes('/login') || path.includes('/signup')
+  const isDashboardPage = path.startsWith('/dashboard')
+  const isAdminPage = path.startsWith('/admin')
+  const isLoginPage = path.startsWith('/login') || path.startsWith('/signup')
 
   if ((isDashboardPage || isAdminPage) && !user) {
-    // Redirect to login, preserving the current URL as a redirect parameter if needed
-    // Note: We should probably use a localized URL here if needed, 
-    // but next-intl middleware handles root redirects.
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
