@@ -1,0 +1,40 @@
+{
+  "hero": {
+    "title": "Institutional-Grade Digital Asset Ecosystem",
+    "subtitle": "Access premium liquidity, secure custody, and real-time analytics designed for the elite circle of institutional investors.",
+    "primaryCTA": {
+      "text": "Open Account",
+      "href": "/signup"
+    },
+    "secondaryCTA": {
+      "text": "View Markets",
+      "href": "/markets"
+    },
+    "stats": [
+      { "label": "Trading Volume", "value": "$50B+" },
+      { "label": "Active Institutions", "value": "2,500+" },
+      { "label": "Countries Supported", "value": "120+" }
+    ]
+  },
+  "features": {
+    "title": "Built for High-Performance Finance",
+    "description": "Our platform combines speed, security, and scalability to meet the demands of enterprise-level operations.",
+    "items": [
+      {
+        "icon": "Shield",
+        "title": "Security First",
+        "description": "MPC-CMP technology with institutional-grade cold storage and multi-sig authorization."
+      },
+      {
+        "icon": "Zap",
+        "title": "Ultra-Low Latency",
+        "description": "Proprietary matching engine capable of processing 1M+ transactions per second."
+      },
+      {
+        "icon": "TrendingUp",
+        "title": "Advanced Analytics",
+        "description": "Real-time portfolio attribution, risk modeling, and market sentiment analysis."
+      }
+    ]
+  }
+}
