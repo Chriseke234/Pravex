@@ -9,18 +9,25 @@ export default function Homepage() {
       <FeaturesGrid data={homepageData.features} />
       
       {/* Trust Section */}
-      <section className="py-20 border-y border-white/5 bg-primary/[0.02]">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-20 border-y border-white/5 bg-primary/[0.02] overflow-hidden">
+        <div className="w-full">
           <p className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-12">
             Trusted by World-Class Institutions
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-12 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-            {/* Logos would go here - Using placeholder text for now as per rules I should use generate_image but for logos text is cleaner */}
-            <span className="text-2xl font-bold">BINANCE</span>
-            <span className="text-2xl font-bold">COINBASE</span>
-            <span className="text-2xl font-bold">KRAKEN</span>
-            <span className="text-2xl font-bold">GEMINI</span>
-            <span className="text-2xl font-bold">FIREBLOCKS</span>
+          
+          <div className="flex overflow-hidden group">
+            {[...Array(2)].map((_, i) => (
+              <div 
+                key={i} 
+                className="flex animate-marquee shrink-0 items-center justify-around gap-16 px-8 min-w-full opacity-50 grayscale group-hover:grayscale-0 transition-all duration-500"
+              >
+                <span className="text-2xl font-bold tracking-widest">BINANCE</span>
+                <span className="text-2xl font-bold tracking-widest">COINBASE</span>
+                <span className="text-2xl font-bold tracking-widest">KRAKEN</span>
+                <span className="text-2xl font-bold tracking-widest">GEMINI</span>
+                <span className="text-2xl font-bold tracking-widest">FIREBLOCKS</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
