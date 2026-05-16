@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { GlassCard } from "@/components/shared/glass-card";
-import { TrendingUp, TrendingDown, Search, Filter } from "lucide-react";
+import { TrendingUp, TrendingDown, Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -22,23 +22,68 @@ const ASSETS = [
   { name: "Aptos", symbol: "APT", price: "$9.40", change: "+4.5%", volume: "$180M", mcap: "$4.2B", up: true },
   { name: "Arbitrum", symbol: "ARB", price: "$1.15", change: "-3.1%", volume: "$320M", mcap: "$3.1B", up: false },
   { name: "Optimism", symbol: "OP", price: "$2.85", change: "+2.1%", volume: "$150M", mcap: "$2.9B", up: true },
+  { name: "Sui", symbol: "SUI", price: "$1.45", change: "+5.1%", volume: "$200M", mcap: "$1.8B", up: true },
+  { name: "Injective", symbol: "INJ", price: "$28.30", change: "-4.2%", volume: "$110M", mcap: "$2.6B", up: false },
+  { name: "Stellar", symbol: "XLM", price: "$0.11", change: "+0.5%", volume: "$85M", mcap: "$3.1B", up: true },
+  { name: "Filecoin", symbol: "FIL", price: "$5.80", change: "-1.8%", volume: "$130M", mcap: "$2.9B", up: false },
+  { name: "Internet Computer", symbol: "ICP", price: "$12.40", change: "+3.6%", volume: "$170M", mcap: "$5.7B", up: true },
+  { name: "VeChain", symbol: "VET", price: "$0.03", change: "+1.2%", volume: "$45M", mcap: "$2.4B", up: true },
+  { name: "Maker", symbol: "MKR", price: "$2,850.00", change: "-2.5%", volume: "$80M", mcap: "$2.6B", up: false },
+  { name: "Render", symbol: "RNDR", price: "$10.20", change: "+8.4%", volume: "$300M", mcap: "$3.9B", up: true },
+  { name: "The Graph", symbol: "GRT", price: "$0.32", change: "-0.9%", volume: "$65M", mcap: "$3.0B", up: false },
+  { name: "Lido DAO", symbol: "LDO", price: "$2.15", change: "+1.7%", volume: "$90M", mcap: "$1.9B", up: true },
 ];
 
 export function AssetTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [filterMode, setFilterMode] = useState<"all" | "gainers" | "losers">("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const cycleFilter = () => {
+    if (filterMode === "all") setFilterMode("gainers");
+    else if (filterMode === "gainers") setFilterMode("losers");
+    else setFilterMode("all");
+    setCurrentPage(1); // Reset page on filter
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset page on search
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setCurrentPage(1); // Reset page on tab change
+  };
 
   const filteredAssets = ASSETS.filter(asset => {
     const matchesSearch = asset.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           asset.symbol.toLowerCase().includes(searchQuery.toLowerCase());
     
+    let matchesTab = true;
     if (activeTab === "watchlist") {
-      // Mock watchlist behavior: just show top 3 for demo
-      return matchesSearch && ["BTC", "ETH", "SOL"].includes(asset.symbol);
+      // Mock watchlist behavior: just show top a few for demo
+      matchesTab = ["BTC", "ETH", "SOL", "AVAX", "LINK"].includes(asset.symbol);
     }
     
-    return matchesSearch;
+    let matchesFilter = true;
+    if (filterMode === "gainers") matchesFilter = asset.up === true;
+    if (filterMode === "losers") matchesFilter = asset.up === false;
+
+    return matchesSearch && matchesTab && matchesFilter;
   });
+
+  const totalPages = Math.ceil(filteredAssets.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedAssets = filteredAssets.slice(startIndex, startIndex + itemsPerPage);
+
+  const filterLabels = {
+    all: "Filter",
+    gainers: "Gainers",
+    losers: "Losers"
+  };
 
   return (
     <div className="space-y-6">
@@ -49,20 +94,25 @@ export function AssetTable() {
             type="text" 
             placeholder="Search assets..." 
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearch}
             className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-white"
           />
         </div>
         <div className="flex gap-2 w-full md:w-auto">
-          <Button variant="glass" size="sm" className="flex-1 md:flex-none">
+          <Button 
+            variant={filterMode === "all" ? "glass" : "default"} 
+            size="sm" 
+            className="flex-1 md:flex-none min-w-[100px]"
+            onClick={cycleFilter}
+          >
             <Filter className="w-4 h-4 mr-2" />
-            Filter
+            {filterLabels[filterMode]}
           </Button>
           <Button 
             variant={activeTab === "all" ? "default" : "glass"} 
             size="sm" 
             className="flex-1 md:flex-none"
-            onClick={() => setActiveTab("all")}
+            onClick={() => handleTabChange("all")}
           >
             All Assets
           </Button>
@@ -70,7 +120,7 @@ export function AssetTable() {
             variant={activeTab === "watchlist" ? "default" : "glass"} 
             size="sm" 
             className="flex-1 md:flex-none"
-            onClick={() => setActiveTab("watchlist")}
+            onClick={() => handleTabChange("watchlist")}
           >
             Watchlist
           </Button>
@@ -91,8 +141,8 @@ export function AssetTable() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {filteredAssets.length > 0 ? (
-                filteredAssets.map((asset) => (
+              {paginatedAssets.length > 0 ? (
+                paginatedAssets.map((asset) => (
                   <tr key={asset.symbol} className="hover:bg-white/[0.02] transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -133,6 +183,35 @@ export function AssetTable() {
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-white/5 bg-white/[0.01] flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">
+              Showing <span className="font-medium text-white">{startIndex + 1}</span> to <span className="font-medium text-white">{Math.min(startIndex + itemsPerPage, filteredAssets.length)}</span> of <span className="font-medium text-white">{filteredAssets.length}</span> assets
+            </span>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="gap-1"
+              >
+                <ChevronLeft className="w-4 h-4" /> Previous
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="gap-1"
+              >
+                Next <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </GlassCard>
     </div>
   );
