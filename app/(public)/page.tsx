@@ -1,6 +1,7 @@
 import { Hero } from "@/features/cms/components/hero"
 import { FeaturesGrid } from "@/features/cms/components/features-grid"
 import homepageData from "@/data/cms/homepage.json"
+import { FadeIn } from "@/components/animations/fade-in"
 
 export default function Homepage() {
   return (
@@ -35,21 +36,23 @@ export default function Homepage() {
       {/* CTA Section */}
       <section className="py-24">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="glassmorphism p-12 rounded-3xl space-y-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] -z-10" />
-            <h2 className="text-4xl font-bold">Ready to Elevate Your Portfolio?</h2>
-            <p className="text-lg text-muted-foreground">
-              Join thousands of institutional investors who trust Pavex for their digital asset infrastructure.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Link href="/signup">
-                <Button variant="premium" size="lg">Open Account</Button>
-              </Link>
-              <Link href="/contact">
-                <Button variant="outline" size="lg">Contact Sales</Button>
-              </Link>
+          <FadeIn direction="up">
+            <div className="glassmorphism p-12 rounded-3xl space-y-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] -z-10" />
+              <h2 className="text-4xl font-bold">Ready to Elevate Your Portfolio?</h2>
+              <p className="text-lg text-muted-foreground">
+                Join thousands of institutional investors who trust Pavex for their digital asset infrastructure.
+              </p>
+              <div className="flex justify-center gap-4">
+                <Link href="/signup">
+                  <Button variant="premium" size="lg">Open Account</Button>
+                </Link>
+                <Link href="/contact">
+                  <Button variant="outline" size="lg">Contact Sales</Button>
+                </Link>
+              </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </section>
     </div>
