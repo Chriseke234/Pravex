@@ -2,6 +2,7 @@ import { MarketTicker } from "@/features/markets/components/market-ticker";
 import { AssetTable } from "@/features/markets/components/asset-table";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart3, Globe, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 
 export default function MarketsPage() {
   return (
@@ -56,9 +57,11 @@ export default function MarketsPage() {
               <h2 className="text-2xl font-bold">Market Assets</h2>
               <p className="text-muted-foreground">Live pricing and performance metrics.</p>
             </div>
-            <Button variant="link" className="text-primary gap-2">
-              Learn about our methodology <ArrowRight className="w-4 h-4" />
-            </Button>
+            <Link href="/academy">
+              <Button variant="link" className="text-primary gap-2">
+                Learn about our methodology <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
           </div>
           <AssetTable />
         </section>
