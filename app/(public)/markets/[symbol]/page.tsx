@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowUpRight, ArrowDownRight, Info } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import Image from "next/image";
+import { AssetIcon } from "@/components/shared/asset-icon";
 
 export default function AssetDetailPage() {
   const params = useParams();
@@ -64,15 +64,7 @@ export default function AssetDetailPage() {
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="flex items-center gap-4">
-              {asset.logo ? (
-                <div className="w-16 h-16 rounded-full bg-white/10 overflow-hidden relative shrink-0">
-                  <Image src={asset.logo} alt={asset.symbol} fill className="object-cover" />
-                </div>
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-2xl font-bold text-white shrink-0">
-                  {asset.symbol[0]}
-                </div>
-              )}
+              <AssetIcon src={asset.logo} symbol={asset.symbol} name={asset.name} size="xl" />
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold text-white flex items-center gap-3">
                   {asset.name} 

@@ -6,7 +6,7 @@ import { Asset } from "@/app/api/markets/route";
 import { Button } from "@/components/ui/button";
 import { Search, Star, TrendingUp, ChevronLeft, ChevronRight, X, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { AssetIcon } from "@/components/shared/asset-icon";
 
 // Sparkline Component using raw SVG
 function Sparkline({ data, colorClass }: { data: number[], colorClass: string }) {
@@ -262,15 +262,7 @@ export function MarketsClient() {
                     </td>
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
-                        {asset.logo ? (
-                          <div className="w-8 h-8 rounded-full bg-white/10 overflow-hidden relative shrink-0">
-                            <Image src={asset.logo} alt={asset.symbol} fill sizes="32px" className="object-cover" />
-                          </div>
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white shrink-0">
-                            {asset.symbol[0]}
-                          </div>
-                        )}
+                        <AssetIcon src={asset.logo} symbol={asset.symbol} name={asset.name} size="md" />
                         <div>
                           <div className="font-bold text-white">{asset.name}</div>
                           <div className="text-xs text-gray-500 uppercase flex items-center gap-2">
@@ -353,15 +345,7 @@ export function MarketsClient() {
           <div className="relative w-full max-w-4xl bg-[#0A1628] border border-white/10 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
             <div className="flex items-center justify-between p-6 border-b border-white/5">
               <div className="flex items-center gap-4">
-                {selectedAsset.logo ? (
-                  <div className="w-12 h-12 rounded-full bg-white/10 overflow-hidden relative shrink-0">
-                    <Image src={selectedAsset.logo} alt={selectedAsset.symbol} fill className="object-cover" />
-                  </div>
-                ) : (
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-xl font-bold text-white shrink-0">
-                    {selectedAsset.symbol[0]}
-                  </div>
-                )}
+                <AssetIcon src={selectedAsset.logo} symbol={selectedAsset.symbol} name={selectedAsset.name} size="lg" />
                 <div>
                   <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                     {selectedAsset.name} 

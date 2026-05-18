@@ -35,7 +35,7 @@ export default function PublicLayout({
             <h4 className="font-bold">Platform</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/markets" className="hover:text-primary">Markets</Link></li>
-              <li><Link href="/pricing" className="hover:text-primary">Pricing</Link></li>
+              <li><Link href="/investment-plans" className="hover:text-primary">Investment Plans</Link></li>
               <li><Link href="/security" className="hover:text-primary">Security</Link></li>
             </ul>
           </div>

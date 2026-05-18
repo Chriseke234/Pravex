@@ -1,32 +1,32 @@
 import { Metadata } from "next";
-import { PricingCards } from "@/features/cms/components/pricing-cards";
+import { InvestmentCards } from "@/features/cms/components/investment-cards";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, HelpCircle, ShieldCheck, Globe } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Institutional Pricing Plans",
-  description: "Transparent, scalable pricing infrastructure for digital institutions.",
+  title: "Institutional Investment Plans",
+  description: "Transparent, scalable investment plans for digital institutions.",
   alternates: {
-    canonical: "/pricing",
+    canonical: "/investment-plans",
   },
 };
 
-export default function PricingPage() {
+export default function InvestmentPlansPage() {
   return (
     <div className="min-h-screen pt-32 pb-24">
       <main className="max-w-7xl mx-auto px-4 space-y-24">
         {/* Header */}
         <section className="text-center space-y-6 max-w-3xl mx-auto">
           <h1 className="text-6xl font-bold tracking-tight text-gradient">
-            Transparent Pricing for <br /> Digital Institutions
+            Transparent Investment Plans for <br /> Digital Institutions
           </h1>
           <p className="text-xl text-muted-foreground">
-            Choose the infrastructure that scales with your ambition. No hidden fees, no complexity.
+            Choose the investment plan that scales with your ambition. No hidden fees, no complexity.
           </p>
         </section>
 
-        {/* Pricing Grid */}
-        <PricingCards />
+        {/* Investment Plans Grid */}
+        <InvestmentCards />
 
         {/* FAQ Preview / Trust markers */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-white/5">

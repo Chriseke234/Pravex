@@ -3,6 +3,7 @@
 import { GlassCard } from "@/components/shared/glass-card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, TrendingDown, MoreHorizontal } from "lucide-react";
+import { AssetIcon } from "@/components/shared/asset-icon";
 
 const USER_ASSETS = [
   { name: "Bitcoin", symbol: "BTC", amount: "4.52", value: "$290,240.12", price: "$64,212.45", change: "+2.4%", up: true },
@@ -36,9 +37,7 @@ export function AssetList() {
               <tr key={asset.symbol} className="hover:bg-white/[0.02] transition-colors group">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-xs">
-                      {asset.symbol[0]}
-                    </div>
+                    <AssetIcon symbol={asset.symbol} name={asset.name} size="md" />
                     <div>
                       <div className="font-medium">{asset.name}</div>
                       <div className="text-xs text-muted-foreground">{asset.symbol}</div>

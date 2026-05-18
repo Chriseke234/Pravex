@@ -56,7 +56,7 @@ const TIERS = [
   },
 ];
 
-export function PricingCards() {
+export function InvestmentCards() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
 
   return (
