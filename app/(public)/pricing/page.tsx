@@ -1,6 +1,15 @@
+import { Metadata } from "next";
 import { PricingCards } from "@/features/cms/components/pricing-cards";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, HelpCircle, ShieldCheck, Globe } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Institutional Pricing Plans",
+  description: "Transparent, scalable pricing infrastructure for digital institutions.",
+  alternates: {
+    canonical: "/pricing",
+  },
+};
 
 export default function PricingPage() {
   return (

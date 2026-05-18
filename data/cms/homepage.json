@@ -36,5 +36,29 @@
         "description": "Real-time portfolio attribution, risk modeling, and market sentiment analysis."
       }
     ]
+  },
+  "testimonials": {
+    "title": "Trusted by Industry Leaders",
+    "description": "See why the world's top financial institutions choose Pavex as their primary infrastructure partner.",
+    "items": [
+      {
+        "name": "Sarah Jenkins",
+        "role": "Chief Investment Officer",
+        "company": "Nexus Capital Management",
+        "quote": "Pavex has completely transformed our trading operations. The ultra-low latency execution and deep liquidity pools have given us a distinct edge in volatile markets."
+      },
+      {
+        "name": "Michael Chen",
+        "role": "Head of Digital Assets",
+        "company": "Vanguard Horizon",
+        "quote": "The MPC-CMP security architecture provides the exact level of assurance our risk committee demanded. Pavex is the gold standard for institutional custody."
+      },
+      {
+        "name": "Elena Rodriguez",
+        "role": "Managing Director",
+        "company": "Quantum Strategies",
+        "quote": "Unparalleled API reliability and comprehensive real-time analytics. Integrating Pavex into our algorithmic trading systems was seamless and immediate."
+      }
+    ]
   }
 }

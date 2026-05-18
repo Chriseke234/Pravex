@@ -1,4 +1,13 @@
 import { Navbar } from "@/components/shared/navbar"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Institutional Digital Asset Brokerage",
+  description: "Secure, high-performance operating system for institutional digital assets.",
+  alternates: {
+    canonical: "/",
+  },
+}
 
 export default function PublicLayout({
   children,

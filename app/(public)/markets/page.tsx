@@ -1,8 +1,17 @@
+import { Metadata } from "next";
 import { MarketTicker } from "@/features/markets/components/market-ticker";
 import { AssetTable } from "@/features/markets/components/asset-table";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart3, Globe, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Live Markets",
+  description: "Real-time institutional market data, pricing, and analytics.",
+  alternates: {
+    canonical: "/markets",
+  },
+};
 
 export default function MarketsPage() {
   return (

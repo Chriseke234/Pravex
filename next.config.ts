@@ -7,9 +7,12 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+      },
     ],
   },
-  // Turbopack might need specific settings if it's Next.js 16
 };
 
 export default nextConfig;

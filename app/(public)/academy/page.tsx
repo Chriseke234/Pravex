@@ -1,6 +1,15 @@
+import { Metadata } from "next";
 import { AcademyGrid } from "@/features/cms/components/academy-grid";
 import { Button } from "@/components/ui/button";
 import { Search, GraduationCap, Sparkles, BookMarked } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Pavex Academy",
+  description: "Master digital asset infrastructure with our institutional resources and guides.",
+  alternates: {
+    canonical: "/academy",
+  },
+};
 
 export default function AcademyPage() {
   return (
