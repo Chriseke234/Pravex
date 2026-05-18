@@ -78,7 +78,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: number, suffix?: str
 function HeroSection() {
   return (
     <section className="pt-32 pb-16 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
-      <div className="flex-1 space-y-8 order-2 md:order-1">
+      <div className="flex-1 space-y-8">
         <FadeIn>
           <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 text-[#D4AF37] text-sm font-semibold px-4 py-2 rounded-full border border-[#D4AF37]/20">
             Trusted by 2,500+ investors worldwide
@@ -113,7 +113,7 @@ function HeroSection() {
         </FadeIn>
       </div>
       
-      <div className="flex-1 w-full order-1 md:order-2">
+      <div className="flex-1 w-full">
         <FadeIn delay={200} className="relative h-[200px] md:h-[600px] w-full rounded-2xl overflow-hidden border border-[#D4AF37]/40 shadow-2xl shadow-[#D4AF37]/10">
           <Image 
             src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=800&q=80" 
