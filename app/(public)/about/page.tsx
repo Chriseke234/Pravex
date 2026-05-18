@@ -71,7 +71,7 @@ export default function AboutPage() {
             <FadeIn direction="up">
               <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm font-medium mb-4">
                 <Building2 className="w-4 h-4 text-primary" />
-                <span>Founded 2026</span>
+                <span>Founded 2020</span>
               </div>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight">
                 Architecting the Future of <span className="text-gradient">Digital Capital</span>

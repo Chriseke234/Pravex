@@ -31,7 +31,7 @@ export default function AuthLayout({
         </div>
 
         <div className="relative z-10 text-sm text-muted-foreground">
-          © 2026 Pavex Institutional. All rights reserved.
+          © 2020 Pavex Institutional. All rights reserved.
         </div>
       </div>
 

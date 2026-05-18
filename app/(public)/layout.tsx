@@ -57,7 +57,7 @@ export default function PublicLayout({
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 pt-12 mt-12 border-t border-white/5 text-center text-sm text-muted-foreground">
-          © 2026 Pavex Institutional. Built for the future of finance.
+          © 2020 Pavex Institutional. Built for the future of finance.
         </div>
       </footer>
     </div>

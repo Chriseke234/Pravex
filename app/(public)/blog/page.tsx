@@ -9,9 +9,9 @@ import { motion } from "framer-motion";
 
 const BLOG_POSTS = [
   {
-    title: "The Evolution of Institutional Custody in 2026",
+    title: "The Evolution of Institutional Custody in 2020",
     category: "Infrastructure",
-    date: "May 14, 2026",
+    date: "May 14, 2020",
     author: "Sarah Chen",
     image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=800&auto=format&fit=crop",
     excerpt: "How multi-party computation and distributed ledgers are reshaping the way tier-1 banks secure digital assets."
@@ -19,7 +19,7 @@ const BLOG_POSTS = [
   {
     title: "Navigating Global Regulatory Frameworks",
     category: "Compliance",
-    date: "May 10, 2026",
+    date: "May 10, 2020",
     author: "Michael Roberts",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=800&auto=format&fit=crop",
     excerpt: "A comprehensive guide to MiCA, SEC guidelines, and the emerging standards for digital asset institutions."
@@ -27,7 +27,7 @@ const BLOG_POSTS = [
   {
     title: "Algorithmic Trading: Strategies for High Volatility",
     category: "Trading",
-    date: "May 05, 2026",
+    date: "May 05, 2020",
     author: "David Kim",
     image: "https://images.unsplash.com/photo-1611974715853-2b8ef9a3d136?q=80&w=800&auto=format&fit=crop",
     excerpt: "Optimizing execution algorithms to minimize slippage during macro-economic news events."
@@ -35,7 +35,7 @@ const BLOG_POSTS = [
   {
     title: "Security Deep Dive: Zero-Trust Architectures",
     category: "Security",
-    date: "April 28, 2026",
+    date: "April 28, 2020",
     author: "Elena Rodriguez",
     image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
     excerpt: "Implementing strict access controls and continuous authentication in decentralized environments."
@@ -43,7 +43,7 @@ const BLOG_POSTS = [
   {
     title: "Tokenization of Real-World Assets",
     category: "Market Insights",
-    date: "April 21, 2026",
+    date: "April 21, 2020",
     author: "James Wilson",
     image: "https://images.unsplash.com/photo-1640341719935-661a69ea3511?q=80&w=800&auto=format&fit=crop",
     excerpt: "The multi-trillion dollar opportunity in bringing traditional financial instruments on-chain."
@@ -51,7 +51,7 @@ const BLOG_POSTS = [
   {
     title: "Pavex Platform Update: V2.5 Release Notes",
     category: "Product Updates",
-    date: "April 15, 2026",
+    date: "April 15, 2020",
     author: "The Pavex Team",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
     excerpt: "Introducing predictive analytics forecasting and expanded webhook configurations for enterprise users."
