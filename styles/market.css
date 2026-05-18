@@ -1,0 +1,47 @@
+/* market.css */
+
+@keyframes flashGreen {
+  0% { 
+    background-color: transparent; 
+    color: inherit; 
+  }
+  10% { 
+    background-color: rgba(16, 185, 129, 0.25); 
+    color: #34d399; 
+  }
+  100% { 
+    background-color: transparent; 
+    color: inherit; 
+  }
+}
+
+@keyframes flashRed {
+  0% { 
+    background-color: transparent; 
+    color: inherit; 
+  }
+  10% { 
+    background-color: rgba(239, 68, 68, 0.25); 
+    color: #f87171; 
+  }
+  100% { 
+    background-color: transparent; 
+    color: inherit; 
+  }
+}
+
+.price-up {
+  animation: flashGreen 800ms ease-out;
+  border-radius: 4px;
+  padding: 0 4px;
+  margin: 0 -4px;
+  transition: color 150ms ease;
+}
+
+.price-down {
+  animation: flashRed 800ms ease-out;
+  border-radius: 4px;
+  padding: 0 4px;
+  margin: 0 -4px;
+  transition: color 150ms ease;
+}
