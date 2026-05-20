@@ -3,8 +3,26 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Globe, Menu, X } from "lucide-react";
+import { Globe, Menu, X, Sun, Moon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+      aria-label="Toggle theme"
+    >
+      {/* Sun icon (shown in dark mode to switch to light) */}
+      <Sun className="w-4 h-4 hidden dark:block" />
+      {/* Moon icon (shown in light mode to switch to dark) */}
+      <Moon className="w-4 h-4 block dark:hidden" />
+    </button>
+  );
+}
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,21 +40,25 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-background/80 backdrop-blur-md">
+    <nav className="fixed top-0 w-full z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link href="/" onClick={closeMenu} className="flex items-center gap-2 text-xl font-bold">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">P</div>
-            <span>Pavex</span>
+        <div className="flex items-center gap-6 lg:gap-8">
+          <Link href="/" onClick={closeMenu} className="flex items-center gap-2 text-xl font-bold shrink-0">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white text-sm font-black">P</div>
+            <span className="font-serif">Pavex</span>
           </Link>
-          
+
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground font-medium">
+          <div className="hidden md:flex items-center gap-5 text-sm text-muted-foreground font-medium">
             {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href} 
-                className={`transition-colors ${pathname === link.href ? 'text-primary' : 'hover:text-foreground'}`}
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`transition-colors whitespace-nowrap ${
+                  pathname === link.href
+                    ? "text-primary font-semibold"
+                    : "hover:text-foreground"
+                }`}
               >
                 {link.name}
               </Link>
@@ -45,8 +67,9 @@ export function Navbar() {
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" size="sm" className="gap-2">
+        <div className="hidden md:flex items-center gap-2">
+          <ThemeToggle />
+          <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground">
             <Globe className="w-4 h-4" />
             EN
           </Button>
@@ -58,31 +81,44 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
-        <div className="md:hidden flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu">
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {/* Mobile Controls */}
+        <div className="md:hidden flex items-center gap-1">
+          <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleMenu}
+            aria-label="Toggle Menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-background border-b border-white/5 p-4 flex flex-col gap-4 shadow-2xl">
-          <div className="flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href} 
-                onClick={closeMenu}
-                className={`text-lg font-medium py-2 border-b border-white/5 ${pathname === link.href ? 'text-primary' : 'text-muted-foreground'}`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-          
-          <div className="flex flex-col gap-3 pt-4">
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="bg-background border-b border-border/40 p-4 flex flex-col gap-1 shadow-xl">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              onClick={closeMenu}
+              className={`text-base font-medium py-3 px-4 rounded-xl transition-colors ${
+                pathname === link.href
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+
+          <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/40">
             <Link href="/login" onClick={closeMenu}>
               <Button variant="outline" className="w-full justify-center">Login</Button>
             </Link>
@@ -91,7 +127,7 @@ export function Navbar() {
             </Link>
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

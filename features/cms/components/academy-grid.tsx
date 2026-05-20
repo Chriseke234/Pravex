@@ -6,6 +6,7 @@ import { BookOpen, Clock, ArrowRight, Play, FileText, TrendingUp } from "lucide-
 import { FadeIn } from "@/components/animations/fade-in";
 import { StaggerContainer, staggerItem } from "@/components/animations/stagger-container";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const ARTICLES = [
   {
@@ -65,10 +66,12 @@ export function AcademyGrid() {
         <motion.div key={article.title} variants={staggerItem}>
           <GlassCard className="p-0 overflow-hidden group border-white/5 flex flex-col h-full">
             <div className="relative h-48 overflow-hidden">
-              <img 
+              <Image 
                 src={article.image} 
                 alt={article.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
               <div className="absolute bottom-4 left-4">

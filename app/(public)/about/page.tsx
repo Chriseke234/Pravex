@@ -14,9 +14,7 @@ import {
   Globe,
   Briefcase
 } from "lucide-react";
-import { FadeIn } from "@/components/animations/fade-in";
-import { StaggerContainer, staggerItem } from "@/components/animations/stagger-container";
-import { motion } from "framer-motion";
+import { AnimateIn } from "@/components/ui/AnimateIn";
 import Link from "next/link";
 
 const TEAM = [
@@ -117,7 +115,7 @@ const COMPLIANCE_CARDS = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen pt-32 pb-24 bg-[#0A1628] text-white">
+    <div className="min-h-screen pt-32 pb-24 bg-background text-foreground">
       <main className="max-w-7xl mx-auto px-4 space-y-32">
         
         {/* Hero & Founding Story */}
@@ -126,34 +124,34 @@ export default function AboutPage() {
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-6 space-y-6">
-              <FadeIn direction="up">
-                <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm font-medium mb-4">
-                  <Building2 className="w-4 h-4 text-[#D4AF37]" />
+              <AnimateIn direction="up">
+                <div className="inline-flex items-center gap-2 bg-card/5 border border-border/30 rounded-full px-4 py-2 text-sm font-medium mb-4">
+                  <Building2 className="w-4 h-4 text-gold" />
                   <span>Founded 2020</span>
                 </div>
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight font-serif text-white">
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight font-serif text-foreground">
                   Built by Finance Veterans, <br />
                   <span className="text-gradient">Engineered for Institutions</span>
                 </h1>
-              </FadeIn>
+              </AnimateIn>
             </div>
             
-            <div className="lg:col-span-6 space-y-6 text-gray-300 text-lg leading-relaxed pt-2">
-              <FadeIn direction="up" delay={0.1}>
+            <div className="lg:col-span-6 space-y-6 text-muted-foreground text-lg leading-relaxed pt-2">
+              <AnimateIn direction="up" delay={100}>
                 <p>
                   Pavex Institutional was founded in 2020 by a group of veteran financial systems engineers and quantitative traders who saw a critical gap in the market. While digital assets promised to revolutionize global capital markets, the underlying infrastructure lacked the safety, predictability, and compliance required by institutional allocators.
                 </p>
-              </FadeIn>
-              <FadeIn direction="up" delay={0.2}>
+              </AnimateIn>
+              <AnimateIn direction="up" delay={200}>
                 <p>
                   We set out to build a bridge between traditional high finance and decentralized technologies. Over the past four years, our team has engineered a zero-trust custodial framework and a microsecond-latency execution engine designed specifically to meet the rigorous compliance standards of sovereign wealth funds, asset managers, and Tier-1 banks.
                 </p>
-              </FadeIn>
-              <FadeIn direction="up" delay={0.3}>
+              </AnimateIn>
+              <AnimateIn direction="up" delay={300}>
                 <p>
                   Today, Pavex is a leading digital capital operating system, securing billions of dollars in transaction volume. Our platform enables institutions to access deep aggregated liquidity, manage multi-party approval custody workflows, and execute trading strategies with absolute operational certainty.
                 </p>
-              </FadeIn>
+              </AnimateIn>
             </div>
           </div>
         </section>
@@ -161,65 +159,64 @@ export default function AboutPage() {
         {/* Mission & Values */}
         <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-4">
-            <FadeIn direction="up">
-              <h2 className="text-3xl md:text-4xl font-bold font-serif text-white">Our Core Pillars</h2>
-              <p className="text-gray-400">We do not compromise. The integrity of our infrastructure stands on three fundamental operational values.</p>
-            </FadeIn>
+            <AnimateIn direction="up">
+              <h2 className="text-3xl md:text-4xl font-bold font-serif text-foreground">Our Core Pillars</h2>
+              <p className="text-muted-foreground">We do not compromise. The integrity of our infrastructure stands on three fundamental operational values.</p>
+            </AnimateIn>
           </div>
           
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {VALUES.map((value) => (
-              <motion.div key={value.title} variants={staggerItem}>
-                <GlassCard className="p-8 h-full space-y-6 border-white/5 bg-white/[0.01] hover:bg-white/5 transition-all duration-300 hover:scale-[1.02]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {VALUES.map((value, idx) => (
+              <AnimateIn key={value.title} delay={idx * 100} className="h-full">
+                <GlassCard className="p-8 h-full space-y-6 border-border/20 bg-card/[0.01] hover:bg-card/5 transition-all duration-300 hover:scale-[1.02]">
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${value.bg}`}>
                     <value.icon className={`w-7 h-7 ${value.color}`} />
                   </div>
-                  <h3 className="text-2xl font-bold text-white">{value.title}</h3>
-                  <p className="text-gray-400 leading-relaxed text-sm">
+                  <h3 className="text-2xl font-bold text-foreground">{value.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm">
                     {value.description}
                   </p>
                 </GlassCard>
-              </motion.div>
+              </AnimateIn>
             ))}
-          </StaggerContainer>
+          </div>
         </section>
 
         {/* Leadership Team */}
         <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-4">
-            <FadeIn direction="up">
-              <h2 className="text-3xl md:text-4xl font-bold font-serif text-white">Leadership Team</h2>
-              <p className="text-gray-400">Our executives bring decades of experience from Tier-1 financial institutions and digital asset innovators.</p>
-            </FadeIn>
+            <AnimateIn direction="up">
+              <h2 className="text-3xl md:text-4xl font-bold font-serif text-foreground">Leadership Team</h2>
+              <p className="text-muted-foreground">Our executives bring decades of experience from Tier-1 financial institutions and digital asset innovators.</p>
+            </AnimateIn>
           </div>
           
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {TEAM.map((member) => (
-              <motion.div key={member.name} variants={staggerItem}>
-                <GlassCard className="p-6 h-full flex flex-col justify-between border-white/5 bg-white/[0.01] hover:bg-white/5 transition-all duration-300">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {TEAM.map((member, idx) => (
+              <AnimateIn key={member.name} delay={idx * 100} className="h-full">
+                <GlassCard className="p-6 h-full flex flex-col justify-between border-border/20 bg-card/[0.01] hover:bg-card/5 transition-all duration-300">
                   <div className="space-y-6">
-                    {/* Color initials avatar */}
                     <div className="flex items-center gap-4">
                       <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center text-xl font-bold text-white shadow-lg border border-white/10 shrink-0`}>
                         {member.initials}
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                        <p className="text-xs text-[#D4AF37] font-semibold">{member.role}</p>
+                        <h3 className="text-xl font-bold text-foreground">{member.name}</h3>
+                        <p className="text-xs text-gold font-semibold">{member.role}</p>
                       </div>
                     </div>
                     
-                    <p className="text-sm text-gray-400 leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {member.bio}
                     </p>
                   </div>
 
-                  <div className="pt-6 mt-6 border-t border-white/5 flex justify-end">
+                  <div className="pt-6 mt-6 border-t border-border/25 flex justify-end">
                     <a 
                       href="https://linkedin.com" 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-gray-500 hover:text-white transition-colors"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
                       title={`${member.name} on LinkedIn`}
                     >
                       <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -228,59 +225,59 @@ export default function AboutPage() {
                     </a>
                   </div>
                 </GlassCard>
-              </motion.div>
+              </AnimateIn>
             ))}
-          </StaggerContainer>
+          </div>
         </section>
 
         {/* Regulatory & Compliance Section */}
         <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-4">
-            <FadeIn direction="up">
-              <h2 className="text-3xl md:text-4xl font-bold font-serif text-white">Our Regulatory Standing</h2>
-              <p className="text-gray-400">Strict adherence to regulatory standards across major global jurisdictions.</p>
-            </FadeIn>
+            <AnimateIn direction="up">
+              <h2 className="text-3xl md:text-4xl font-bold font-serif text-foreground">Our Regulatory Standing</h2>
+              <p className="text-muted-foreground">Strict adherence to regulatory standards across major global jurisdictions.</p>
+            </AnimateIn>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {COMPLIANCE_CARDS.map((card, i) => (
-              <FadeIn key={card.title} direction="up" delay={i * 0.1}>
-                <GlassCard className="p-6 h-full flex flex-col justify-between border-white/5 bg-white/[0.01]">
+              <AnimateIn key={card.title} direction="up" delay={i * 100}>
+                <GlassCard className="p-6 h-full flex flex-col justify-between border-border/20 bg-card/[0.01]">
                   <div className="space-y-4">
-                    <div className="p-3 bg-white/5 w-fit rounded-xl">
-                      <card.icon className="w-5 h-5 text-[#D4AF37]" />
+                    <div className="p-3 bg-card/5 w-fit rounded-xl">
+                      <card.icon className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-white text-base">{card.title}</h3>
-                      <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">{card.description}</p>
+                      <h3 className="font-bold text-foreground text-base">{card.title}</h3>
+                      <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{card.description}</p>
                     </div>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-white/5">
+                  <div className="mt-4 pt-4 border-t border-border/20">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
                       {card.badge}
                     </span>
                   </div>
                 </GlassCard>
-              </FadeIn>
+              </AnimateIn>
             ))}
           </div>
 
-          <FadeIn direction="up" delay={0.4}>
-            <div className="bg-white/[0.02] border border-white/5 p-6 rounded-2xl max-w-3xl mx-auto text-center">
-              <p className="text-sm text-gray-400 leading-relaxed">
+          <AnimateIn direction="up" delay={400}>
+            <div className="bg-card/[0.02] border border-border/20 p-6 rounded-2xl max-w-3xl mx-auto text-center">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Pavex Institutional Ltd is authorised and regulated by the Financial Conduct Authority (FCA), reference number XXXXXXX.
               </p>
             </div>
-          </FadeIn>
+          </AnimateIn>
         </section>
 
         {/* Press / Media */}
         <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto">
-            <FadeIn direction="up">
-              <h2 className="text-2xl font-bold font-serif text-white mb-2">As Featured In</h2>
-              <p className="text-sm text-gray-500">Major financial publication coverage and industry insights.</p>
-            </FadeIn>
+            <AnimateIn direction="up">
+              <h2 className="text-2xl font-bold font-serif text-foreground mb-2">As Featured In</h2>
+              <p className="text-sm text-muted-foreground">Major financial publication coverage and industry insights.</p>
+            </AnimateIn>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto items-center">
@@ -290,23 +287,23 @@ export default function AboutPage() {
               { name: "CoinDesk", code: "COINDESK" },
               { name: "The Block", code: "THE BLOCK" }
             ].map((media, i) => (
-              <FadeIn key={media.name} direction="up" delay={i * 0.1}>
-                <div className="h-16 flex items-center justify-center border border-white/5 bg-white/[0.01] rounded-2xl text-gray-500 font-bold hover:text-gray-300 hover:border-white/10 transition-colors uppercase tracking-wider text-sm select-none">
+              <AnimateIn key={media.name} direction="up" delay={i * 100}>
+                <div className="h-16 flex items-center justify-center border border-border/20 bg-card/[0.01] rounded-2xl text-muted-foreground font-bold hover:text-foreground hover:border-foreground/20 transition-colors uppercase tracking-wider text-sm select-none">
                   {media.name}
                 </div>
-              </FadeIn>
+              </AnimateIn>
             ))}
           </div>
         </section>
 
         {/* Join Us CTA */}
-        <FadeIn direction="up">
-          <section className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-gradient-to-r from-primary/10 via-[#0A1628] to-emerald-500/5 p-12 md:p-20 text-center space-y-8">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4AF37]/5 blur-3xl rounded-full -z-10" />
+        <AnimateIn direction="up">
+          <section className="relative rounded-[2.5rem] overflow-hidden border border-border/25 bg-gradient-to-r from-primary/10 via-background to-emerald-500/5 p-12 md:p-20 text-center space-y-8">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 blur-3xl rounded-full -z-10" />
             <div className="max-w-2xl mx-auto space-y-6">
-              <Briefcase className="w-12 h-12 text-[#D4AF37] mx-auto mb-2" />
-              <h2 className="text-3xl md:text-5xl font-bold font-serif text-white">Join Our Team</h2>
-              <p className="text-gray-400 text-lg leading-relaxed">
+              <Briefcase className="w-12 h-12 text-gold mx-auto mb-2" />
+              <h2 className="text-3xl md:text-5xl font-bold font-serif text-foreground">Join Our Team</h2>
+              <p className="text-muted-foreground text-lg leading-relaxed">
                 We are constantly looking for exceptional software engineers, security architects, and quantitative analysts to help build the future of decentralized capital infrastructure.
               </p>
               <div className="pt-4">
@@ -318,7 +315,7 @@ export default function AboutPage() {
               </div>
             </div>
           </section>
-        </FadeIn>
+        </AnimateIn>
 
       </main>
     </div>

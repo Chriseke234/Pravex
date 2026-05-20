@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface AssetIconProps {
   src?: string;
@@ -62,12 +63,13 @@ export function AssetIcon({ src, symbol, name, className = "", size = "md" }: As
 
   return (
     <div className={`${sizeClass} rounded-full bg-white/5 overflow-hidden relative shrink-0 border border-white/10 ${className}`}>
-      <img
+      <Image
         src={src}
         alt={symbol}
-        className="w-full h-full object-cover"
+        fill
+        className="object-cover"
         onError={() => setError(true)}
-        loading="lazy"
+        sizes="(max-width: 768px) 48px, 48px"
       />
     </div>
   );

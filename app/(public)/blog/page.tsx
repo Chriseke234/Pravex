@@ -6,6 +6,7 @@ import { ArrowRight, Calendar, User } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
 import { StaggerContainer, staggerItem } from "@/components/animations/stagger-container";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const BLOG_POSTS = [
   {
@@ -81,10 +82,13 @@ export default function BlogPage() {
           <GlassCard className="p-0 overflow-hidden group">
             <div className="flex flex-col lg:flex-row">
               <div className="relative w-full lg:w-1/2 h-64 lg:h-[400px] overflow-hidden">
-                <img 
+                <Image 
                   src={BLOG_POSTS[0].image} 
                   alt={BLOG_POSTS[0].title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  fill
+                  priority
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 <div className="absolute top-4 left-4">
                   <span className="bg-primary/90 text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">
@@ -125,10 +129,12 @@ export default function BlogPage() {
               <motion.div key={post.title} variants={staggerItem}>
                 <GlassCard className="p-0 overflow-hidden group border-white/5 flex flex-col h-full">
                   <div className="relative h-48 overflow-hidden">
-                    <img 
+                    <Image 
                       src={post.image} 
                       alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
                     <div className="absolute bottom-4 left-4">

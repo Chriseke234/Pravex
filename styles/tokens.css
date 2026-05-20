@@ -4,14 +4,59 @@
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
 
-    /* Backgrounds - Slate Dark */
-    --background: 222.2 84% 4.9%;
+    /* Light Theme Backgrounds & Cards */
+    --background: 210 40% 98%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    /* Muted & Accent */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    /* Destructive */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Borders & Inputs */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+
+    /* Radii */
+    --radius: 0.75rem;
+
+    /* Custom Fintech Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-blur: 12px;
+
+    --gradient-premium: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --gradient-dark: linear-gradient(180deg, rgba(248, 250, 252, 0) 0%, rgba(241, 245, 249, 1) 100%);
+
+    /* Pavex Brand Colors HSL */
+    --brand-gold: 45.4 69.4% 53.3%; /* #D4AF37 */
+    --brand-gold-hover: 45.4 60% 45%; /* #B8962E */
+    --brand-navy: 215.2 60% 9.8%; /* #0A1628 */
+  }
+
+  .dark {
+    /* Primary Colors - Premium Deep Blue/Indigo */
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Dark Theme Backgrounds & Cards - Slate Dark Navy */
+    --background: 215.2 60% 9.8%; /* #0A1628 */
     --foreground: 210 40% 98%;
 
-    /* Card & Popover */
-    --card: 222.2 84% 4.9%;
+    --card: 215.2 60% 9.8%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 215.2 60% 9.8%;
     --popover-foreground: 210 40% 98%;
 
     /* Muted & Accent */
@@ -33,12 +78,17 @@
     --radius: 0.75rem;
 
     /* Custom Fintech Tokens */
-    --glass-bg: rgba(15, 23, 42, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(10, 22, 40, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
     --glass-blur: 12px;
 
     --gradient-premium: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-    --gradient-dark: linear-gradient(180deg, rgba(30, 41, 59, 0) 0%, rgba(15, 23, 42, 1) 100%);
+    --gradient-dark: linear-gradient(180deg, rgba(30, 41, 59, 0) 0%, rgba(10, 22, 40, 1) 100%);
+
+    /* Pavex Brand Colors HSL */
+    --brand-gold: 45.4 69.4% 53.3%;
+    --brand-gold-hover: 45.4 60% 45%;
+    --brand-navy: 215.2 60% 9.8%;
   }
 }
 
@@ -47,6 +97,7 @@
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .text-gradient {

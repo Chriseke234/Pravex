@@ -4,46 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Zap, BarChart3, Coins, Receipt, Headset, CheckCircle2 } from "lucide-react";
-
-function useIntersectionObserver(options = { threshold: 0.1 }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        observer.unobserve(entry.target);
-      }
-    }, options);
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [options]);
-
-  return { ref, isVisible };
-}
-
-function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) {
-  const { ref, isVisible } = useIntersectionObserver();
-  
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-1000 ease-out ${className}`}
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "translateY(0)" : "translateY(24px)",
-        transitionDelay: `${delay}ms`
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+import { AnimateIn } from "@/components/ui/AnimateIn";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number, suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -57,7 +19,6 @@ function AnimatedCounter({ target, suffix = "" }: { target: number, suffix?: str
       const step = (timestamp: number) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        // easeOutQuart
         const easeOut = 1 - Math.pow(1 - progress, 4);
         setCount(Math.floor(easeOut * target));
         
@@ -79,42 +40,46 @@ function HeroSection() {
   return (
     <section className="pt-32 pb-16 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
       <div className="flex-1 space-y-8">
-        <FadeIn>
-          <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 text-[#D4AF37] text-sm font-semibold px-4 py-2 rounded-full border border-[#D4AF37]/20">
+        <AnimateIn>
+          <div className="inline-flex items-center gap-2 bg-gold/10 text-gold text-sm font-semibold px-4 py-2 rounded-full border border-gold/20">
             Trusted by 2,500+ investors worldwide
           </div>
-        </FadeIn>
+        </AnimateIn>
         
-        <FadeIn delay={100}>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight">
+        <AnimateIn delay={100}>
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-foreground leading-tight">
             Buy, trade and grow your crypto. Simply.
           </h1>
-        </FadeIn>
+        </AnimateIn>
         
-        <FadeIn delay={200}>
-          <p className="text-xl text-gray-300 leading-relaxed max-w-lg">
+        <AnimateIn delay={200}>
+          <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
             Pavex makes it easy to invest in Bitcoin, Ethereum and more — with the security and tools that serious investors rely on.
           </p>
-        </FadeIn>
+        </AnimateIn>
         
-        <FadeIn delay={300} className="flex flex-col sm:flex-row gap-4">
-          <Link href="/signup" className="flex items-center justify-center gap-2 bg-[#D4AF37] hover:bg-[#B8962E] text-[#0A1628] font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
-            Create Free Account <ArrowRight className="w-5 h-5" />
-          </Link>
-          <Link href="/markets" className="flex items-center justify-center gap-2 bg-transparent border border-white/20 hover:border-white/40 text-white font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
-            See Live Markets
-          </Link>
-        </FadeIn>
+        <AnimateIn delay={300}>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/signup" className="flex items-center justify-center gap-2 bg-gold hover:bg-gold-hover text-navy font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
+              Create Free Account <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link href="/markets" className="flex items-center justify-center gap-2 bg-transparent border border-border hover:border-foreground/40 text-foreground font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
+              See Live Markets
+            </Link>
+          </div>
+        </AnimateIn>
         
-        <FadeIn delay={400} className="flex flex-wrap items-center gap-6 pt-4 text-sm text-gray-400 font-medium">
-          <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> No hidden fees</div>
-          <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Withdrawals in 24hrs</div>
-          <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#D4AF37]" /> Regulated & secure</div>
-        </FadeIn>
+        <AnimateIn delay={400}>
+          <div className="flex flex-wrap items-center gap-6 pt-4 text-sm text-muted-foreground font-medium">
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-gold" /> No hidden fees</div>
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-gold" /> Withdrawals in 24hrs</div>
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-gold" /> Regulated &amp; secure</div>
+          </div>
+        </AnimateIn>
       </div>
       
       <div className="flex-1 w-full">
-        <FadeIn delay={200} className="relative h-[200px] md:h-[600px] w-full rounded-2xl overflow-hidden border border-[#D4AF37]/40 shadow-2xl shadow-[#D4AF37]/10">
+        <AnimateIn delay={200} className="relative h-[200px] md:h-[600px] w-full rounded-2xl overflow-hidden border border-gold/40 shadow-2xl shadow-gold/10">
           <Image 
             src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=800&q=80" 
             alt="Trading Dashboard" 
@@ -123,7 +88,7 @@ function HeroSection() {
             priority 
             sizes="(max-width: 768px) 100vw, 50vw"
           />
-        </FadeIn>
+        </AnimateIn>
       </div>
     </section>
   );
@@ -142,7 +107,7 @@ function LiveTickerBar() {
   ];
 
   return (
-    <div className="w-full bg-[#0A1628] border-y border-white/5 overflow-hidden py-4 flex">
+    <div className="w-full bg-background border-y border-border/30 overflow-hidden py-4 flex">
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes ticker {
           0% { transform: translateX(0); }
@@ -159,9 +124,9 @@ function LiveTickerBar() {
       `}} />
       <div className="animate-ticker shrink-0">
         {[...assets, ...assets, ...assets].map((asset, i) => (
-          <div key={i} className="flex items-center gap-3 px-8 border-r border-white/5 whitespace-nowrap">
-            <span className="font-bold text-white">{asset.symbol}</span>
-            <span className="text-gray-300">{asset.price}</span>
+          <div key={i} className="flex items-center gap-3 px-8 border-r border-border/30 whitespace-nowrap">
+            <span className="font-bold text-foreground">{asset.symbol}</span>
+            <span className="text-muted-foreground">{asset.price}</span>
             <span className={`text-xs font-bold px-2 py-1 rounded-md ${asset.up ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
               {asset.change}
             </span>
@@ -174,25 +139,25 @@ function LiveTickerBar() {
 
 function StatsBar() {
   return (
-    <section className="py-16 border-b border-white/5">
+    <section className="py-16 border-b border-border/30">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x divide-white/5">
-          <div className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white">$<AnimatedCounter target={120} suffix="B+" /></div>
-            <div className="text-sm text-gray-400 font-medium uppercase tracking-wide">moved through Pavex</div>
-          </div>
-          <div className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white"><AnimatedCounter target={2500} suffix="+" /></div>
-            <div className="text-sm text-gray-400 font-medium uppercase tracking-wide">investors & institutions</div>
-          </div>
-          <div className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white"><AnimatedCounter target={120} suffix="+" /></div>
-            <div className="text-sm text-gray-400 font-medium uppercase tracking-wide">countries served</div>
-          </div>
-          <div className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white"><AnimatedCounter target={99} suffix=".99%" /></div>
-            <div className="text-sm text-gray-400 font-medium uppercase tracking-wide">platform uptime</div>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x divide-border/30">
+          <AnimateIn className="text-center space-y-2">
+            <div className="text-4xl md:text-5xl font-bold text-foreground">$<AnimatedCounter target={120} suffix="B+" /></div>
+            <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">moved through Pavex</div>
+          </AnimateIn>
+          <AnimateIn delay={100} className="text-center space-y-2">
+            <div className="text-4xl md:text-5xl font-bold text-foreground"><AnimatedCounter target={2500} suffix="+" /></div>
+            <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">investors &amp; institutions</div>
+          </AnimateIn>
+          <AnimateIn delay={200} className="text-center space-y-2">
+            <div className="text-4xl md:text-5xl font-bold text-foreground"><AnimatedCounter target={120} suffix="+" /></div>
+            <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">countries served</div>
+          </AnimateIn>
+          <AnimateIn delay={300} className="text-center space-y-2">
+            <div className="text-4xl md:text-5xl font-bold text-foreground"><AnimatedCounter target={99} suffix=".99%" /></div>
+            <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">platform uptime</div>
+          </AnimateIn>
         </div>
       </div>
     </section>
@@ -224,35 +189,35 @@ function HowItWorks() {
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto">
       <div className="text-center space-y-4 mb-16">
-        <FadeIn>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-white">Get started in minutes</h2>
-        </FadeIn>
-        <FadeIn delay={100}>
-          <p className="text-xl text-gray-400">No paperwork. No complexity. Just three simple steps.</p>
-        </FadeIn>
+        <AnimateIn>
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">Get started in minutes</h2>
+        </AnimateIn>
+        <AnimateIn delay={100}>
+          <p className="text-xl text-muted-foreground">No paperwork. No complexity. Just three simple steps.</p>
+        </AnimateIn>
       </div>
 
       <div className="relative flex flex-col md:flex-row gap-8 justify-between">
         {steps.map((step, i) => (
-          <FadeIn key={i} delay={i * 200} className="flex-1 z-10">
-            <div className="bg-white/[0.03] border border-white/10 rounded-3xl overflow-hidden h-full transform transition-transform hover:-translate-y-1 duration-200">
+          <AnimateIn key={i} delay={i * 200} className="flex-1 z-10">
+            <div className="bg-card/[0.03] border border-border/30 rounded-3xl overflow-hidden h-full transform transition-transform hover:-translate-y-1 duration-200">
               <div className="relative h-[160px] w-full">
                 <Image src={step.img} alt={step.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
               </div>
               <div className="p-8 relative">
-                <div className="absolute -top-6 left-8 w-12 h-12 bg-[#D4AF37] rounded-full flex items-center justify-center text-[#0A1628] font-bold text-lg border-4 border-[#0A1628]">
+                <div className="absolute -top-6 left-8 w-12 h-12 bg-gold rounded-full flex items-center justify-center text-navy font-bold text-lg border-4 border-background">
                   {step.num}
                 </div>
-                <h3 className="text-2xl font-bold text-white mt-4 mb-2">{step.title}</h3>
-                <p className="text-gray-400">{step.desc}</p>
+                <h3 className="text-2xl font-bold text-foreground mt-4 mb-2">{step.title}</h3>
+                <p className="text-muted-foreground">{step.desc}</p>
               </div>
             </div>
-          </FadeIn>
+          </AnimateIn>
         ))}
         {/* Desktop Connectors */}
         <div className="hidden md:flex absolute top-1/2 left-0 w-full justify-between px-[16%] -translate-y-1/2 pointer-events-none z-0">
-          <div className="text-[#D4AF37] text-4xl">→</div>
-          <div className="text-[#D4AF37] text-4xl">→</div>
+          <div className="text-gold text-4xl">→</div>
+          <div className="text-gold text-4xl">→</div>
         </div>
       </div>
     </section>
@@ -294,23 +259,23 @@ function FeaturesGrid() {
   ];
 
   return (
-    <section className="py-24 bg-[#0A1628] border-y border-white/5">
+    <section className="py-24 bg-background border-y border-border/30">
       <div className="max-w-7xl mx-auto px-4">
-        <FadeIn>
+        <AnimateIn>
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-serif font-bold text-white">Everything you need. Nothing you don't.</h2>
+            <h2 className="text-4xl font-serif font-bold text-foreground">Everything you need. Nothing you don't.</h2>
           </div>
-        </FadeIn>
+        </AnimateIn>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feat, i) => (
-            <FadeIn key={i} delay={i * 100} className="h-full">
-              <div className="bg-white/[0.02] border border-white/5 p-8 rounded-3xl h-full transition-transform hover:-translate-y-2 duration-300">
-                <feat.icon className="w-8 h-8 text-[#D4AF37] mb-6" />
-                <h3 className="text-xl font-bold text-white mb-3">{feat.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{feat.desc}</p>
+            <AnimateIn key={i} delay={i * 100} className="h-full">
+              <div className="bg-card/[0.02] border border-border/30 p-8 rounded-3xl h-full transition-transform hover:-translate-y-2 duration-300">
+                <feat.icon className="w-8 h-8 text-gold mb-6" />
+                <h3 className="text-xl font-bold text-foreground mb-3">{feat.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{feat.desc}</p>
               </div>
-            </FadeIn>
+            </AnimateIn>
           ))}
         </div>
       </div>
@@ -339,26 +304,26 @@ function Testimonials() {
 
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto">
-      <FadeIn className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-white">Investors love Pavex</h2>
-      </FadeIn>
+      <AnimateIn className="text-center mb-16">
+        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">Investors love Pavex</h2>
+      </AnimateIn>
 
       <div className="flex flex-col md:flex-row gap-6">
         {reviews.map((rev, i) => (
-          <FadeIn key={i} delay={i * 150} className="flex-1">
-            <div className="bg-white p-8 rounded-3xl h-full relative">
-              <div className="text-[#D4AF37] text-xl mb-4 tracking-widest">★★★★★</div>
-              <p className="text-gray-600 italic mb-10 text-lg">"{rev.quote}"</p>
+          <AnimateIn key={i} delay={i * 150} className="flex-1">
+            <div className="bg-card border border-border/30 p-8 rounded-3xl h-full relative">
+              <div className="text-gold text-xl mb-4 tracking-widest">★★★★★</div>
+              <p className="text-muted-foreground italic mb-10 text-lg">&quot;{rev.quote}&quot;</p>
               <div className="flex items-center gap-4 mt-auto absolute bottom-8">
-                <Image src={rev.avatar} alt={rev.name} width={48} height={48} className="rounded-full bg-gray-200" />
+                <Image src={rev.avatar} alt={rev.name} width={48} height={48} className="rounded-full bg-muted" />
                 <div>
-                  <div className="font-bold text-[#0A1628]">{rev.name}</div>
-                  <div className="text-sm text-gray-500">{rev.role}</div>
+                  <div className="font-bold text-foreground">{rev.name}</div>
+                  <div className="text-sm text-muted-foreground">{rev.role}</div>
                 </div>
               </div>
               <div className="h-16"></div> {/* Spacer for absolute positioning */}
             </div>
-          </FadeIn>
+          </AnimateIn>
         ))}
       </div>
     </section>
@@ -375,34 +340,34 @@ function MarketsPreview() {
   ];
 
   return (
-    <section className="py-24 bg-[#0A1628] border-y border-white/5">
+    <section className="py-24 bg-background border-y border-border/30">
       <div className="max-w-4xl mx-auto px-4">
-        <FadeIn className="text-center mb-12">
-          <h2 className="text-3xl font-serif font-bold text-white">What's moving today</h2>
-        </FadeIn>
+        <AnimateIn className="text-center mb-12">
+          <h2 className="text-3xl font-serif font-bold text-foreground">What&apos;s moving today</h2>
+        </AnimateIn>
         
-        <FadeIn delay={100} className="bg-white/[0.02] border border-white/5 rounded-3xl overflow-hidden">
+        <AnimateIn delay={100} className="bg-card/[0.02] border border-border/30 rounded-3xl overflow-hidden">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-white/5 text-gray-400 text-sm">
+              <tr className="border-b border-border/30 text-muted-foreground text-sm">
                 <th className="py-4 px-6 font-medium">Asset</th>
                 <th className="py-4 px-6 font-medium text-right">Price</th>
                 <th className="py-4 px-6 font-medium text-right">24h Change</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-border/20">
               {topAssets.map((asset, i) => (
-                <tr key={i} className="hover:bg-white/5 transition-colors">
+                <tr key={i} className="hover:bg-accent/30 transition-colors">
                   <td className="py-4 px-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white">{asset.sym[0]}</div>
+                      <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-xs font-bold text-foreground">{asset.sym[0]}</div>
                       <div>
-                        <div className="font-bold text-white">{asset.name}</div>
-                        <div className="text-xs text-gray-400">{asset.sym}</div>
+                        <div className="font-bold text-foreground">{asset.name}</div>
+                        <div className="text-xs text-muted-foreground">{asset.sym}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-right font-medium text-white">{asset.price}</td>
+                  <td className="py-4 px-6 text-right font-medium text-foreground">{asset.price}</td>
                   <td className={`py-4 px-6 text-right font-medium ${asset.change.startsWith('+') ? 'text-emerald-400' : 'text-red-400'}`}>
                     {asset.change}
                   </td>
@@ -410,13 +375,13 @@ function MarketsPreview() {
               ))}
             </tbody>
           </table>
-        </FadeIn>
+        </AnimateIn>
         
-        <FadeIn delay={200} className="text-center mt-8">
-          <Link href="/markets" className="text-[#D4AF37] font-bold hover:underline inline-flex items-center gap-1">
+        <AnimateIn delay={200} className="text-center mt-8">
+          <Link href="/markets" className="text-gold font-bold hover:underline inline-flex items-center gap-1">
             View all 200+ markets <ArrowRight className="w-4 h-4" />
           </Link>
-        </FadeIn>
+        </AnimateIn>
       </div>
     </section>
   );
@@ -433,20 +398,22 @@ function CTABanner() {
       </div>
       
       <div className="relative z-10 max-w-3xl mx-auto px-4 text-center space-y-8">
-        <FadeIn>
-          <h2 className="text-5xl font-serif font-bold text-white">Ready to start investing?</h2>
-        </FadeIn>
-        <FadeIn delay={100}>
+        <AnimateIn>
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-white">Ready to start investing?</h2>
+        </AnimateIn>
+        <AnimateIn delay={100}>
           <p className="text-xl text-gray-300">Create your free account in 2 minutes. No minimum deposit required.</p>
-        </FadeIn>
-        <FadeIn delay={200} className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/signup" className="flex items-center justify-center gap-2 bg-[#D4AF37] hover:bg-[#B8962E] text-[#0A1628] font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
-            Open Free Account <ArrowRight className="w-5 h-5" />
-          </Link>
-          <Link href="/contact" className="flex items-center justify-center gap-2 bg-transparent border border-white/20 hover:border-white/40 text-white font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
-            Talk to our team
-          </Link>
-        </FadeIn>
+        </AnimateIn>
+        <AnimateIn delay={200}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/signup" className="flex items-center justify-center gap-2 bg-gold hover:bg-gold-hover text-navy font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
+              Open Free Account <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link href="/contact" className="flex items-center justify-center gap-2 bg-transparent border border-white/20 hover:border-white/40 text-white font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] duration-200">
+              Talk to our team
+            </Link>
+          </div>
+        </AnimateIn>
       </div>
     </section>
   );
@@ -454,7 +421,7 @@ function CTABanner() {
 
 export default function Homepage() {
   return (
-    <div className="bg-[#0A1628] min-h-screen font-sans">
+    <div className="bg-background min-h-screen font-sans">
       <HeroSection />
       <LiveTickerBar />
       <StatsBar />
@@ -464,7 +431,7 @@ export default function Homepage() {
       <MarketsPreview />
       <CTABanner />
       
-      <div className="max-w-7xl mx-auto px-4 py-8 text-[11px] text-gray-500 text-center border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-4 py-8 text-[11px] text-muted-foreground text-center border-t border-border/30">
         Pavex Institutional Ltd. Digital assets are high-risk investments. The value of your investments can go up as well as down and you may get back less than you put in. This is not financial advice. Past performance is not a reliable indicator of future results.
       </div>
     </div>

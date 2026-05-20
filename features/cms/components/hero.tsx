@@ -34,7 +34,7 @@ export function Hero({ data }: HeroProps) {
         </FadeIn>
 
         <FadeIn direction="up" delay={0.1}>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gradient">
             {data.title}
           </h1>
         </FadeIn>
