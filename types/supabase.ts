@@ -1,4 +1,4 @@
-export type UserRole = 'user' | 'admin' | 'superuser';
+export type UserRole = 'user' | 'admin' | 'superuser' | 'super_admin';
 export type UserTier = 'Starter' | 'Professional' | 'Enterprise';
 export type RiskScore = 'Low' | 'Medium' | 'High';
 
@@ -46,3 +46,90 @@ export interface Transaction {
   metadata: Record<string, any>;
   created_at: string;
 }
+
+export interface Wallet {
+  id: string;
+  user_id: string;
+  balance: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WalletTransaction {
+  id: string;
+  wallet_id: string;
+  amount: number;
+  type: 'deposit' | 'withdrawal' | 'credit' | 'debit';
+  status: 'pending' | 'completed' | 'failed';
+  reference: string | null;
+  description: string | null;
+  created_at: string;
+}
+
+export interface Withdrawal {
+  id: string;
+  user_id: string;
+  amount: number;
+  bank_name: string;
+  account_name: string;
+  account_number: string;
+  status: 'pending' | 'approved' | 'rejected';
+  reviewed_by: string | null;
+  created_at: string;
+}
+
+export interface Deposit {
+  id: string;
+  user_id: string;
+  amount: number;
+  provider: string;
+  reference: string;
+  status: 'pending' | 'completed' | 'failed';
+  created_at: string;
+}
+
+export interface Conversation {
+  id: string;
+  user_id: string;
+  status: 'open' | 'closed' | 'escalated';
+  created_at: string;
+}
+
+export interface Message {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  message: string | null;
+  attachment_url: string | null;
+  created_at: string;
+}
+
+export interface UserSession {
+  id: string;
+  user_id: string;
+  login_time: string;
+  last_activity: string;
+  status: 'online' | 'offline';
+  device: string | null;
+  ip_address: string | null;
+}
+
+export interface Notification {
+  id: string;
+  recipient_id: string | null;
+  title: string;
+  message: string;
+  read: boolean;
+  created_at: string;
+}
+
+export interface AuditLog {
+  id: string;
+  actor_id: string | null;
+  actor_role: string;
+  action: string;
+  target: string;
+  metadata: Record<string, any>;
+  created_at: string;
+}
+

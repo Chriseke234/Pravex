@@ -18,7 +18,8 @@ import {
   CreditCard,
   Code2,
   Terminal,
-  Globe
+  Globe,
+  MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,7 @@ const NAV_ITEMS = [
 ];
 
 const UTILITY_ITEMS = [
+  { label: "Support Chat", icon: MessageSquare, href: "/dashboard/support" },
   { label: "Settings", icon: Settings, href: "/dashboard/settings" },
 ];
 
@@ -40,6 +42,7 @@ const DEVELOPER_ITEMS = [
   { label: "API Keys", icon: Code2, href: "/dashboard/settings/api-keys" },
   { label: "Webhooks", icon: Globe, href: "/dashboard/settings/webhooks" },
 ];
+
 
 export function Sidebar() {
   const pathname = usePathname();

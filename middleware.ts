@@ -37,9 +37,10 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
   const isDashboardPage = path.startsWith('/dashboard')
   const isAdminPage = path.startsWith('/admin')
+  const isSuperAdminPage = path.startsWith('/super-admin')
   const isLoginPage = path.startsWith('/login') || path.startsWith('/signup')
 
-  if ((isDashboardPage || isAdminPage) && !user) {
+  if ((isDashboardPage || isAdminPage || isSuperAdminPage) && !user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
@@ -47,8 +48,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
+  if (isSuperAdminPage && user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || (profile.role !== 'super_admin' && profile.role !== 'superuser')) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+  }
+
   return response
 }
+
 
 export const config = {
   matcher: [
