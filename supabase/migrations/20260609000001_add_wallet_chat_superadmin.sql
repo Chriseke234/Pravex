@@ -216,10 +216,11 @@ CREATE POLICY "Superadmins can view audit logs" ON public.audit_logs
 -- 9. Trigger Functions
 
 -- Trigger: Update updated_at on wallet
-CREATE OR REPLACE FUNCTION public.handle_wallet_updated_at()
+CREATE TRIGGER set_wallets_updated_at
 BEFORE UPDATE ON public.wallets
 FOR EACH ROW
 EXECUTE FUNCTION public.handle_updated_at();
+
 
 -- Trigger: Auto-create wallet for new profile
 CREATE OR REPLACE FUNCTION public.handle_new_profile_wallet()
