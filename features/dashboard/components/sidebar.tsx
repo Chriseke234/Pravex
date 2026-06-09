@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUiStore } from "@/store/ui-store";
+import { useProfile } from "@/hooks/use-profile";
+import { createClient } from "@/services/supabase";
 import { 
+  X,
   LayoutDashboard, 
   Wallet, 
   ArrowUpRight, 
@@ -39,17 +43,42 @@ const DEVELOPER_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { isSidebarOpen, closeSidebar } = useUiStore();
+  const { profile, isLoading } = useProfile();
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  };
+
+  const initial = profile?.full_name?.charAt(0) || profile?.email?.charAt(0) || "U";
+  const name = profile?.full_name || profile?.email || "Unknown User";
+  const tier = profile?.tier || "Starter Tier";
 
   return (
-    <aside className="w-64 h-screen fixed left-0 top-0 bg-black/40 backdrop-blur-xl border-r border-white/5 flex flex-col z-50">
-      <div className="p-6">
-        <Link href="/dashboard" className="flex items-center gap-2">
+    <>
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden" 
+          onClick={closeSidebar}
+        />
+      )}
+      <aside className={cn(
+        "w-64 h-screen fixed left-0 top-0 bg-black/40 backdrop-blur-xl border-r border-white/5 flex flex-col z-50 transition-transform duration-300",
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}>
+        <div className="p-6 flex justify-between items-center">
+          <Link href="/dashboard" className="flex items-center gap-2" onClick={() => window.innerWidth < 1024 && closeSidebar()}>
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Shield className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">PAVEX</span>
-        </Link>
-      </div>
+            <span className="text-xl font-bold tracking-tight text-white">IRONBRIDGEMARKET</span>
+          </Link>
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={closeSidebar}>
+            <X className="w-5 h-5 text-muted-foreground" />
+          </Button>
+        </div>
 
       <nav className="flex-1 px-4 space-y-8 mt-4">
         <div>
@@ -63,6 +92,7 @@ export function Sidebar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    onClick={() => window.innerWidth < 1024 && closeSidebar()}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 group",
                       isActive 
@@ -91,6 +121,7 @@ export function Sidebar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  onClick={() => window.innerWidth < 1024 && closeSidebar()}
                   className="flex items-center gap-3 px-3 py-2 rounded-xl text-muted-foreground hover:text-white hover:bg-white/5 transition-all duration-200"
                 >
                   <item.icon className="w-5 h-5" />
@@ -109,6 +140,7 @@ export function Sidebar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  onClick={() => window.innerWidth < 1024 && closeSidebar()}
                   className="flex items-center gap-3 px-3 py-2 rounded-xl text-muted-foreground hover:text-white hover:bg-white/5 transition-all duration-200"
                 >
                   <item.icon className="w-5 h-5" />
@@ -124,19 +156,20 @@ export function Sidebar() {
         <div className="glassmorphism p-4 rounded-2xl border border-white/5 bg-white/[0.02] mb-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-bold">
-              JD
+              {isLoading ? "..." : initial}
             </div>
-            <div>
-              <div className="text-sm font-bold">John Doe</div>
-              <div className="text-xs text-muted-foreground">Institutional Tier</div>
+            <div className="flex-1 overflow-hidden">
+              <div className="text-sm font-bold truncate">{isLoading ? "Loading..." : name}</div>
+              <div className="text-xs text-muted-foreground truncate">{isLoading ? "..." : tier}</div>
             </div>
           </div>
-          <Button variant="outline" size="sm" className="w-full justify-start gap-2 h-9 text-xs">
+          <Button variant="outline" size="sm" className="w-full justify-start gap-2 h-9 text-xs" onClick={handleSignOut}>
             <LogOut className="w-3 h-3" />
             Sign Out
           </Button>
         </div>
       </div>
     </aside>
+    </>
   );
 }

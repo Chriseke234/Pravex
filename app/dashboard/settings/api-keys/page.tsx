@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useApiKeys } from "@/hooks/use-api-keys";
 import { GlassCard } from "@/components/shared/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,28 +10,55 @@ import {
   Plus, 
   Copy, 
   Trash2, 
-  ShieldCheck, 
   Globe, 
   Terminal,
   ExternalLink,
   Code2,
   AlertCircle
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-const MOCK_KEYS = [
-  { id: "1", name: "Production Trading Bot", prefix: "px_live_...", scopes: ["read", "write"], created: "2024-05-10" },
-  { id: "2", name: "Mobile App Integration", prefix: "px_test_...", scopes: ["read"], created: "2024-05-12" },
-];
 
 export default function APIKeysPage() {
+  const { apiKeys, isLoading, createApiKey, deleteApiKey } = useApiKeys();
   const [showNewKeyModal, setShowNewKeyModal] = useState(false);
-  const [apiKey, setApiKey] = useState("");
+  
+  // Form state
+  const [newKeyName, setNewKeyName] = useState("");
+  const [newKeyScopes, setNewKeyScopes] = useState<string[]>(["read"]);
+  
+  // Result state
+  const [generatedKey, setGeneratedKey] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateKey = () => {
-    // Mock key generation
-    const key = `px_live_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
-    setApiKey(key);
+  const toggleScope = (scope: string) => {
+    setNewKeyScopes(prev => 
+      prev.includes(scope) 
+        ? prev.filter(s => s !== scope)
+        : [...prev, scope]
+    );
+  };
+
+  const handleGenerateKey = async () => {
+    if (!newKeyName) return;
+    setIsGenerating(true);
+    try {
+      const { rawKey } = await createApiKey.mutateAsync({ name: newKeyName, scopes: newKeyScopes });
+      setGeneratedKey(rawKey);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteApiKey.mutateAsync(id);
+  };
+
+  const handleCloseModal = () => {
+    setShowNewKeyModal(false);
+    setGeneratedKey("");
+    setNewKeyName("");
+    setNewKeyScopes(["read"]);
   };
 
   return (
@@ -39,7 +67,7 @@ export default function APIKeysPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">API Management</h1>
-          <p className="text-muted-foreground">Provision secure keys for programmatic access to the Pavex infrastructure.</p>
+          <p className="text-muted-foreground">Provision secure keys for programmatic access to the Ironbridgemarket infrastructure.</p>
         </div>
         <Button variant="premium" className="gap-2" onClick={() => setShowNewKeyModal(true)}>
           <Plus className="w-4 h-4" /> Create New Key
@@ -62,36 +90,42 @@ export default function APIKeysPage() {
       <section className="space-y-6">
         <h2 className="text-xl font-bold px-2">Active API Keys</h2>
         <div className="space-y-4">
-          {MOCK_KEYS.map((key) => (
-            <GlassCard key={key.id} className="p-6">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div className="flex gap-4 items-center">
-                  <div className="p-3 bg-white/5 rounded-2xl border border-white/10">
-                    <Key className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold">{key.name}</h3>
-                    <div className="flex gap-2 items-center mt-1">
-                      <code className="text-xs text-muted-foreground bg-white/5 px-2 py-0.5 rounded">{key.prefix}</code>
-                      <span className="text-[10px] text-muted-foreground">• Created {key.created}</span>
+          {isLoading ? (
+            <div className="p-6 text-muted-foreground">Loading keys...</div>
+          ) : apiKeys?.length === 0 ? (
+            <div className="p-6 text-muted-foreground border border-white/10 rounded-2xl">No API keys provisioned.</div>
+          ) : (
+            apiKeys?.map((key) => (
+              <GlassCard key={key.id} className="p-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                  <div className="flex gap-4 items-center">
+                    <div className="p-3 bg-white/5 rounded-2xl border border-white/10">
+                      <Key className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold">{key.name}</h3>
+                      <div className="flex gap-2 items-center mt-1">
+                        <code className="text-xs text-muted-foreground bg-white/5 px-2 py-0.5 rounded">{key.key_prefix}...</code>
+                        <span className="text-[10px] text-muted-foreground">• Created {new Date(key.created_at).toLocaleDateString()}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex gap-3 w-full md:w-auto">
-                  <div className="flex gap-1">
-                    {key.scopes.map(s => (
-                      <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                        {s}
-                      </span>
-                    ))}
+                  <div className="flex gap-3 w-full md:w-auto">
+                    <div className="flex gap-1">
+                      {key.scopes.map(s => (
+                        <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                    <Button variant="glass" size="icon" className="h-9 w-9" onClick={() => handleDelete(key.id)}>
+                      <Trash2 className="w-4 h-4 text-rose-500" />
+                    </Button>
                   </div>
-                  <Button variant="glass" size="icon" className="h-9 w-9">
-                    <Trash2 className="w-4 h-4 text-rose-500" />
-                  </Button>
                 </div>
-              </div>
-            </GlassCard>
-          ))}
+              </GlassCard>
+            ))
+          )}
         </div>
       </section>
 
@@ -105,7 +139,7 @@ export default function APIKeysPage() {
             <h3 className="text-xl font-bold">API Documentation</h3>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Integrate Pavex into your proprietary trading systems, order management software, or institutional custodians. 
+            Integrate Ironbridgemarket into your proprietary trading systems, order management software, or institutional custodians. 
             Supports REST and WebSocket streams.
           </p>
           <Button variant="outline" className="w-full gap-2">
@@ -130,7 +164,7 @@ export default function APIKeysPage() {
         </GlassCard>
       </div>
 
-      {/* New Key Modal (Mock) */}
+      {/* New Key Modal */}
       {showNewKeyModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <GlassCard className="max-w-xl w-full p-8 space-y-6 relative border-primary/20">
@@ -138,39 +172,56 @@ export default function APIKeysPage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Key Name</label>
-                <Input placeholder="e.g. Trading Desk Bot A" className="bg-white/5 border-white/10" />
+                <Input 
+                  placeholder="e.g. Trading Desk Bot A" 
+                  value={newKeyName}
+                  onChange={(e) => setNewKeyName(e.target.value)}
+                  className="bg-white/5 border-white/10" 
+                  disabled={!!generatedKey}
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Permissions (Scopes)</label>
                 <div className="grid grid-cols-2 gap-3">
                   {["read", "write", "vault_approve", "transfer"].map(s => (
                     <label key={s} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
-                      <input type="checkbox" className="rounded border-white/20 bg-transparent text-primary" />
+                      <input 
+                        type="checkbox" 
+                        className="rounded border-white/20 bg-transparent text-primary" 
+                        checked={newKeyScopes.includes(s)}
+                        onChange={() => toggleScope(s)}
+                        disabled={!!generatedKey}
+                      />
                       <span className="text-sm capitalize">{s.replace('_', ' ')}</span>
                     </label>
                   ))}
                 </div>
               </div>
             </div>
-            <div className="flex gap-3 pt-4">
-              <Button variant="glass" className="flex-1" onClick={() => setShowNewKeyModal(false)}>Cancel</Button>
-              <Button variant="premium" className="flex-1" onClick={generateKey}>Generate Key</Button>
-            </div>
+            {!generatedKey && (
+              <div className="flex gap-3 pt-4">
+                <Button variant="glass" className="flex-1" onClick={handleCloseModal}>Cancel</Button>
+                <Button variant="premium" className="flex-1" onClick={handleGenerateKey} disabled={!newKeyName || isGenerating}>
+                  {isGenerating ? "Generating..." : "Generate Key"}
+                </Button>
+              </div>
+            )}
 
-            {apiKey && (
+            {generatedKey && (
               <div className="mt-6 p-4 bg-primary/10 border border-primary/20 rounded-2xl space-y-3 animate-in fade-in slide-in-from-top-2">
                 <p className="text-xs font-bold text-primary uppercase">Your New API Key</p>
                 <div className="flex gap-2">
                   <code className="flex-1 bg-black/40 p-3 rounded-xl text-xs break-all border border-white/5">
-                    {apiKey}
+                    {generatedKey}
                   </code>
-                  <Button variant="glass" size="icon" onClick={() => navigator.clipboard.writeText(apiKey)}>
+                  <Button variant="glass" size="icon" onClick={() => navigator.clipboard.writeText(generatedKey)}>
                     <Copy className="w-4 h-4" />
                   </Button>
                 </div>
                 <p className="text-[10px] text-muted-foreground italic">
                   Copy this key now. It will not be shown again for security reasons.
                 </p>
+                <Button variant="glass" className="w-full mt-4" onClick={handleCloseModal}>Done</Button>
               </div>
             )}
           </GlassCard>

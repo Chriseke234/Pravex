@@ -1,14 +1,41 @@
 "use client";
 
+import { useState } from "react";
 import { VaultCard } from "@/features/vaults/components/vault-card";
 import { ApprovalWorkflow } from "@/features/vaults/components/approval-workflow";
 import { Button } from "@/components/ui/button";
-import { Plus, ShieldPlus, Search, Filter, ShieldCheck, Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { GlassCard } from "@/components/shared/glass-card";
+import { Plus, ShieldPlus, Search, Filter, ShieldCheck, Loader2, X } from "lucide-react";
 import { useVaults } from "@/hooks/use-vaults";
 import { Vault } from "@/types/supabase";
 
 export default function VaultsPage() {
-  const { vaults, isLoading, error } = useVaults();
+  const { vaults, isLoading, error, createVault } = useVaults();
+  
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [vaultType, setVaultType] = useState<"Single-Sig" | "Multi-Sig">("Single-Sig");
+  const [newVaultName, setNewVaultName] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleCreateVault = async () => {
+    if (!newVaultName) return;
+    setIsCreating(true);
+    try {
+      await createVault.mutateAsync({
+        name: newVaultName,
+        type: "Institutional",
+        threshold_n: vaultType === "Single-Sig" ? 1 : 2,
+        threshold_m: vaultType === "Single-Sig" ? 1 : 3,
+      });
+      setShowCreateModal(false);
+      setNewVaultName("");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsCreating(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -32,10 +59,20 @@ export default function VaultsPage() {
           <p className="text-muted-foreground">Secure multi-signature asset management and governance.</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="glass" size="sm" className="gap-2">
+          <Button 
+            variant="glass" 
+            size="sm" 
+            className="gap-2"
+            onClick={() => { setVaultType("Single-Sig"); setShowCreateModal(true); }}
+          >
             <Plus className="w-4 h-4" /> New Single-Sig
           </Button>
-          <Button variant="premium" size="sm" className="gap-2">
+          <Button 
+            variant="premium" 
+            size="sm" 
+            className="gap-2"
+            onClick={() => { setVaultType("Multi-Sig"); setShowCreateModal(true); }}
+          >
             <ShieldPlus className="w-4 h-4" /> Create Multi-Sig Vault
           </Button>
         </div>
@@ -102,6 +139,52 @@ export default function VaultsPage() {
           <Button variant="outline" className="w-full md:w-auto h-12 px-8">Configure Policies</Button>
         </div>
       </div>
+
+      {/* Create Vault Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <GlassCard className="max-w-md w-full p-8 space-y-6 relative border-primary/20">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Create {vaultType} Vault</h2>
+              <Button variant="ghost" size="icon" onClick={() => setShowCreateModal(false)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Vault Name</label>
+                <Input 
+                  placeholder="e.g. Treasury Fund Alpha" 
+                  value={newVaultName}
+                  onChange={(e) => setNewVaultName(e.target.value)}
+                  className="bg-white/5 border-white/10" 
+                />
+              </div>
+              <div className="p-4 bg-white/5 border border-white/10 rounded-2xl">
+                <h4 className="text-sm font-bold mb-1">Configuration Overview</h4>
+                {vaultType === "Single-Sig" ? (
+                  <p className="text-xs text-muted-foreground">1-of-1 Signature Threshold. Ideal for high-frequency trading or individual active accounts.</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">2-of-3 Signature Threshold. Institutional security for cold storage and large treasuries.</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <Button variant="glass" className="flex-1" onClick={() => setShowCreateModal(false)}>Cancel</Button>
+              <Button 
+                variant="premium" 
+                className="flex-1" 
+                onClick={handleCreateVault}
+                disabled={!newVaultName || isCreating}
+              >
+                {isCreating ? "Creating..." : "Create Vault"}
+              </Button>
+            </div>
+          </GlassCard>
+        </div>
+      )}
     </div>
   );
 }

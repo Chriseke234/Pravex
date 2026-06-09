@@ -9,14 +9,14 @@ export function RiskWarning() {
 
   useEffect(() => {
     // Check localStorage on client mount
-    const accepted = localStorage.getItem("pavex-risk-warning-accepted");
+    const accepted = localStorage.getItem("ironbridgemarket-risk-warning-accepted");
     if (!accepted) {
       setIsOpen(true);
     }
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem("pavex-risk-warning-accepted", "true");
+    localStorage.setItem("ironbridgemarket-risk-warning-accepted", "true");
     setIsOpen(false);
   };
 
@@ -53,10 +53,10 @@ export function RiskWarning() {
             Digital asset investment and trading are subject to extreme market volatility, technical complexities, and regulatory instability. Cryptocurrencies, security tokens, and stablecoins are highly speculative high-risk instruments and lack the regulatory guarantees, capital protections, and deposit insurance schemes (such as the US FDIC or UK FSCS) common in traditional retail and commercial banking products.
           </p>
           <p>
-            The risk of total financial loss exists when holding, trading, or collateralizing digital assets. Pavex Institutional provides high-performance execution, custody architectures, and order routing platforms on an as-is, zero-trust basis. No content, analysis, or market data provided on this platform constitutes professional financial, legal, tax, or investment advice.
+            The risk of total financial loss exists when holding, trading, or collateralizing digital assets. Ironbridgemarket Institutional provides high-performance execution, custody architectures, and order routing platforms on an as-is, zero-trust basis. No content, analysis, or market data provided on this platform constitutes professional financial, legal, tax, or investment advice.
           </p>
           <p>
-            By accessing Pavex Institutional, you acknowledge and agree that you possess the necessary sophistication, capital resilience, and technical understanding to evaluate these products, and that you assume full responsibility for all transactions, market exposure, and operations executed within your accounts.
+            By accessing Ironbridgemarket Institutional, you acknowledge and agree that you possess the necessary sophistication, capital resilience, and technical understanding to evaluate these products, and that you assume full responsibility for all transactions, market exposure, and operations executed within your accounts.
           </p>
         </div>
 

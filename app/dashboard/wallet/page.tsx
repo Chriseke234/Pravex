@@ -30,37 +30,37 @@ export default function WalletPage() {
           <PortfolioChart />
         </div>
         <div>
-          {/* Quick Actions / Risk Analysis Placeholder */}
+          {/* Portfolio Health */}
           <div className="glassmorphism p-6 rounded-3xl border border-white/5 h-full space-y-6">
             <h3 className="text-lg font-bold">Portfolio Health</h3>
             <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Risk Score</span>
-                  <span className="font-bold text-emerald-400">Low Risk (2.4)</span>
+                  <span className="font-bold text-muted-foreground">N/A</span>
                 </div>
                 <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-emerald-500 w-[24%]" />
+                  <div className="h-full bg-white/10 w-0" />
                 </div>
               </div>
               
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Diversification</span>
-                  <span className="font-bold text-blue-400">Optimal</span>
+                  <span className="font-bold text-muted-foreground">N/A</span>
                 </div>
                 <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 w-[85%]" />
+                  <div className="h-full bg-white/10 w-0" />
                 </div>
               </div>
             </div>
 
             <div className="pt-6 border-t border-white/5 space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Recent Insight</h4>
-              <p className="text-sm leading-relaxed">
-                Your portfolio is currently 15% underweight in Stablecoins compared to your target allocation.
+              <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Status</h4>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Risk analysis and rebalancing insights require a live market data feed. Connect a price oracle to activate this panel.
               </p>
-              <Button variant="outline" size="sm" className="w-full">Rebalance Now</Button>
+              <Button variant="outline" size="sm" className="w-full" disabled>Rebalance Now</Button>
             </div>
           </div>
         </div>

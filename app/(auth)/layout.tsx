@@ -14,8 +14,8 @@ export default function AuthLayout({
         
         <div className="relative z-10">
           <div className="flex items-center gap-2 text-2xl font-bold">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">P</div>
-            <span>Pavex</span>
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">I</div>
+            <span>Ironbridgemarket</span>
           </div>
         </div>
 
@@ -31,7 +31,7 @@ export default function AuthLayout({
         </div>
 
         <div className="relative z-10 text-sm text-muted-foreground">
-          © 2020 Pavex Institutional. All rights reserved.
+          © 2020 Ironbridgemarket Institutional. All rights reserved.
         </div>
       </div>
 

@@ -1,13 +1,26 @@
 "use client";
 
-import { Bell, Search, Globe, ChevronDown, Command } from "lucide-react";
+import { Menu, Bell, Search, Globe, ChevronDown, Command } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUiStore } from "@/store/ui-store";
+import { useVaults } from "@/hooks/use-vaults";
+import { useProfile } from "@/hooks/use-profile";
 
 export function Topbar() {
+  const { openSidebar } = useUiStore();
+  const { vaults, isLoading: isLoadingVaults } = useVaults();
+  const { profile } = useProfile();
+
+  const totalValue = vaults?.reduce((sum, v) => sum + Number(v.balance_usd || 0), 0) || 0;
+  const formattedValue = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(totalValue);
+
   return (
-    <header className="h-16 fixed top-0 right-0 left-64 bg-black/20 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-8 z-40">
+    <header className="h-16 fixed top-0 right-0 left-0 lg:left-64 bg-black/20 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-4 lg:px-8 z-40">
       <div className="flex items-center gap-4 flex-1">
-        <div className="relative w-96">
+        <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={openSidebar}>
+          <Menu className="w-5 h-5" />
+        </Button>
+        <div className="relative w-full max-w-sm hidden sm:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input 
             type="text" 
@@ -38,10 +51,12 @@ export function Topbar() {
         <div className="flex items-center gap-3 cursor-pointer group">
           <div className="text-right">
             <div className="text-sm font-bold leading-none">Portfolio Value</div>
-            <div className="text-xs text-emerald-400 font-medium">$1,245,682.42</div>
+            <div className="text-xs text-emerald-400 font-medium">
+              {isLoadingVaults ? "Loading..." : formattedValue}
+            </div>
           </div>
-          <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-all overflow-hidden">
-            <div className="w-full h-full bg-gradient-to-br from-primary/40 to-blue-600/40" />
+          <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-all overflow-hidden text-lg font-bold">
+            {profile?.full_name?.charAt(0) || profile?.email?.charAt(0) || "U"}
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ export default function DashboardLayout({
       <Sidebar />
 
       {/* Main Content Area */}
-      <div className="pl-64 flex flex-col min-h-screen">
+      <div className="pl-0 lg:pl-64 flex flex-col min-h-screen">
         {/* Topbar - Fixed position logic is inside Topbar component */}
         <Topbar />
 

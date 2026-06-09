@@ -44,8 +44,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6 lg:gap-8">
           <Link href="/" onClick={closeMenu} className="flex items-center gap-2 text-xl font-bold shrink-0">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white text-sm font-black">P</div>
-            <span className="font-serif">Pavex</span>
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white text-sm font-black">I</div>
+            <span className="font-serif">Ironbridgemarket</span>
           </Link>
 
           {/* Desktop Navigation */}

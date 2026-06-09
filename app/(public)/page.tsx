@@ -54,7 +54,7 @@ function HeroSection() {
         
         <AnimateIn delay={200}>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-            Pavex makes it easy to invest in Bitcoin, Ethereum and more — with the security and tools that serious investors rely on.
+            Ironbridgemarket makes it easy to invest in Bitcoin, Ethereum and more — with the security and tools that serious investors rely on.
           </p>
         </AnimateIn>
         
@@ -144,7 +144,7 @@ function StatsBar() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x divide-border/30">
           <AnimateIn className="text-center space-y-2">
             <div className="text-4xl md:text-5xl font-bold text-foreground">$<AnimatedCounter target={120} suffix="B+" /></div>
-            <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">moved through Pavex</div>
+            <div className="text-sm text-muted-foreground font-medium uppercase tracking-wide">moved through Ironbridgemarket</div>
           </AnimateIn>
           <AnimateIn delay={100} className="text-center space-y-2">
             <div className="text-4xl md:text-5xl font-bold text-foreground"><AnimatedCounter target={2500} suffix="+" /></div>
@@ -305,7 +305,7 @@ function Testimonials() {
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto">
       <AnimateIn className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">Investors love Pavex</h2>
+        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">Investors love Ironbridgemarket</h2>
       </AnimateIn>
 
       <div className="flex flex-col md:flex-row gap-6">
@@ -432,7 +432,7 @@ export default function Homepage() {
       <CTABanner />
       
       <div className="max-w-7xl mx-auto px-4 py-8 text-[11px] text-muted-foreground text-center border-t border-border/30">
-        Pavex Institutional Ltd. Digital assets are high-risk investments. The value of your investments can go up as well as down and you may get back less than you put in. This is not financial advice. Past performance is not a reliable indicator of future results.
+        Ironbridgemarket Institutional Ltd. Digital assets are high-risk investments. The value of your investments can go up as well as down and you may get back less than you put in. This is not financial advice. Past performance is not a reliable indicator of future results.
       </div>
     </div>
   );

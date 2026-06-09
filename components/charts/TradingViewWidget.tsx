@@ -66,7 +66,7 @@ export function TradingViewWidget({ symbol, theme = "dark", height = 500 }: Trad
         style: "1",
         locale: "en",
         enable_publishing: false,
-        backgroundColor: "rgba(10, 22, 40, 1)", // Pavex dark navy #0A1628
+        backgroundColor: "rgba(10, 22, 40, 1)", // Ironbridgemarket dark navy #0A1628
         gridColor: "rgba(255, 255, 255, 0.05)",
         hide_top_toolbar: false,
         hide_legend: false,

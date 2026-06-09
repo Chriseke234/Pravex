@@ -24,7 +24,7 @@ export default function AdminLayout({
             <div className="w-8 h-8 bg-rose-600 rounded-lg flex items-center justify-center">
               <ShieldAlert className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white uppercase italic">Pavex Admin</span>
+            <span className="text-xl font-bold tracking-tight text-white uppercase italic">Ironbridgemarket Admin</span>
           </Link>
         </div>
 

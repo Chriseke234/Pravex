@@ -1,5 +1,6 @@
 "use client";
 
+import { usePortfolio } from "@/hooks/use-portfolio";
 import { GlassCard } from "@/components/shared/glass-card";
 import { 
   PieChart, 
@@ -9,16 +10,30 @@ import {
   Tooltip,
   Legend
 } from "recharts";
-import { Shield, Zap, TrendingUp, Globe } from "lucide-react";
+import { Shield, Zap, TrendingUp, Globe, Loader2 } from "lucide-react";
 
-const DATA = [
-  { name: "Bitcoin", value: 45, color: "var(--primary)" },
-  { name: "Ethereum", value: 30, color: "#3b82f6" },
-  { name: "Stablecoins", value: 15, color: "#10b981" },
-  { name: "Equities", value: 10, color: "#8b5cf6" },
-];
+const COLORS = ["var(--primary)", "#3b82f6", "#10b981", "#8b5cf6", "#f59e0b", "#ef4444"];
+
+const PRICE_MAP: Record<string, number> = {
+  BTC: 64212,
+  ETH: 3452,
+  SOL: 145,
+  USDC: 1,
+  AAPL: 189,
+};
 
 export function AnalyticsWidgets() {
+  const { data: assets, isLoading } = usePortfolio();
+
+  // Build pie data from real portfolio
+  const pieData = assets?.map((a, i) => ({
+    name: a.asset_symbol,
+    value: a.quantity * (PRICE_MAP[a.asset_symbol] || 100),
+    color: COLORS[i % COLORS.length],
+  })) || [];
+
+  const totalValue = pieData.reduce((s, d) => s + d.value, 0);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* Asset Allocation Pie Chart */}
@@ -28,33 +43,44 @@ export function AnalyticsWidgets() {
           <p className="text-sm text-muted-foreground">Portfolio weight by asset class.</p>
         </div>
         <div className="h-[300px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={DATA}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={100}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {DATA.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'rgba(0,0,0,0.8)', 
-                  borderColor: 'rgba(255,255,255,0.1)',
-                  borderRadius: '12px',
-                  backdropFilter: 'blur(10px)'
-                }}
-                itemStyle={{ color: '#fff' }}
-              />
-              <Legend verticalAlign="bottom" height={36}/>
-            </PieChart>
-          </ResponsiveContainer>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            </div>
+          ) : pieData.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+              No assets in portfolio to visualize.
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(0,0,0,0.8)', 
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderRadius: '12px',
+                    backdropFilter: 'blur(10px)'
+                  }}
+                  itemStyle={{ color: '#fff' }}
+                  formatter={(value: any) => [`$${Number(value).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, "Value"]}
+                />
+                <Legend verticalAlign="bottom" height={36}/>
+              </PieChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </GlassCard>
 
@@ -63,9 +89,11 @@ export function AnalyticsWidgets() {
         <GlassCard className="p-6 relative overflow-hidden group">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sharpe Ratio</p>
-              <h4 className="text-2xl font-bold text-gradient">2.45</h4>
-              <p className="text-xs text-emerald-400 font-bold">+0.12 vs last month</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Total Portfolio</p>
+              <h4 className="text-2xl font-bold text-gradient">
+                ${totalValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              </h4>
+              <p className="text-xs text-muted-foreground">{assets?.length || 0} asset(s) tracked</p>
             </div>
             <div className="p-2 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-all">
               <TrendingUp className="w-5 h-5 text-primary" />
@@ -73,7 +101,7 @@ export function AnalyticsWidgets() {
           </div>
           <div className="mt-4 pt-4 border-t border-white/5">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Excellent risk-adjusted returns compared to institutional benchmarks.
+              Live aggregate value computed from your tracked positions.
             </p>
           </div>
         </GlassCard>
@@ -82,8 +110,8 @@ export function AnalyticsWidgets() {
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Volatility (30D)</p>
-              <h4 className="text-2xl font-bold">12.8%</h4>
-              <p className="text-xs text-muted-foreground">Stable Institutional Range</p>
+              <h4 className="text-2xl font-bold">N/A</h4>
+              <p className="text-xs text-muted-foreground">Requires historical price feed</p>
             </div>
             <div className="p-2 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 transition-all">
               <Shield className="w-5 h-5 text-blue-500" />
@@ -96,7 +124,7 @@ export function AnalyticsWidgets() {
               <span>High</span>
             </div>
             <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-              <div className="h-full bg-blue-500 w-[45%]" />
+              <div className="h-full bg-white/10 w-0" />
             </div>
           </div>
         </GlassCard>

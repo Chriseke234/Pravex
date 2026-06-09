@@ -50,10 +50,10 @@ const BLOG_POSTS = [
     excerpt: "The multi-trillion dollar opportunity in bringing traditional financial instruments on-chain."
   },
   {
-    title: "Pavex Platform Update: V2.5 Release Notes",
+    title: "Ironbridgemarket Platform Update: V2.5 Release Notes",
     category: "Product Updates",
     date: "April 15, 2020",
-    author: "The Pavex Team",
+    author: "The Ironbridgemarket Team",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
     excerpt: "Introducing predictive analytics forecasting and expanded webhook configurations for enterprise users."
   }
@@ -67,7 +67,7 @@ export default function BlogPage() {
         <section className="text-center max-w-3xl mx-auto space-y-6">
           <FadeIn direction="up">
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-              Pavex <span className="text-gradient">Blog</span>
+              Ironbridgemarket <span className="text-gradient">Blog</span>
             </h1>
           </FadeIn>
           <FadeIn direction="up" delay={0.1}>

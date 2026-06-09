@@ -129,7 +129,7 @@ export default function AssetDetailPage() {
           <h2 className="text-2xl font-bold text-foreground mb-4">About {asset.name}</h2>
           <p className="text-muted-foreground leading-relaxed max-w-4xl">
             {asset.name} ({asset.symbol}) is currently trading at {formatCurrency(asset.price)} with a 24-hour trading volume of {formatCompact(asset.volume24h)}. 
-            Institutional investors utilize Pavex to gain exposure to {asset.name} via regulated custodial accounts with microsecond execution latency and deep aggregated liquidity.
+            Institutional investors utilize Ironbridgemarket to gain exposure to {asset.name} via regulated custodial accounts with microsecond execution latency and deep aggregated liquidity.
           </p>
         </div>
 

@@ -10,14 +10,14 @@ export function CookieBanner() {
 
   useEffect(() => {
     // Check localStorage on client mount
-    const consent = localStorage.getItem("pavex-cookie-consent");
+    const consent = localStorage.getItem("ironbridgemarket-cookie-consent");
     if (!consent) {
       setIsVisible(true);
     }
   }, []);
 
   const handleConsent = (level: "all" | "rejected" | "managed") => {
-    localStorage.setItem("pavex-cookie-consent", level);
+    localStorage.setItem("ironbridgemarket-cookie-consent", level);
     setIsVisible(false);
   };
 

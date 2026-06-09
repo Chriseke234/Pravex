@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Open Institutional Account",
-  description: "Start your institutional investment journey with Pavex.",
+  description: "Start your institutional investment journey with Ironbridgemarket.",
   alternates: {
     canonical: "/signup",
   },
