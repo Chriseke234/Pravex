@@ -39,7 +39,7 @@
     --gradient-premium: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     --gradient-dark: linear-gradient(180deg, rgba(248, 250, 252, 0) 0%, rgba(241, 245, 249, 1) 100%);
 
-    /* Pavex Brand Colors HSL */
+    /* Ironbridge Market Brand Colors HSL */
     --brand-gold: 45.4 69.4% 53.3%; /* #D4AF37 */
     --brand-gold-hover: 45.4 60% 45%; /* #B8962E */
     --brand-navy: 215.2 60% 9.8%; /* #0A1628 */
@@ -85,7 +85,7 @@
     --gradient-premium: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     --gradient-dark: linear-gradient(180deg, rgba(30, 41, 59, 0) 0%, rgba(10, 22, 40, 1) 100%);
 
-    /* Pavex Brand Colors HSL */
+    /* Ironbridge Market Brand Colors HSL */
     --brand-gold: 45.4 69.4% 53.3%;
     --brand-gold-hover: 45.4 60% 45%;
     --brand-navy: 215.2 60% 9.8%;
