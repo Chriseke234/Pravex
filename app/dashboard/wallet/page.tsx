@@ -2,14 +2,36 @@
 
 import { useState } from "react";
 import { WalletOverview } from "@/features/dashboard/components/wallet-overview";
+
 import { PortfolioChart } from "@/features/dashboard/components/portfolio-chart";
 import { AssetList } from "@/features/dashboard/components/asset-list";
 import { FiatWallet } from "@/features/dashboard/components/fiat-wallet";
 import { Button } from "@/components/ui/button";
 import { Download, Filter, Search, ShieldCheck, Coins } from "lucide-react";
+import { useVaults } from "@/hooks/use-vaults";
 
 export default function WalletPage() {
   const [activeTab, setActiveTab] = useState<"crypto" | "fiat">("crypto");
+  const { vaults } = useVaults();
+
+  const handleExportStatement = () => {
+    if (!vaults || vaults.length === 0) return;
+    const content = "IRONBRIDGE MARKET - CRYPTO CUSTODY STATEMENT\n" +
+      `Generated: ${new Date().toLocaleString()}\n` +
+      `==========================================\n` +
+      "Vaults Valuation List:\n" +
+      (vaults.map(v => `- ${v.name} (${v.type}): $${Number(v.balance_usd || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`).join("\n") || "No vaults created.") +
+      `\n==========================================\n` +
+      "Status: ACTIVE";
+
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `crypto_custody_statement_${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="space-y-8 pb-12">
@@ -22,7 +44,7 @@ export default function WalletPage() {
         <div className="flex gap-3">
           {activeTab === "crypto" ? (
             <>
-              <Button variant="glass" size="sm" className="gap-2">
+              <Button variant="glass" size="sm" className="gap-2" onClick={handleExportStatement}>
                 <Download className="w-4 h-4" /> Export Statement
               </Button>
               <Button variant="premium" size="sm" onClick={() => setActiveTab("fiat")}>Manage Funding</Button>
@@ -34,6 +56,7 @@ export default function WalletPage() {
           )}
         </div>
       </div>
+
 
       {/* Tabs */}
       <div className="flex border-b border-white/5 gap-6">

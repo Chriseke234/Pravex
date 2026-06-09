@@ -19,6 +19,7 @@ import {
 import { FadeIn } from "@/components/animations/fade-in";
 import { StaggerContainer, staggerItem } from "@/components/animations/stagger-container";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useTransactions } from "@/hooks/use-transactions";
 import { useProfile } from "@/hooks/use-profile";
@@ -62,6 +63,27 @@ export default function DashboardOverview() {
     }
   };
 
+  const handleDownloadReport = () => {
+    const reportText = `IRONBRIDGE MARKET - PORTFOLIO AUDIT STATEMENT\n` +
+      `Generated: ${new Date().toLocaleString()}\n` +
+      `Client: ${profile?.full_name || profile?.email || "Unknown User"}\n` +
+      `Institutional Tier: ${profile?.tier || "Starter"}\n` +
+      `Total Custody Valuation: $${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}\n` +
+      `==========================================\n` +
+      `Recent Flows Log:\n` +
+      (transactions?.map(t => `- ${new Date(t.created_at).toLocaleDateString()} ${new Date(t.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} | ${t.type} ${t.amount} ${t.asset} ($${t.amount_usd?.toFixed(2) || 0}) [Status: ${t.status}]`).join("\n") || "No transactions recorded.") +
+      `\n==========================================\n` +
+      `Status: VERIFIED`;
+
+    const blob = new Blob([reportText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ironbridge_portfolio_statement_${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-8">
       {/* Welcome Header */}
@@ -71,10 +93,11 @@ export default function DashboardOverview() {
           <p className="text-muted-foreground">Welcome back, {profile?.full_name || profile?.email || "User"}. Here is your portfolio performance.</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="glass" size="sm">Download Report</Button>
+          <Button variant="glass" size="sm" onClick={handleDownloadReport}>Download Report</Button>
           <Button variant="premium" size="sm" onClick={() => setShowTradeModal(true)}>Execute Trade</Button>
         </div>
       </div>
+
 
       {/* Quick Stats */}
       <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -155,21 +178,26 @@ export default function DashboardOverview() {
           <GlassCard className="p-6 h-full space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold">Market Activity</h2>
-              <Button variant="ghost" size="sm">View All</Button>
+              <Link href="/dashboard/analytics">
+                <Button variant="ghost" size="sm">View All</Button>
+              </Link>
             </div>
             <div className="h-[400px] flex items-center justify-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
               <p className="text-muted-foreground text-sm italic">Analytics chart placeholder - Integration pending Phase 4.3</p>
             </div>
           </GlassCard>
         </FadeIn>
-
+ 
         {/* Recent Transactions */}
         <FadeIn direction="up" delay={0.2}>
           <GlassCard className="p-6 space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold">Recent Flows</h2>
-              <Button variant="ghost" size="sm">View History</Button>
+              <Link href="/dashboard/transactions">
+                <Button variant="ghost" size="sm">View History</Button>
+              </Link>
             </div>
+
             <div className="space-y-4">
               {recentTxs.length === 0 ? (
                 <div className="text-center p-6 text-muted-foreground text-sm">No recent transactions.</div>
