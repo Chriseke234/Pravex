@@ -58,6 +58,7 @@ export function Sidebar() {
   const initial = profile?.full_name?.charAt(0) || profile?.email?.charAt(0) || "U";
   const name = profile?.full_name || profile?.email || "Unknown User";
   const tier = profile?.tier || "Starter Tier";
+  const isAdmin = profile && ["admin", "superuser", "super_admin"].includes(profile.role);
 
   return (
     <>
@@ -153,6 +154,25 @@ export function Sidebar() {
             ))}
           </ul>
         </div>
+        {isAdmin && (
+          <div className="mt-6">
+            <p className="px-2 text-xs font-semibold uppercase tracking-widest text-purple-400 mb-4">
+              Administration
+            </p>
+            <ul className="space-y-1">
+              <li>
+                <Link
+                  href="/super-admin"
+                  onClick={() => window.innerWidth < 1024 && closeSidebar()}
+                  className="flex items-center gap-3 px-3 py-2 rounded-xl text-purple-300 hover:text-white hover:bg-purple-950/20 transition-all duration-200 border border-purple-500/10 bg-purple-500/5 group"
+                >
+                  <Shield className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
+                  <span className="font-medium">Admin Panel</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </nav>
 
       <div className="p-4 mt-auto">

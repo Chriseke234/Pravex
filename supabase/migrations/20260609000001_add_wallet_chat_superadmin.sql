@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS public.deposits (
 CREATE TABLE IF NOT EXISTS public.conversations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+    subject TEXT,
     status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'closed', 'escalated')),
     created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
@@ -131,10 +132,12 @@ ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 
 -- Wallets RLS Policies
+DROP POLICY IF EXISTS "Users can view own wallet" ON public.wallets;
 CREATE POLICY "Users can view own wallet" ON public.wallets
     FOR SELECT USING (auth.uid() = user_id OR public.is_admin_or_superadmin());
 
 -- Wallet Transactions RLS Policies
+DROP POLICY IF EXISTS "Users can view own wallet transactions" ON public.wallet_transactions;
 CREATE POLICY "Users can view own wallet transactions" ON public.wallet_transactions
     FOR SELECT USING (
         EXISTS (
@@ -143,40 +146,51 @@ CREATE POLICY "Users can view own wallet transactions" ON public.wallet_transact
         ) OR public.is_admin_or_superadmin()
     );
 
+DROP POLICY IF EXISTS "Admins/Superadmins can manage transactions" ON public.wallet_transactions;
 CREATE POLICY "Admins/Superadmins can manage transactions" ON public.wallet_transactions
     FOR ALL USING (public.is_admin_or_superadmin());
 
 -- Withdrawals RLS Policies
+DROP POLICY IF EXISTS "Users can view own withdrawals" ON public.withdrawals;
 CREATE POLICY "Users can view own withdrawals" ON public.withdrawals
     FOR SELECT USING (auth.uid() = user_id OR public.is_admin_or_superadmin());
 
+DROP POLICY IF EXISTS "Users can create withdrawals" ON public.withdrawals;
 CREATE POLICY "Users can create withdrawals" ON public.withdrawals
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins/Superadmins can update withdrawals" ON public.withdrawals;
 CREATE POLICY "Admins/Superadmins can update withdrawals" ON public.withdrawals
     FOR UPDATE USING (public.is_admin_or_superadmin());
 
 -- Deposits RLS Policies
+DROP POLICY IF EXISTS "Users can view own deposits" ON public.deposits;
 CREATE POLICY "Users can view own deposits" ON public.deposits
     FOR SELECT USING (auth.uid() = user_id OR public.is_admin_or_superadmin());
 
+DROP POLICY IF EXISTS "Users can create deposits" ON public.deposits;
 CREATE POLICY "Users can create deposits" ON public.deposits
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins/Superadmins can update deposits" ON public.deposits;
 CREATE POLICY "Admins/Superadmins can update deposits" ON public.deposits
     FOR UPDATE USING (public.is_admin_or_superadmin());
 
 -- Conversations RLS Policies
+DROP POLICY IF EXISTS "Users can view own conversations" ON public.conversations;
 CREATE POLICY "Users can view own conversations" ON public.conversations
     FOR SELECT USING (auth.uid() = user_id OR public.is_admin_or_superadmin());
 
+DROP POLICY IF EXISTS "Users can create conversations" ON public.conversations;
 CREATE POLICY "Users can create conversations" ON public.conversations
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins/Superadmins can update conversations" ON public.conversations;
 CREATE POLICY "Admins/Superadmins can update conversations" ON public.conversations
     FOR UPDATE USING (public.is_admin_or_superadmin());
 
 -- Messages RLS Policies
+DROP POLICY IF EXISTS "Users can view own conversation messages" ON public.messages;
 CREATE POLICY "Users can view own conversation messages" ON public.messages
     FOR SELECT USING (
         EXISTS (
@@ -185,6 +199,7 @@ CREATE POLICY "Users can view own conversation messages" ON public.messages
         ) OR public.is_admin_or_superadmin()
     );
 
+DROP POLICY IF EXISTS "Users can send messages to own conversations" ON public.messages;
 CREATE POLICY "Users can send messages to own conversations" ON public.messages
     FOR INSERT WITH CHECK (
         auth.uid() = sender_id AND (
@@ -196,26 +211,32 @@ CREATE POLICY "Users can send messages to own conversations" ON public.messages
     );
 
 -- User Sessions RLS Policies
+DROP POLICY IF EXISTS "Users can manage own sessions" ON public.user_sessions;
 CREATE POLICY "Users can manage own sessions" ON public.user_sessions
     FOR ALL USING (auth.uid() = user_id OR public.is_admin_or_superadmin());
 
 -- Notifications RLS Policies
+DROP POLICY IF EXISTS "Users can view own or broadcast notifications" ON public.notifications;
 CREATE POLICY "Users can view own or broadcast notifications" ON public.notifications
     FOR SELECT USING (auth.uid() = recipient_id OR recipient_id IS NULL OR public.is_admin_or_superadmin());
 
+DROP POLICY IF EXISTS "Users can mark own notifications as read" ON public.notifications;
 CREATE POLICY "Users can mark own notifications as read" ON public.notifications
     FOR UPDATE USING (auth.uid() = recipient_id);
 
+DROP POLICY IF EXISTS "Admins/Superadmins can create notifications" ON public.notifications;
 CREATE POLICY "Admins/Superadmins can create notifications" ON public.notifications
     FOR INSERT WITH CHECK (public.is_admin_or_superadmin());
 
 -- Audit Logs RLS Policies
+DROP POLICY IF EXISTS "Superadmins can view audit logs" ON public.audit_logs;
 CREATE POLICY "Superadmins can view audit logs" ON public.audit_logs
     FOR SELECT USING (public.is_superadmin());
 
 -- 9. Trigger Functions
 
 -- Trigger: Update updated_at on wallet
+DROP TRIGGER IF EXISTS set_wallets_updated_at ON public.wallets;
 CREATE TRIGGER set_wallets_updated_at
 BEFORE UPDATE ON public.wallets
 FOR EACH ROW
@@ -233,6 +254,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS create_wallet_on_profile_signup ON public.profiles;
 CREATE TRIGGER create_wallet_on_profile_signup
 AFTER INSERT ON public.profiles
 FOR EACH ROW EXECUTE FUNCTION public.handle_new_profile_wallet();
@@ -261,6 +283,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS on_wallet_transaction_insert ON public.wallet_transactions;
 CREATE TRIGGER on_wallet_transaction_insert
 AFTER INSERT ON public.wallet_transactions
 FOR EACH ROW
@@ -279,6 +302,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS on_deposit_status_update ON public.deposits;
 CREATE TRIGGER on_deposit_status_update
 AFTER UPDATE OF status ON public.deposits
 FOR EACH ROW
@@ -297,6 +321,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS on_withdrawal_status_update ON public.withdrawals;
 CREATE TRIGGER on_withdrawal_status_update
 AFTER UPDATE OF status ON public.withdrawals
 FOR EACH ROW

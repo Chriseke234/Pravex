@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/services/supabase";
 import { Conversation, Message } from "@/types/supabase";
 
+// Conversation enriched with the originating user's profile
 type ConversationWithUser = Conversation & {
   profiles: {
     full_name: string | null;
@@ -12,14 +13,25 @@ type ConversationWithUser = Conversation & {
   };
 };
 
+// Extended message type that includes the sender's profile info
+export type MessageWithSender = Message & {
+  profiles: {
+    full_name: string | null;
+    email: string;
+    role: string;
+    avatar_url: string | null;
+  };
+};
+
 export function useAdminChat(conversationId?: string) {
   const supabase = createClient();
   const queryClient = useQueryClient();
-  const [realtimeMessages, setRealtimeMessages] = useState<Message[]>([]);
+  const [realtimeMessages, setRealtimeMessages] = useState<MessageWithSender[]>([]);
 
-  // 1. Fetch all conversations for admin
+  // 1. Fetch all conversations for the admin panel
   const conversationsQuery = useQuery<ConversationWithUser[]>({
     queryKey: ["admin-conversations"],
+    refetchInterval: 30000, // Poll every 30s for new conversations
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversations")
@@ -34,19 +46,22 @@ export function useAdminChat(conversationId?: string) {
     },
   });
 
-  // 2. Fetch messages for active conversation
-  const messagesQuery = useQuery<Message[]>({
+  // 2. Fetch messages for active conversation, joined with sender profile
+  const messagesQuery = useQuery<MessageWithSender[]>({
     queryKey: ["admin-messages", conversationId],
     enabled: !!conversationId,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("messages")
-        .select("*")
+        .select(`
+          *,
+          profiles:sender_id ( full_name, email, role, avatar_url )
+        `)
         .eq("conversation_id", conversationId)
         .order("created_at", { ascending: true });
 
       if (error) throw error;
-      return data as Message[];
+      return data as any as MessageWithSender[];
     },
   });
 
@@ -55,7 +70,7 @@ export function useAdminChat(conversationId?: string) {
     setRealtimeMessages([]);
   }, [conversationId]);
 
-  // 3. Realtime Subscription for new messages
+  // 3. Realtime subscription for new messages
   useEffect(() => {
     if (!conversationId) return;
 
@@ -71,9 +86,22 @@ export function useAdminChat(conversationId?: string) {
         },
         (payload) => {
           const newMsg = payload.new as Message;
+
+          // Realtime payloads don't include the joined profile,
+          // so we provide a fallback until the next refetch
+          const msgWithSender: MessageWithSender = {
+            ...newMsg,
+            profiles: (newMsg as any).profiles ?? {
+              full_name: null,
+              email: "",
+              role: "user",
+              avatar_url: null,
+            },
+          };
+
           setRealtimeMessages((prev) => {
-            if (prev.some((m) => m.id === newMsg.id)) return prev;
-            return [...prev, newMsg];
+            if (prev.some((m) => m.id === msgWithSender.id)) return prev;
+            return [...prev, msgWithSender];
           });
         }
       )
@@ -84,8 +112,8 @@ export function useAdminChat(conversationId?: string) {
     };
   }, [conversationId, supabase]);
 
-  // Combined messages list
-  const allMessages = [
+  // Combined messages list (DB + realtime, deduplicated & sorted)
+  const allMessages: MessageWithSender[] = [
     ...(messagesQuery.data || []),
     ...realtimeMessages.filter(
       (rm) => !messagesQuery.data?.some((dbm) => dbm.id === rm.id)
@@ -93,6 +121,8 @@ export function useAdminChat(conversationId?: string) {
   ].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
   // 4. Mutations
+
+  /** Update a conversation's status (open, closed, escalated) */
   const updateTicketStatus = useMutation({
     mutationFn: async ({ status }: { status: "open" | "closed" | "escalated" }) => {
       if (!conversationId) throw new Error("No conversation selected");
@@ -111,6 +141,7 @@ export function useAdminChat(conversationId?: string) {
     },
   });
 
+  /** Send an admin reply in the active conversation */
   const sendReply = useMutation({
     mutationFn: async ({ message, attachmentUrl }: { message: string | null; attachmentUrl?: string | null }) => {
       if (!conversationId) throw new Error("No conversation selected");
@@ -127,11 +158,14 @@ export function useAdminChat(conversationId?: string) {
             attachment_url: attachmentUrl || null,
           },
         ])
-        .select()
+        .select(`
+          *,
+          profiles:sender_id ( full_name, email, role, avatar_url )
+        `)
         .single();
 
       if (error) throw error;
-      return data as Message;
+      return data as any as MessageWithSender;
     },
   });
 

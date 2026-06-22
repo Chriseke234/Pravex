@@ -91,6 +91,7 @@ export interface Deposit {
 export interface Conversation {
   id: string;
   user_id: string;
+  subject: string | null;
   status: 'open' | 'closed' | 'escalated';
   created_at: string;
 }
