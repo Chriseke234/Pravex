@@ -30,7 +30,7 @@ const NAV_ITEMS = [
   { label: "Wallet", icon: Wallet, href: "/dashboard/wallet" },
   { label: "Vaults", icon: Shield, href: "/dashboard/vaults" },
   { label: "Transactions", icon: History, href: "/dashboard/transactions" },
-  { label: "Market Data", icon: BarChart4, href: "/dashboard/markets" },
+  { label: "Market Data", icon: BarChart4, href: "/markets" },
 ];
 
 const UTILITY_ITEMS = [
