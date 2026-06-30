@@ -78,6 +78,15 @@ export default function UserSupportPage() {
   // New‑chat modal state
   const [isNewChatOpen, setIsNewChatOpen] = useState(false);
   const [newChatSubject, setNewChatSubject] = useState("");
+  const [newChatError, setNewChatError] = useState<string | null>(null);
+
+  // Clear modal error/subject when opened
+  useEffect(() => {
+    if (isNewChatOpen) {
+      setNewChatError(null);
+      setNewChatSubject("");
+    }
+  }, [isNewChatOpen]);
 
   // Mobile panel toggle – true = show chat, false = show conversation list
   const [showChat, setShowChat] = useState(false);
@@ -103,6 +112,7 @@ export default function UserSupportPage() {
   /** Create a new conversation and navigate to it */
   const handleStartChat = async () => {
     try {
+      setNewChatError(null);
       const newConversation = await createConversation.mutateAsync({
         subject: newChatSubject || undefined,
       });
@@ -110,8 +120,9 @@ export default function UserSupportPage() {
       setIsNewChatOpen(false);
       setNewChatSubject("");
       setShowChat(true); // switch to chat on mobile
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      setNewChatError(e?.message || "Failed to start conversation. Please make sure the database is migrated.");
     }
   };
 
@@ -572,6 +583,13 @@ export default function UserSupportPage() {
               className="bg-black/30 border-white/10 rounded-xl text-sm"
             />
           </div>
+
+          {/* Error message */}
+          {newChatError && (
+            <div className="text-[11px] text-rose-500 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl">
+              {newChatError}
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex justify-end gap-2 pt-1">
