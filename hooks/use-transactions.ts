@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClient } from "@/services/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { Transaction } from "@/types/supabase";
 
 // Extended type to include the joined vault name

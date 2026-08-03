@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClient } from "@/services/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { Conversation, Message } from "@/types/supabase";
 
 // Conversation enriched with the originating user's profile

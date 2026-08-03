@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { createClient } from "@/services/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { GlassCard } from "@/components/shared/glass-card";
 import { 
   Users, 

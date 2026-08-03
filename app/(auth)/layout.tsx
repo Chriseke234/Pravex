@@ -1,46 +1,95 @@
-import { GlassCard } from "@/components/shared/glass-card"
+import { Shield } from "lucide-react";
+import Link from "next/link";
 
 export default function AuthLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen grid lg:grid-cols-2 bg-background">
-      {/* Visual Side */}
-      <div className="hidden lg:flex flex-col justify-between p-12 bg-primary/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2000')] bg-cover bg-center opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-background" />
-        
+    <div className="min-h-screen grid lg:grid-cols-2 bg-slate-950">
+      {/* ─── Visual / Hero Side ─────────────────────── */}
+      <div className="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2000')",
+          }}
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-950/80 to-slate-900/60" />
+        {/* Gold glow top-right */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/8 rounded-full blur-3xl" />
+
+        {/* Brand mark */}
         <div className="relative z-10">
-          <div className="flex items-center gap-2 text-2xl font-bold">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">I</div>
-            <span>Ironbridgemarket</span>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30">
+              <Shield className="w-5 h-5 text-slate-950" strokeWidth={2.5} />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-amber-400 tracking-[0.2em] uppercase">Iron Bridge</p>
+              <p className="text-base font-bold text-white">Banking</p>
+            </div>
+          </Link>
+        </div>
+
+        {/* Hero copy */}
+        <div className="relative z-10 space-y-6">
+          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-xs font-semibold text-amber-400 tracking-wide">
+              Institutional-Grade Platform
+            </span>
+          </div>
+          <h2 className="text-4xl font-bold text-white leading-tight">
+            The future of<br />
+            <span className="text-gradient-gold">institutional banking</span>
+          </h2>
+          <p className="text-slate-400 text-lg max-w-sm leading-relaxed">
+            Access premium liquidity, multi-signature custody, and real-time analytics trusted by 2,500+ institutions across 120 countries.
+          </p>
+
+          {/* Social proof */}
+          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-800/60">
+            {[
+              { label: "AUM", value: "$4.2B+" },
+              { label: "Institutions", value: "2,500+" },
+              { label: "Countries", value: "120+" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="text-xl font-bold text-white">{stat.value}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="relative z-10 space-y-4">
-          <h2 className="text-4xl font-bold leading-tight">
-            Institutional-grade <br />
-            <span className="text-primary">Wealth Management</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-md">
-            Join the elite circle of institutional investors. 
-            Access premium liquidity, real-time analytics, and secure custody.
-          </p>
-        </div>
-
-        <div className="relative z-10 text-sm text-muted-foreground">
-          © 2020 Ironbridgemarket Institutional. All rights reserved.
+        {/* Footer */}
+        <div className="relative z-10 text-xs text-slate-600">
+          © {new Date().getFullYear()} Iron Bridge Banking. All rights reserved.
         </div>
       </div>
 
-      {/* Form Side */}
-      <div className="flex items-center justify-center p-8">
-        <div className="w-full max-w-md space-y-8">
-          {children}
+      {/* ─── Form Side ──────────────────────────────── */}
+      <div className="flex flex-col items-center justify-center p-6 sm:p-10 bg-slate-950">
+        {/* Mobile brand */}
+        <div className="lg:hidden mb-8">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-md shadow-amber-500/25">
+              <Shield className="w-4 h-4 text-slate-950" strokeWidth={2.5} />
+            </div>
+            <div>
+              <p className="text-[9px] font-bold text-amber-400 tracking-[0.2em] uppercase">Iron Bridge</p>
+              <p className="text-sm font-bold text-white">Banking</p>
+            </div>
+          </Link>
         </div>
+
+        <div className="w-full max-w-md">{children}</div>
       </div>
     </div>
-  )
+  );
 }

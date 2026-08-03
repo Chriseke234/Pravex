@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { createClient } from "@/services/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 export function useSessionTracker() {
   const supabase = createClient();

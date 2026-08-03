@@ -1,4 +1,4 @@
-import { createClient } from '@/services/supabase'
+import { createClient } from '@/lib/supabase/client'
 
 export async function verifyApiKey(request: Request) {
   const authHeader = request.headers.get('Authorization')

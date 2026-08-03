@@ -1,4 +1,4 @@
-import { ImageResponse } from "next/og";
+﻿import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
                 letterSpacing: "-0.5px",
               }}
             >
-              Ironbridgemarket <span style={{ color: "#D4AF37" }}>Institutional</span>
+              Iron Bridge Banking <span style={{ color: "#D4AF37" }}>Institutional</span>
             </span>
           </div>
 
@@ -169,7 +169,7 @@ export async function GET(request: Request) {
               paddingTop: "24px",
             }}
           >
-            <span style={{ color: "#64748b", fontSize: "16px" }}>ironbridgemarket.com</span>
+            <span style={{ color: "#64748b", fontSize: "16px" }}>ironbridgebanking.com</span>
             <span style={{ color: "#64748b", fontSize: "16px" }}>MPC-CMP Custody &bull; Regulated Brokerage</span>
           </div>
         </div>

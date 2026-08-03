@@ -1,8 +1,8 @@
-import { Metadata } from "next";
+﻿import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Client Login",
-  description: "Secure access to your Ironbridgemarket institutional dashboard.",
+  description: "Secure access to your Iron Bridge Banking institutional dashboard.",
   alternates: {
     canonical: "/login",
   },

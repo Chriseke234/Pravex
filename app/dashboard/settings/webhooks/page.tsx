@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useWebhooks } from "@/hooks/use-webhooks";
@@ -122,7 +122,7 @@ export default function WebhooksPage() {
           <h3 className="text-xl font-bold">Signature Verification</h3>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Ironbridgemarket signs all webhook events with a unique secret key. Use this secret to verify that payloads 
+          Iron Bridge Banking signs all webhook events with a unique secret key. Use this secret to verify that payloads 
           are sent from our infrastructure and have not been tampered with.
         </p>
         <div className="flex gap-2 items-center">

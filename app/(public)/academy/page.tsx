@@ -1,10 +1,10 @@
-import { Metadata } from "next";
+﻿import { Metadata } from "next";
 import { AcademyGrid } from "@/features/cms/components/academy-grid";
 import { Button } from "@/components/ui/button";
 import { Search, GraduationCap, Sparkles, BookMarked } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Ironbridgemarket Academy",
+  title: "Iron Bridge Banking Academy",
   description: "Master digital asset infrastructure with our institutional resources and guides.",
   alternates: {
     canonical: "/academy",
@@ -23,7 +23,7 @@ export default function AcademyPage() {
               Intelligence Hub
             </div>
             <h1 className="text-6xl font-bold tracking-tight">
-              Ironbridgemarket <span className="text-gradient">Academy</span>
+              Iron Bridge Banking <span className="text-gradient">Academy</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
               Master the complexities of digital asset infrastructure. Professional resources, deep-dive market insights, and technical guides for the institutional investor.
@@ -82,7 +82,7 @@ export default function AcademyPage() {
             </div>
             <h2 className="text-4xl font-bold">Stay Ahead of the Curve</h2>
             <p className="text-lg text-muted-foreground">
-              Subscribe to the Ironbridgemarket Institutional newsletter and receive weekly market analysis and platform updates directly in your inbox.
+              Subscribe to the Iron Bridge Banking newsletter and receive weekly market analysis and platform updates directly in your inbox.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import { useMarketData } from "@/hooks/useMarketData";
@@ -107,7 +107,7 @@ export function MarketsClient() {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const saved = localStorage.getItem("ironbridgemarket_watchlist");
+    const saved = localStorage.getItem("iron_bridge_banking_watchlist");
     if (saved) {
       try { setWatchlist(JSON.parse(saved)); } catch {}
     }
@@ -119,7 +119,7 @@ export function MarketsClient() {
       ? watchlist.filter((x) => x !== id)
       : [...watchlist, id];
     setWatchlist(newWatchlist);
-    localStorage.setItem("ironbridgemarket_watchlist", JSON.stringify(newWatchlist));
+    localStorage.setItem("iron_bridge_banking_watchlist", JSON.stringify(newWatchlist));
   };
 
   const stats = useMemo(() => {

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { GlassCard } from "@/components/shared/glass-card";
 import { Button } from "@/components/ui/button";
@@ -94,7 +94,7 @@ export default function SecurityPage() {
           
           <AnimateIn direction="up" delay={100}>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-              Ironbridgemarket utilizes next-generation multi-party computation (MPC), physical hardware security modules (HSMs), and strict zero-trust parameters to safeguard digital assets at scale.
+              Iron Bridge Banking utilizes next-generation multi-party computation (MPC), physical hardware security modules (HSMs), and strict zero-trust parameters to safeguard digital assets at scale.
             </p>
           </AnimateIn>
           

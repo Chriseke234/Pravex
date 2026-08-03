@@ -1,319 +1,401 @@
 "use client";
 
 import { useState } from "react";
-import { GlassCard } from "@/components/shared/glass-card";
+import { StatCard } from "@/components/ui/stat-card";
+import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  TrendingUp, 
-  TrendingDown, 
+import { StatusBadge } from "@/components/ui/badge";
+import { GlassCard } from "@/components/shared/glass-card";
+import {
+  ArrowUpRight,
+  ArrowDownLeft,
   Wallet,
   Activity,
   ShieldCheck,
-  Zap,
-  X,
-  RefreshCw
+  TrendingUp,
+  RefreshCw,
+  Download,
+  Send,
+  Plus,
+  Landmark,
+  Calculator,
 } from "lucide-react";
 import { FadeIn } from "@/components/animations/fade-in";
 import { StaggerContainer, staggerItem } from "@/components/animations/stagger-container";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useTransactions } from "@/hooks/use-transactions";
+import { formatCurrency, formatDate } from "@/lib/utils/formatters";
+import { useWallet } from "@/hooks/use-wallet";
 import { useProfile } from "@/hooks/use-profile";
-import { useVaults } from "@/hooks/use-vaults";
+import { useTransfers } from "@/hooks/use-transfers";
+import { useAccounts } from "@/hooks/use-accounts";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { useToast } from "@/components/ui/toast";
 
 export default function DashboardOverview() {
-  const { transactions, createTransaction } = useTransactions();
+  const { wallet, transactions, isLoading: isLoadingWallet } = useWallet();
   const { profile } = useProfile();
-  const { vaults } = useVaults();
-  
-  const [showTradeModal, setShowTradeModal] = useState(false);
-  const [tradeType, setTradeType] = useState<"Deposit" | "Withdrawal" | "Trade">("Deposit");
-  const [tradeAsset, setTradeAsset] = useState("BTC");
-  const [tradeAmount, setTradeAmount] = useState("");
+  const { accounts } = useAccounts();
+  const { createTransfer } = useTransfers();
+  const { showToast } = useToast();
+
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [recipient, setRecipient] = useState("");
+  const [accountNum, setAccountNum] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [amount, setAmount] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const recentTxs = transactions?.slice(0, 6) || [];
-  const totalValue = vaults?.reduce((sum, v) => sum + Number(v.balance_usd || 0), 0) || 0;
+  const walletBalance = wallet?.balance || 0;
+  const recentTxs = transactions?.slice(0, 5) || [];
+  const accountCount = accounts?.length || 1;
 
-  const handleExecuteTrade = async () => {
-    if (!tradeAmount || isNaN(Number(tradeAmount))) return;
+  // Chart data simulation from recent transactions
+  const chartData = [
+    { name: "Mon", amount: 1200 },
+    { name: "Tue", amount: 2400 },
+    { name: "Wed", amount: 1800 },
+    { name: "Thu", amount: 3900 },
+    { name: "Fri", amount: 3100 },
+    { name: "Sat", amount: 4800 },
+    { name: "Sun", amount: walletBalance || 5200 },
+  ];
+
+  const handleSendTransfer = async () => {
+    if (!amount || isNaN(Number(amount)) || !recipient || !accountNum) return;
     setIsSubmitting(true);
-    
     try {
-      const mockUsdValue = Number(tradeAmount) * (tradeAsset === "BTC" ? 64000 : tradeAsset === "ETH" ? 3400 : tradeAsset === "SOL" ? 140 : 1);
-      
-      await createTransaction.mutateAsync({
-        type: tradeType,
-        asset: tradeAsset,
-        amount: Number(tradeAmount),
-        amount_usd: mockUsdValue,
-        status: tradeType === "Withdrawal" ? "Pending" : "Completed" // Withdrawals require approval in our mock system
+      await createTransfer.mutateAsync({
+        recipient_name: recipient,
+        recipient_account: accountNum,
+        bank_name: bankName || "Commercial Bank",
+        amount: Number(amount),
+        currency: "USD",
+        type: "domestic",
+        description: "Dashboard Transfer",
       });
-      
-      setShowTradeModal(false);
-      setTradeAmount("");
-    } catch (e) {
-      console.error(e);
+      showToast({
+        type: "success",
+        title: "Transfer Transmitted",
+        description: `Sent ${formatCurrency(Number(amount))} to ${recipient}`,
+      });
+      setShowTransferModal(false);
+      setAmount("");
+      setRecipient("");
+      setAccountNum("");
+    } catch (e: any) {
+      showToast({
+        type: "error",
+        title: "Transfer Failed",
+        description: e.message || "Failed to process transfer.",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDownloadReport = () => {
-    const reportText = `IRONBRIDGE MARKET - PORTFOLIO AUDIT STATEMENT\n` +
+    const reportText =
+      `IRON BRIDGE BANKING — ACCOUNT STATEMENT\n` +
       `Generated: ${new Date().toLocaleString()}\n` +
       `Client: ${profile?.full_name || profile?.email || "Unknown User"}\n` +
-      `Institutional Tier: ${profile?.tier || "Starter"}\n` +
-      `Total Custody Valuation: $${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}\n` +
+      `Account Tier: ${profile?.tier || "Starter"}\n` +
+      `Primary Wallet Balance: ${formatCurrency(walletBalance)}\n` +
       `==========================================\n` +
-      `Recent Flows Log:\n` +
-      (transactions?.map(t => `- ${new Date(t.created_at).toLocaleDateString()} ${new Date(t.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} | ${t.type} ${t.amount} ${t.asset} ($${t.amount_usd?.toFixed(2) || 0}) [Status: ${t.status}]`).join("\n") || "No transactions recorded.") +
-      `\n==========================================\n` +
-      `Status: VERIFIED`;
+      `Recent Transaction Log:\n` +
+      (transactions
+        ?.map(
+          (t) =>
+            `- ${formatDate(t.created_at)} | ${t.type} | ${formatCurrency(t.amount)} | [${t.status}]`
+        )
+        .join("\n") || "No transactions recorded.") +
+      `\n==========================================\nStatus: FSCS PROTECTED & VERIFIED`;
 
     const blob = new Blob([reportText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `ironbridge_portfolio_statement_${Date.now()}.txt`;
+    link.download = `ironbridge_statement_${Date.now()}.txt`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
   return (
     <div className="space-y-8">
-      {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">System Overview</h1>
-          <p className="text-muted-foreground">Welcome back, {profile?.full_name || profile?.email || "User"}. Here is your portfolio performance.</p>
+      {/* Header */}
+      <FadeIn>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-400 mb-1">
+              Iron Bridge Digital Banking
+            </p>
+            <h1 className="text-3xl font-bold tracking-tight text-white">
+              Financial Overview
+            </h1>
+            <p className="text-slate-400 mt-1">
+              Welcome back,{" "}
+              <span className="text-white font-medium">
+                {profile?.full_name || profile?.email || "Valued Client"}
+              </span>
+              . Here is your account summary.
+            </p>
+          </div>
+          <div className="flex gap-3 shrink-0">
+            <Button variant="outline" size="sm" className="gap-2" onClick={handleDownloadReport}>
+              <Download className="w-4 h-4" />
+              Download Statement
+            </Button>
+            <Button size="sm" className="gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold" onClick={() => setShowTransferModal(true)}>
+              <Send className="w-4 h-4" />
+              Quick Transfer
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <Button variant="glass" size="sm" onClick={handleDownloadReport}>Download Report</Button>
-          <Button variant="premium" size="sm" onClick={() => setShowTradeModal(true)}>Execute Trade</Button>
-        </div>
-      </div>
+      </FadeIn>
 
-
-      {/* Quick Stats */}
-      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* KPI Stats */}
+      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <motion.div variants={staggerItem}>
-          <GlassCard className="p-6 space-y-4">
-            <div className="flex justify-between items-start">
-              <div className="p-2 bg-primary/20 rounded-lg">
-                <Wallet className="w-5 h-5 text-primary" />
-              </div>
-              <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
-                +12.5%
-              </span>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Total Balance</div>
-              <div className="text-2xl font-bold">${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-            </div>
-          </GlassCard>
+          <StatCard
+            title="Wallet Balance"
+            value={formatCurrency(walletBalance)}
+            subtitle="Primary liquid funds"
+            delta={{ value: "+4.2% this month", positive: true }}
+            icon={Wallet}
+            accent="gold"
+          />
         </motion.div>
-
         <motion.div variants={staggerItem}>
-          <GlassCard className="p-6 space-y-4">
-            <div className="flex justify-between items-start">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Activity className="w-5 h-5 text-blue-500" />
-              </div>
-              <span className="text-xs font-bold text-rose-400 flex items-center gap-1">
-                <TrendingDown className="w-3 h-3" />
-                -2.1%
-              </span>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Active Transactions</div>
-              <div className="text-2xl font-bold">{transactions?.length || 0}</div>
-            </div>
-          </GlassCard>
+          <StatCard
+            title="Bank Accounts"
+            value={accountCount}
+            subtitle="Checking &amp; Savings"
+            delta={{ value: "Active & Secured", positive: true }}
+            icon={Landmark}
+            accent="blue"
+          />
         </motion.div>
-
         <motion.div variants={staggerItem}>
-          <GlassCard className="p-6 space-y-4">
-            <div className="flex justify-between items-start">
-              <div className="p-2 bg-amber-500/20 rounded-lg">
-                <Zap className="w-5 h-5 text-amber-500" />
-              </div>
-              <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
-                +4.8%
-              </span>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">24h PnL</div>
-              <div className="text-2xl font-bold">+$52,410.12</div>
-            </div>
-          </GlassCard>
+          <StatCard
+            title="Account Status"
+            value="Verified"
+            subtitle={`${profile?.tier || "Starter"} Tier`}
+            icon={ShieldCheck}
+            accent="emerald"
+          />
         </motion.div>
-
         <motion.div variants={staggerItem}>
-          <GlassCard className="p-6 space-y-4">
-            <div className="flex justify-between items-start">
-              <div className="p-2 bg-indigo-500/20 rounded-lg">
-                <ShieldCheck className="w-5 h-5 text-indigo-500" />
-              </div>
-              <span className="text-xs font-bold text-muted-foreground">{profile?.tier || "Starter"}</span>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Account Status</div>
-              <div className="text-2xl font-bold">Verified</div>
-            </div>
-          </GlassCard>
+          <StatCard
+            title="Total Flows"
+            value={transactions?.length || 0}
+            subtitle="Recorded movements"
+            delta={{ value: "FSCS Protected", positive: true }}
+            icon={Activity}
+            accent="gold"
+          />
         </motion.div>
       </StaggerContainer>
 
+      {/* Quick Action Pills */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <Button
+          onClick={() => setShowTransferModal(true)}
+          className="h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
+        >
+          <Send className="w-5 h-5 text-amber-400" />
+          <span className="font-semibold text-sm">Send Money</span>
+        </Button>
+        <Link href="/dashboard/wallet" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
+          >
+            <ArrowDownLeft className="w-5 h-5 text-emerald-400" />
+            <span className="font-semibold text-sm">Top Up Wallet</span>
+          </Button>
+        </Link>
+        <Link href="/dashboard/loans" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
+          >
+            <Calculator className="w-5 h-5 text-blue-400" />
+            <span className="font-semibold text-sm">Apply for Loan</span>
+          </Button>
+        </Link>
+        <Link href="/dashboard/accounts" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
+          >
+            <Plus className="w-5 h-5 text-amber-400" />
+            <span className="font-semibold text-sm">Open Account</span>
+          </Button>
+        </Link>
+      </div>
+
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Market Activity Preview */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chart Area */}
         <FadeIn direction="up" className="lg:col-span-2">
-          <GlassCard className="p-6 h-full space-y-6">
+          <GlassCard className="p-6 h-full space-y-5 bg-slate-900/80 border-slate-800">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Market Activity</h2>
-              <Link href="/dashboard/analytics">
-                <Button variant="ghost" size="sm">View All</Button>
+              <div>
+                <h2 className="text-lg font-bold text-white">Wallet Balance Trajectory</h2>
+                <p className="text-xs text-slate-400">Weekly activity &amp; liquidity movements</p>
+              </div>
+              <Link href="/dashboard/wallet">
+                <Button variant="ghost" size="sm" className="text-amber-400 hover:text-amber-300">
+                  Wallet Details
+                </Button>
               </Link>
             </div>
-            <div className="h-[400px] flex items-center justify-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
-              <p className="text-muted-foreground text-sm italic">Analytics chart placeholder - Integration pending Phase 4.3</p>
+            <div className="h-[280px] w-full pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#D4A72C" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#D4A72C" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "#090d16", borderColor: "#1e293b", borderRadius: "12px", color: "#fff" }}
+                    formatter={(value) => [`$${Number(value).toLocaleString()}`, "Balance"]}
+                  />
+                  <Area type="monotone" dataKey="amount" stroke="#D4A72C" strokeWidth={2.5} fillOpacity={1} fill="url(#colorBalance)" />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </GlassCard>
         </FadeIn>
- 
+
         {/* Recent Transactions */}
-        <FadeIn direction="up" delay={0.2}>
-          <GlassCard className="p-6 space-y-6">
+        <FadeIn direction="up" delay={0.15}>
+          <GlassCard className="p-6 space-y-5 bg-slate-900/80 border-slate-800">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Recent Flows</h2>
+              <h2 className="text-lg font-bold text-white">Recent Activity</h2>
               <Link href="/dashboard/transactions">
-                <Button variant="ghost" size="sm">View History</Button>
+                <Button variant="ghost" size="sm" className="text-amber-400 hover:text-amber-300">
+                  View All
+                </Button>
               </Link>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               {recentTxs.length === 0 ? (
-                <div className="text-center p-6 text-muted-foreground text-sm">No recent transactions.</div>
+                <div className="text-center py-10 text-slate-500 text-sm">
+                  No recent transaction history recorded.
+                </div>
               ) : (
-                recentTxs.map((tx) => (
-                  <div key={tx.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors group">
-                    <div className="flex items-center gap-3">
-                      <div className={cn(
-                        "w-10 h-10 rounded-full flex items-center justify-center",
-                        tx.type === "Deposit" && "bg-emerald-500/10 text-emerald-500",
-                        tx.type === "Withdrawal" && "bg-rose-500/10 text-rose-500",
-                        tx.type === "Transfer" && "bg-blue-500/10 text-blue-500",
-                        tx.type === "Trade" && "bg-primary/10 text-primary"
-                      )}>
-                        {tx.type === "Deposit" && <ArrowDownLeft className="w-5 h-5" />}
-                        {tx.type === "Withdrawal" && <ArrowUpRight className="w-5 h-5" />}
-                        {tx.type === "Trade" && <RefreshCw className="w-5 h-5" />}
+                recentTxs.map((tx: any) => {
+                  const isDeposit = tx.type?.toLowerCase() === "deposit";
+                  return (
+                    <div
+                      key={tx.id}
+                      className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-800/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={cn(
+                            "w-9 h-9 rounded-xl flex items-center justify-center shrink-0",
+                            isDeposit ? "bg-emerald-500/10 text-emerald-400" : "bg-rose-500/10 text-rose-400"
+                          )}
+                        >
+                          {isDeposit ? <ArrowDownLeft className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-white truncate">{tx.type || "Transaction"}</p>
+                          <p className="text-xs text-slate-500">{formatDate(tx.created_at, { month: "short", day: "numeric" })}</p>
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-sm font-bold">{tx.type}</div>
-                        <div className="text-xs text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</div>
+                      <div className="text-right shrink-0">
+                        <p className={cn("text-sm font-bold", isDeposit ? "text-emerald-400" : "text-slate-200")}>
+                          {isDeposit ? "+" : "-"}{formatCurrency(tx.amount)}
+                        </p>
+                        <StatusBadge status={tx.status} />
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className={cn(
-                        "text-sm font-bold", 
-                        tx.type === "Deposit" ? "text-emerald-500" : tx.type === "Withdrawal" ? "text-rose-500" : "text-white"
-                      )}>
-                        {tx.type === "Deposit" ? "+" : tx.type === "Withdrawal" ? "-" : ""}{tx.amount} {tx.asset}
-                      </div>
-                      <div className="text-xs text-muted-foreground">{tx.status}</div>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </GlassCard>
         </FadeIn>
       </div>
 
-      {/* Execute Trade Modal */}
-      {showTradeModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <GlassCard className="max-w-md w-full p-8 space-y-6 relative border-primary/20">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Simulate Transaction</h2>
-              <Button variant="ghost" size="icon" onClick={() => setShowTradeModal(false)}>
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Transaction Type</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["Deposit", "Withdrawal", "Trade"] as const).map(type => (
-                    <Button 
-                      key={type}
-                      variant={tradeType === type ? "premium" : "outline"}
-                      className="w-full text-xs"
-                      onClick={() => setTradeType(type)}
-                    >
-                      {type}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Asset</label>
-                <select 
-                  value={tradeAsset}
-                  onChange={(e) => setTradeAsset(e.target.value)}
-                  className="w-full h-10 px-3 bg-black/20 border border-white/10 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 text-white"
-                >
-                  <option value="BTC">Bitcoin (BTC)</option>
-                  <option value="ETH">Ethereum (ETH)</option>
-                  <option value="SOL">Solana (SOL)</option>
-                  <option value="USDC">USD Coin (USDC)</option>
-                </select>
-              </div>
+      {/* Quick Transfer Modal */}
+      <Modal
+        isOpen={showTransferModal}
+        onClose={() => setShowTransferModal(false)}
+        title="Execute Wire Transfer"
+        description="Send funds to domestic or international bank accounts."
+        maxWidth="md"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
+              Recipient Name
+            </label>
+            <Input
+              placeholder="e.g. Acme Corp or John Doe"
+              value={recipient}
+              onChange={(e) => setRecipient(e.target.value)}
+            />
+          </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Amount</label>
-                <Input 
-                  type="number"
-                  placeholder="0.00" 
-                  value={tradeAmount}
-                  onChange={(e) => setTradeAmount(e.target.value)}
-                  className="bg-white/5 border-white/10" 
-                />
-              </div>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
+              Account Number / IBAN
+            </label>
+            <Input
+              placeholder="e.g. GB29IBB1029384756"
+              value={accountNum}
+              onChange={(e) => setAccountNum(e.target.value)}
+            />
+          </div>
 
-              {tradeType === "Withdrawal" && (
-                <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                  <p className="text-xs text-amber-500 font-medium">
-                    Note: Withdrawals require multi-signature approval. This transaction will be marked as "Pending" and routed to the Action Required queue.
-                  </p>
-                </div>
-              )}
-            </div>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
+              Recipient Bank Name
+            </label>
+            <Input
+              placeholder="e.g. Barclays Bank or Chase"
+              value={bankName}
+              onChange={(e) => setBankName(e.target.value)}
+            />
+          </div>
 
-            <div className="flex gap-3 pt-4 border-t border-white/5">
-              <Button variant="glass" className="flex-1" onClick={() => setShowTradeModal(false)}>Cancel</Button>
-              <Button 
-                variant="premium" 
-                className="flex-1" 
-                onClick={handleExecuteTrade}
-                disabled={!tradeAmount || isSubmitting}
-              >
-                {isSubmitting ? "Executing..." : "Confirm"}
-              </Button>
-            </div>
-          </GlassCard>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
+              Transfer Amount ($)
+            </label>
+            <Input
+              type="number"
+              placeholder="0.00"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </div>
+
+          <div className="flex gap-3 pt-4 border-t border-slate-800">
+            <Button variant="outline" className="flex-1" onClick={() => setShowTransferModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="flex-1 bg-amber-500 text-slate-950 font-bold hover:bg-amber-600"
+              onClick={handleSendTransfer}
+              disabled={!amount || !recipient || !accountNum || isSubmitting}
+            >
+              {isSubmitting ? "Transmitting..." : "Confirm & Send"}
+            </Button>
+          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 }

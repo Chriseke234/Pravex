@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { Cookie, X } from "lucide-react";
@@ -10,14 +10,14 @@ export function CookieBanner() {
 
   useEffect(() => {
     // Check localStorage on client mount
-    const consent = localStorage.getItem("ironbridgemarket-cookie-consent");
+    const consent = localStorage.getItem("ironbridgebanking-cookie-consent");
     if (!consent) {
       setIsVisible(true);
     }
   }, []);
 
   const handleConsent = (level: "all" | "rejected" | "managed") => {
-    localStorage.setItem("ironbridgemarket-cookie-consent", level);
+    localStorage.setItem("ironbridgebanking-cookie-consent", level);
     setIsVisible(false);
   };
 

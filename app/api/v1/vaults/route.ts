@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/services/supabase'
+import { createClient } from '@/lib/supabase/server'
 import { verifyApiKey } from '@/lib/api-auth'
 
 export async function GET(request: Request) {
@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: auth.error }, { status: auth.status })
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data, error } = await supabase
     .from('vaults')
     .select('*')
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json()
-    const supabase = createClient()
+    const supabase = await createClient()
     
     const { data, error } = await supabase
       .from('vaults')

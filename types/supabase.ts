@@ -2,6 +2,20 @@ export type UserRole = 'user' | 'admin' | 'superuser' | 'super_admin';
 export type UserTier = 'Starter' | 'Professional' | 'Enterprise';
 export type RiskScore = 'Low' | 'Medium' | 'High';
 
+// ─── Banking Types ───────────────────────────────────────────
+
+export type AccountType = 'checking' | 'savings' | 'business' | 'notice_deposit' | 'fixed_deposit';
+export type AccountStatus = 'active' | 'frozen' | 'closed' | 'pending';
+export type TransferType = 'domestic' | 'international' | 'internal';
+export type TransferStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
+export type LoanType = 'personal' | 'mortgage' | 'property' | 'business' | 'auto' | 'portfolio_secured';
+export type LoanStatus = 'pending' | 'under_review' | 'approved' | 'rejected' | 'active' | 'paid_off' | 'defaulted';
+export type KycDocumentType = 'passport' | 'national_id' | 'drivers_license' | 'utility_bill' | 'bank_statement' | 'proof_of_address';
+export type KycStatus = 'pending' | 'approved' | 'rejected';
+export type ReferralStatus = 'pending' | 'registered' | 'credited' | 'expired';
+export type CardStatus = 'active' | 'frozen' | 'expired' | 'cancelled' | 'pending';
+export type CardNetwork = 'Visa' | 'Mastercard';
+
 export interface Profile {
   id: string;
   full_name: string | null;
@@ -51,6 +65,7 @@ export interface Wallet {
   id: string;
   user_id: string;
   balance: number;
+  currency?: string;         // ISO 4217 code, defaults to 'USD'
   created_at: string;
   updated_at: string;
 }
@@ -134,3 +149,105 @@ export interface AuditLog {
   created_at: string;
 }
 
+// ─── New Banking Interfaces ──────────────────────────────────
+
+export interface BankAccount {
+  id: string;
+  user_id: string;
+  account_name: string;
+  account_number: string;
+  account_type: AccountType;
+  currency: string;
+  balance: number;
+  interest_rate: number;
+  is_primary: boolean;
+  status: AccountStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Transfer {
+  id: string;
+  sender_id: string;
+  recipient_name: string;
+  recipient_account: string;
+  bank_name: string | null;
+  bank_code: string | null;
+  amount: number;
+  currency: string;
+  type: TransferType;
+  status: TransferStatus;
+  reference: string | null;
+  description: string | null;
+  fee: number;
+  exchange_rate: number | null;
+  metadata: Record<string, any>;
+  created_at: string;
+}
+
+export interface Loan {
+  id: string;
+  user_id: string;
+  loan_type: LoanType;
+  amount: number;
+  purpose: string;
+  duration_months: number;
+  interest_rate: number;
+  monthly_payment: number | null;
+  total_repayment: number | null;
+  amount_paid: number;
+  next_due_date: string | null;
+  status: LoanStatus;
+  reviewed_by: string | null;
+  rejection_reason: string | null;
+  metadata: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface KycDocument {
+  id: string;
+  user_id: string;
+  document_type: KycDocumentType;
+  file_url: string;
+  file_name: string | null;
+  status: KycStatus;
+  rejection_reason: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+}
+
+export interface Referral {
+  id: string;
+  referrer_id: string;
+  referred_id: string | null;
+  referred_email: string | null;
+  status: ReferralStatus;
+  bonus_amount: number;
+  bonus_currency: string;
+  credited_at: string | null;
+  created_at: string;
+}
+
+export interface Card {
+  id: string;
+  user_id: string;
+  bank_account_id: string | null;
+  card_type: 'virtual' | 'physical';
+  card_network: CardNetwork;
+  last_four: string;
+  expiry_month: number;
+  expiry_year: number;
+  spending_limit: number;
+  status: CardStatus;
+  created_at: string;
+}
+
+export interface PlatformSetting {
+  key: string;
+  value: string;
+  description: string | null;
+  updated_by: string | null;
+  updated_at: string;
+}

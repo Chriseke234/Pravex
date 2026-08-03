@@ -1,108 +1,174 @@
+/* ============================================================
+   Iron Bridge Banking — Design System Tokens
+   Premium Institutional Fintech: Navy + Gold Palette
+   ============================================================ */
+
 @layer base {
   :root {
-    /* Primary Colors - Premium Deep Blue/Indigo */
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    /* ─── Brand Core ─────────────────────────────── */
+    --brand-navy:           215 60% 9%;    /* #0A1628 - Deep Navy */
+    --brand-navy-mid:       215 45% 14%;   /* #122140 - Mid Navy */
+    --brand-navy-light:     215 38% 20%;   /* #1C3254 - Light Navy */
+    --brand-gold:           44 75% 52%;    /* #D4A72C - Institutional Gold */
+    --brand-gold-light:     44 80% 68%;    /* #E8C56A - Gold Highlight */
+    --brand-gold-hover:     44 65% 42%;    /* #B08920 - Gold Pressed */
+    --brand-white:          210 20% 98%;   /* #F7F9FC - Off-White */
 
-    /* Light Theme Backgrounds & Cards */
-    --background: 210 40% 98%;
-    --foreground: 222.2 47.4% 11.2%;
+    /* ─── Primary / Ring ─────────────────────────── */
+    --primary:              44 75% 52%;
+    --primary-foreground:   215 60% 9%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+    /* ─── Light Theme ────────────────────────────── */
+    --background:           210 30% 97%;
+    --foreground:           215 60% 9%;
+    --card:                 0 0% 100%;
+    --card-foreground:      215 60% 9%;
+    --popover:              0 0% 100%;
+    --popover-foreground:   215 60% 9%;
 
-    /* Muted & Accent */
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --muted:                210 25% 93%;
+    --muted-foreground:     215 20% 45%;
+    --accent:               44 80% 95%;
+    --accent-foreground:    215 60% 9%;
 
-    /* Destructive */
-    --destructive: 0 84.2% 60.2%;
+    --destructive:          0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Borders & Inputs */
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --border:               215 20% 88%;
+    --input:                215 20% 88%;
+    --ring:                 44 75% 52%;
+    --radius:               0.75rem;
 
-    /* Radii */
-    --radius: 0.75rem;
+    /* ─── Glass / Blur ───────────────────────────── */
+    --glass-bg:             rgba(255, 255, 255, 0.72);
+    --glass-border:         rgba(10, 22, 40, 0.08);
+    --glass-blur:           14px;
+    --glass-bg-dark:        rgba(10, 22, 40, 0.70);
+    --glass-border-dark:    rgba(255, 255, 255, 0.07);
 
-    /* Custom Fintech Tokens */
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(0, 0, 0, 0.08);
-    --glass-blur: 12px;
+    /* ─── Gradient Tokens ────────────────────────── */
+    --gradient-gold:        linear-gradient(135deg, #D4A72C 0%, #E8C56A 60%, #B08920 100%);
+    --gradient-navy:        linear-gradient(160deg, #0A1628 0%, #122140 60%, #1C3254 100%);
+    --gradient-dark-fade:   linear-gradient(180deg, transparent 0%, #0A1628 100%);
+    --gradient-card:        linear-gradient(145deg, rgba(28,50,84,0.9) 0%, rgba(10,22,40,0.95) 100%);
+    --gradient-gold-glow:   radial-gradient(ellipse at 60% 0%, rgba(212,167,44,0.15) 0%, transparent 65%);
 
-    --gradient-premium: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-    --gradient-dark: linear-gradient(180deg, rgba(248, 250, 252, 0) 0%, rgba(241, 245, 249, 1) 100%);
-
-    /* Ironbridge Market Brand Colors HSL */
-    --brand-gold: 45.4 69.4% 53.3%; /* #D4AF37 */
-    --brand-gold-hover: 45.4 60% 45%; /* #B8962E */
-    --brand-navy: 215.2 60% 9.8%; /* #0A1628 */
+    /* ─── Chart Colors ───────────────────────────── */
+    --chart-1:              44 75% 52%;
+    --chart-2:              215 70% 55%;
+    --chart-3:              160 60% 45%;
+    --chart-4:              0 68% 55%;
+    --chart-5:              280 55% 60%;
   }
 
   .dark {
-    /* Primary Colors - Premium Deep Blue/Indigo */
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    /* ─── Dark Theme Core ────────────────────────── */
+    --primary:              44 75% 52%;
+    --primary-foreground:   215 60% 9%;
 
-    /* Dark Theme Backgrounds & Cards - Slate Dark Navy */
-    --background: 215.2 60% 9.8%; /* #0A1628 */
-    --foreground: 210 40% 98%;
+    --background:           215 60% 7%;    /* #080F1A - Darkest Navy */
+    --foreground:           210 20% 95%;
 
-    --card: 215.2 60% 9.8%;
-    --card-foreground: 210 40% 98%;
-    --popover: 215.2 60% 9.8%;
-    --popover-foreground: 210 40% 98%;
+    --card:                 215 55% 10%;   /* #0C1A2E - Card Navy */
+    --card-foreground:      210 20% 95%;
+    --popover:              215 55% 10%;
+    --popover-foreground:   210 20% 95%;
 
-    /* Muted & Accent */
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --muted:                215 40% 17%;   /* #1A2D47 */
+    --muted-foreground:     215 18% 58%;
 
-    /* Destructive */
-    --destructive: 0 62.8% 30.6%;
+    --accent:               215 40% 17%;
+    --accent-foreground:    44 80% 68%;
+
+    --destructive:          0 62% 45%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Borders & Inputs */
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border:               215 38% 18%;   /* #17293F */
+    --input:                215 38% 15%;
+    --ring:                 44 75% 52%;
+    --radius:               0.75rem;
 
-    /* Radii */
-    --radius: 0.75rem;
-
-    /* Custom Fintech Tokens */
-    --glass-bg: rgba(10, 22, 40, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-blur: 12px;
-
-    --gradient-premium: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-    --gradient-dark: linear-gradient(180deg, rgba(30, 41, 59, 0) 0%, rgba(10, 22, 40, 1) 100%);
-
-    /* Ironbridge Market Brand Colors HSL */
-    --brand-gold: 45.4 69.4% 53.3%;
-    --brand-gold-hover: 45.4 60% 45%;
-    --brand-navy: 215.2 60% 9.8%;
+    /* ─── Dark Glass / Blur ──────────────────────── */
+    --glass-bg:             rgba(8, 15, 26, 0.72);
+    --glass-border:         rgba(255, 255, 255, 0.07);
+    --glass-blur:           16px;
   }
 }
 
+/* ──────────────────────────────────────────────────────────
+   Utility Classes
+────────────────────────────────────────────────────────── */
+
 @layer utilities {
+
+  /* ─── Glassmorphism Card ─────────────────────── */
   .glassmorphism {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
-  .text-gradient {
-    background: var(--gradient-premium);
+  /* ─── Gold Gradient Text ─────────────────────── */
+  .text-gradient-gold {
+    background: var(--gradient-gold);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── Navy Gradient Text ─────────────────────── */
+  .text-gradient-navy {
+    background: var(--gradient-navy);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── Gold Glow Backdrop ─────────────────────── */
+  .gold-glow {
+    box-shadow: 0 0 40px rgba(212, 167, 44, 0.15), 0 0 80px rgba(212, 167, 44, 0.06);
+  }
+
+  /* ─── Premium Card Border ────────────────────── */
+  .card-border-gold {
+    border: 1px solid rgba(212, 167, 44, 0.18);
+  }
+
+  /* ─── Shimmer Loading ────────────────────────── */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer::after {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.06) 20%,
+      rgba(255, 255, 255, 0.12) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+    content: '';
+  }
+
+  /* ─── Scrollbar Styling ──────────────────────── */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(212, 167, 44, 0.25);
+    border-radius: 99px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 167, 44, 0.45);
   }
 }
