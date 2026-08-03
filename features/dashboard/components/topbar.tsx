@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Bell, Search, Command } from "lucide-react";
+import { Menu, Bell, Search, Command, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUiStore } from "@/store/ui-store";
 import { useWallet } from "@/hooks/use-wallet";
@@ -47,8 +47,15 @@ export function Topbar() {
         </div>
       </div>
 
-      {/* Right: Balance + Notifications + Avatar */}
+      {/* Right: Public Site Link + Balance + Notifications + Avatar */}
       <div className="flex items-center gap-3">
+        <Link href="/" title="Return to Public Website">
+          <Button variant="ghost" size="sm" className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 hover:text-white border border-slate-800/80 hover:bg-slate-900 rounded-xl px-3 py-1.5">
+            <Globe className="w-3.5 h-3.5 text-amber-400" />
+            <span>Public Site</span>
+          </Button>
+        </Link>
+
         <div className="hidden md:flex flex-col items-end">
           <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
             Wallet Balance

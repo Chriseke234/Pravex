@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   },
   description:
     "Iron Bridge Banking — Modern enterprise banking, private wealth management, commercial financing, personal savings, and competitive loans.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   keywords: [
     "Iron Bridge Banking",
     "digital banking",

@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sun, Moon, Shield, ChevronDown, Building2, User, CreditCard, Landmark, Calculator, Briefcase, FileText } from "lucide-react";
+import { Menu, X, Sun, Moon, Shield, ChevronDown, LayoutDashboard, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 /* ─── Iron Bridge Banking Logo ─────────────────────────── */
 function IBBLogo({ className }: { className?: string }) {
@@ -101,12 +102,26 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const closeMenu = () => {
@@ -202,16 +217,26 @@ export function Navbar() {
         {/* Right: Desktop Actions */}
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
-          <Link href="/login">
-            <Button variant="ghost" size="sm" className="text-slate-300">
-              Sign In
-            </Button>
-          </Link>
-          <Link href="/signup">
-            <Button size="sm" className="font-semibold bg-amber-500 hover:bg-amber-600 text-slate-950">
-              Open Account
-            </Button>
-          </Link>
+          {user ? (
+            <Link href="/dashboard">
+              <Button size="sm" className="font-semibold bg-amber-500 hover:bg-amber-600 text-slate-950 gap-2">
+                <LayoutDashboard className="w-4 h-4" /> Go to Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="text-slate-300">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm" className="font-semibold bg-amber-500 hover:bg-amber-600 text-slate-950">
+                  Open Account
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -267,12 +292,22 @@ export function Navbar() {
               Contact
             </Link>
             <div className="flex gap-2 pt-2">
-              <Link href="/login" onClick={closeMenu} className="flex-1">
-                <Button variant="outline" className="w-full">Sign In</Button>
-              </Link>
-              <Link href="/signup" onClick={closeMenu} className="flex-1">
-                <Button className="w-full bg-amber-500 text-slate-950">Open Account</Button>
-              </Link>
+              {user ? (
+                <Link href="/dashboard" onClick={closeMenu} className="w-full">
+                  <Button className="w-full bg-amber-500 text-slate-950 font-bold gap-2">
+                    <LayoutDashboard className="w-4 h-4" /> Go to Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login" onClick={closeMenu} className="flex-1">
+                    <Button variant="outline" className="w-full">Sign In</Button>
+                  </Link>
+                  <Link href="/signup" onClick={closeMenu} className="flex-1">
+                    <Button className="w-full bg-amber-500 text-slate-950">Open Account</Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
