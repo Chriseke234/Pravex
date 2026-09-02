@@ -1,5 +1,5 @@
-import { Shield } from "lucide-react";
-import Link from "next/link";
+﻿import Link from "next/link";
+import { Logo } from "@/components/shared/logo";
 
 export default function AuthLayout({
   children,
@@ -8,7 +8,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-slate-950">
-      {/* ─── Visual / Hero Side ─────────────────────── */}
+      {/* ─── Visual / Hero Side ─────────────────────────────── */}
       <div className="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden">
         {/* Background Image */}
         <div
@@ -25,15 +25,7 @@ export default function AuthLayout({
 
         {/* Brand mark */}
         <div className="relative z-10">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30">
-              <Shield className="w-5 h-5 text-slate-950" strokeWidth={2.5} />
-            </div>
-            <div>
-              <p className="text-[10px] font-bold text-amber-400 tracking-[0.2em] uppercase">Iron Bridge</p>
-              <p className="text-base font-bold text-white">Banking</p>
-            </div>
-          </Link>
+          <Logo size="lg" href="/" />
         </div>
 
         {/* Hero copy */}
@@ -69,23 +61,15 @@ export default function AuthLayout({
 
         {/* Footer */}
         <div className="relative z-10 text-xs text-slate-600">
-          © {new Date().getFullYear()} Iron Bridge Banking. All rights reserved.
+          &copy; {new Date().getFullYear()} Iron Bridge Banking. All rights reserved.
         </div>
       </div>
 
-      {/* ─── Form Side ──────────────────────────────── */}
+      {/* ─── Form Side ──────────────────────────────────────── */}
       <div className="flex flex-col items-center justify-center p-6 sm:p-10 bg-slate-950">
         {/* Mobile brand */}
         <div className="lg:hidden mb-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-md shadow-amber-500/25">
-              <Shield className="w-4 h-4 text-slate-950" strokeWidth={2.5} />
-            </div>
-            <div>
-              <p className="text-[9px] font-bold text-amber-400 tracking-[0.2em] uppercase">Iron Bridge</p>
-              <p className="text-sm font-bold text-white">Banking</p>
-            </div>
-          </Link>
+          <Logo size="md" href="/" />
         </div>
 
         <div className="w-full max-w-md">{children}</div>

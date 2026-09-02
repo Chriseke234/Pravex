@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/shared/logo";
 import {
   Menu,
   X,
@@ -21,7 +22,6 @@ import {
   Landmark,
   PiggyBank,
   Wallet,
-  TrendingUp,
   CreditCard,
   Briefcase,
   Compass,
@@ -43,28 +43,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-
-/* ─── Iron Bridge Banking Logo ────────�/* ─── Iron Bridge Banking Logo ─────────────────────────── */
-function IBBLogo({ className }: { className?: string }) {
-  return (
-    <div className={cn("flex items-center gap-2.5 group", className)}>
-      <div className="relative w-9 h-9 shrink-0">
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-md shadow-amber-500/30 group-hover:shadow-amber-500/50 transition-shadow duration-300" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Shield className="w-4.5 h-4.5 text-slate-950" strokeWidth={2.5} />
-        </div>
-      </div>
-      <div className="leading-none">
-        <p className="text-[11px] font-semibold text-amber-500 dark:text-amber-400 tracking-[0.18em] uppercase">
-          Iron Bridge
-        </p>
-        <p className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
-          Banking
-        </p>
-      </div>
-    </div>
-  );
-}
 
 /* ─── Theme Toggle ──────────────────────────────────────── */
 function ThemeToggle({ className }: { className?: string }) {
@@ -242,9 +220,7 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Left: Logo + Desktop Mega Nav */}
           <div className="flex items-center gap-6">
-            <Link href="/" onClick={closeMenu} aria-label="Iron Bridge Banking Home">
-              <IBBLogo />
-            </Link>
+            <Logo size="md" href="/" onClick={closeMenu} />
 
             {/* Desktop Dropdown Menus */}
             <div className="hidden lg:flex items-center gap-1">
@@ -367,9 +343,7 @@ export function Navbar() {
         <div className="fixed inset-0 z-[999] flex flex-col justify-between bg-white dark:bg-slate-950 text-slate-900 dark:text-white animate-fade-in overflow-hidden h-screen h-[100dvh]">
           {/* Mobile Menu Top Header Bar */}
           <div className="h-16 px-4 sm:px-6 flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 shrink-0">
-            <Link href="/" onClick={closeMenu} aria-label="Iron Bridge Banking Home">
-              <IBBLogo />
-            </Link>
+            <Logo size="md" href="/" onClick={closeMenu} />
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <button
@@ -510,7 +484,7 @@ export function Navbar() {
                               )}
                             >
                               <div className="w-6 h-6 rounded-lg bg-slate-200/80 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 shrink-0">
-                                <SubIcon className="w-3 h-3" />
+                                <SubIcon className="w-3.5 h-3.5" />
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="font-semibold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 truncate">

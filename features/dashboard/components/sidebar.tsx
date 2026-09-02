@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import Link from "next/link";
@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useUiStore } from "@/store/ui-store";
 import { useProfile } from "@/hooks/use-profile";
 import { createClient } from "@/lib/supabase/client";
+import { Logo } from "@/components/shared/logo";
 import {
   X,
   LayoutDashboard,
@@ -30,7 +31,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-/* ─── Navigation Config ─────────────────────────────────── */
+/* ─── Navigation Config ─────────────────────────────────────────── */
 const MAIN_ITEMS = [
   { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
   { label: "Main Website", icon: Globe, href: "/" },
@@ -58,7 +59,7 @@ const DEVELOPER_ITEMS = [
   { label: "Webhooks", icon: Globe, href: "/dashboard/settings/webhooks" },
 ];
 
-/* ─── Nav Link ──────────────────────────────────────────── */
+/* ─── Nav Link ──────────────────────────────────────────────────── */
 function NavLink({
   href,
   icon: Icon,
@@ -165,20 +166,7 @@ export function Sidebar() {
       >
         {/* Brand Header */}
         <div className="px-5 h-16 flex items-center justify-between border-b border-slate-800/60 shrink-0">
-          <Link
-            href="/dashboard"
-            onClick={mobileClose}
-            className="flex items-center gap-2.5 group"
-            aria-label="Iron Bridge Banking Dashboard"
-          >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-md shadow-amber-500/25 shrink-0">
-              <Shield className="w-4 h-4 text-slate-950" strokeWidth={2.5} />
-            </div>
-            <div className="leading-none">
-              <p className="text-[9px] font-bold text-amber-400 tracking-[0.2em] uppercase">Iron Bridge</p>
-              <p className="text-sm font-bold text-white">Banking</p>
-            </div>
-          </Link>
+          <Logo size="sm" href="/dashboard" onClick={mobileClose} />
           <Button
             variant="ghost"
             size="icon-sm"
@@ -198,7 +186,9 @@ export function Sidebar() {
               {MAIN_ITEMS.map((item) => (
                 <NavLink
                   key={item.href}
-                  {...item}
+                  href={item.href}
+                  icon={item.icon}
+                  label={item.label}
                   active={isActive(item.href)}
                   onClickMobile={mobileClose}
                 />
@@ -207,12 +197,14 @@ export function Sidebar() {
           </div>
 
           <div>
-            <SectionLabel>Financial Services</SectionLabel>
+            <SectionLabel>Services</SectionLabel>
             <ul className="space-y-0.5">
               {BANKING_ITEMS.map((item) => (
                 <NavLink
                   key={item.href}
-                  {...item}
+                  href={item.href}
+                  icon={item.icon}
+                  label={item.label}
                   active={isActive(item.href)}
                   onClickMobile={mobileClose}
                 />
@@ -226,7 +218,9 @@ export function Sidebar() {
               {ACCOUNT_ITEMS.map((item) => (
                 <NavLink
                   key={item.href}
-                  {...item}
+                  href={item.href}
+                  icon={item.icon}
+                  label={item.label}
                   active={isActive(item.href)}
                   onClickMobile={mobileClose}
                 />
@@ -235,12 +229,14 @@ export function Sidebar() {
           </div>
 
           <div>
-            <SectionLabel>Developer</SectionLabel>
+            <SectionLabel>Developers</SectionLabel>
             <ul className="space-y-0.5">
               {DEVELOPER_ITEMS.map((item) => (
                 <NavLink
                   key={item.href}
-                  {...item}
+                  href={item.href}
+                  icon={item.icon}
+                  label={item.label}
                   active={isActive(item.href)}
                   onClickMobile={mobileClose}
                 />
@@ -253,10 +249,10 @@ export function Sidebar() {
               <SectionLabel accent>Administration</SectionLabel>
               <ul className="space-y-0.5">
                 <NavLink
-                  href="/super-admin"
+                  href="/admin"
                   icon={Shield}
-                  label="Admin Panel"
-                  active={isActive("/super-admin")}
+                  label="Super Admin Panel"
+                  active={isActive("/admin")}
                   onClickMobile={mobileClose}
                 />
               </ul>
@@ -264,31 +260,29 @@ export function Sidebar() {
           )}
         </nav>
 
-        {/* Profile Footer */}
-        <div className="p-3 border-t border-slate-800/60 shrink-0">
-          <div className="bg-slate-900 rounded-2xl p-3 border border-slate-800/60">
-            <div className="flex items-center gap-3 mb-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center font-bold text-slate-950 text-xs shrink-0 shadow-md shadow-amber-500/20">
-                {isLoading ? "…" : initial}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-white truncate">
-                  {isLoading ? "Loading…" : name}
-                </p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <Badge variant="gold" size="sm">{tier}</Badge>
-                </div>
+        {/* User Footer */}
+        <div className="p-3 border-t border-slate-800/60 bg-slate-900/40 shrink-0">
+          <div className="flex items-center gap-3 p-2 rounded-xl bg-slate-900/80 border border-slate-800/80">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs shrink-0">
+              {initial}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-white truncate">{name}</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                <Badge variant="outline" className="text-[9px] py-0 px-1 border-amber-500/30 text-amber-400">
+                  {tier}
+                </Badge>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-start gap-2 text-xs h-7 text-slate-400 border-slate-800 hover:text-rose-400 hover:border-rose-500/30"
+            <button
               onClick={handleSignOut}
+              className="text-slate-500 hover:text-rose-400 p-1 rounded-lg hover:bg-slate-800/60 transition-colors"
+              title="Sign Out"
+              aria-label="Sign Out"
             >
-              <LogOut className="w-3.5 h-3.5" />
-              Sign Out
-            </Button>
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </aside>
