@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUiStore } from "@/store/ui-store";
@@ -115,6 +116,17 @@ export function Sidebar() {
   const { isSidebarOpen, closeSidebar } = useUiStore();
   const { profile, isLoading } = useProfile();
 
+  useEffect(() => {
+    if (isSidebarOpen && window.innerWidth < 1024) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isSidebarOpen]);
+
   const handleSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -137,7 +149,7 @@ export function Sidebar() {
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-40 lg:hidden transition-opacity duration-300"
           onClick={closeSidebar}
           aria-hidden="true"
         />
