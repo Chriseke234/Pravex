@@ -44,7 +44,7 @@ import {
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
-/* ─── Iron Bridge Banking Logo ────────�/* ─── Iron Bridge Banking Logo ─────────────────────────── */
+/* ─── Iron Bridge Banking Logo ────────�/* ─── Iron Bridge Banking Logo ─────────────────────────── */
 function IBBLogo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-2.5 group", className)}>
@@ -595,16 +595,6 @@ export function Navbar() {
               <span className="font-medium text-slate-600 dark:text-slate-400">FDIC Insured • 256-bit SSL</span>
             </div>
             <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">v2.4.0</span>
-          </div>
-        </div>,
-        document.body
-      )}
-    </>
-  );
-}        <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span className="font-medium text-slate-400">FDIC Insured • 256-bit SSL</span>
-            </div>
-            <span className="text-[10px] text-slate-500 font-mono">v2.4.0</span>
           </div>
         </div>,
         document.body
