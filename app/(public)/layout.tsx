@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/layout/Footer";
-import { CookieBanner } from "@/components/ui/CookieBanner";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -23,7 +22,6 @@ export default function PublicLayout({
         {children}
       </main>
       <Footer />
-      <CookieBanner />
     </div>
   );
 }
