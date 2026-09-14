@@ -40,10 +40,10 @@
     --radius:               0.75rem;
 
     /* ─── Glass / Blur ───────────────────────────── */
-    --glass-bg:             rgba(255, 255, 255, 0.72);
-    --glass-border:         rgba(10, 22, 40, 0.08);
+    --glass-bg:             rgba(12, 26, 46, 0.88);
+    --glass-border:         rgba(23, 41, 63, 0.85);
     --glass-blur:           14px;
-    --glass-bg-dark:        rgba(10, 22, 40, 0.70);
+    --glass-bg-dark:        rgba(10, 22, 40, 0.88);
     --glass-border-dark:    rgba(255, 255, 255, 0.07);
 
     /* ─── Gradient Tokens ────────────────────────── */

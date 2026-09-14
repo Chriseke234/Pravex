@@ -13,12 +13,12 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       <div
         ref={ref}
         className={cn(
-          // Base glassmorphism
-          "glassmorphism rounded-2xl transition-all duration-300",
+          // Brand Deep Navy Card
+          "bg-[#0C1A2E] border border-[#17293F] text-slate-100 rounded-2xl transition-all duration-300",
           // Optional hover lift
-          hover && "hover:border-white/15 hover:shadow-lg hover:shadow-slate-950/40",
+          hover && "hover:border-[#1C3254] hover:shadow-lg hover:shadow-black/40",
           // Optional gold top accent
-          goldEdge && "border-t-amber-500/30 [border-top-color:rgba(212,167,44,0.3)]",
+          goldEdge && "border-t-amber-500/40",
           className
         )}
         {...props}
