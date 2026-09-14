@@ -270,61 +270,7 @@ export default function DashboardOverview() {
         </div>
       </FadeIn>
 
-      {/* Navigation Shortcuts */}
-      <div className="grid grid-cols-3 gap-3 sm:gap-4">
-        <Link href="/dashboard/accounts" className="w-full">
-          <Button
-            variant="outline"
-            className="w-full h-14 flex items-center justify-center gap-3 bg-[#0C1A2E] border border-[#17293F] hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
-          >
-            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-slate-950 transition-colors">
-              <Landmark className="w-4 h-4" />
-            </div>
-            <div className="text-left">
-              <p className="font-bold text-xs sm:text-sm text-white">My Accounts</p>
-              <p className="text-[10px] text-slate-400 hidden sm:block">Checking &amp; Savings</p>
-            </div>
-          </Button>
-        </Link>
 
-        <Link href="/dashboard/cards" className="w-full">
-          <Button
-            variant="outline"
-            className="w-full h-14 flex items-center justify-center gap-3 bg-[#0C1A2E] border border-[#17293F] hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
-          >
-            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
-              <CreditCard className="w-4 h-4" />
-            </div>
-            <div className="text-left">
-              <p className="font-bold text-xs sm:text-sm text-white">Payment Cards</p>
-              <p className="text-[10px] text-slate-400 hidden sm:block">Virtual &amp; Physical Cards</p>
-            </div>
-          </Button>
-        </Link>
-
-        <Link href="/dashboard/loans" className="w-full">
-          <Button
-            variant="outline"
-            className="w-full h-14 flex items-center justify-center gap-3 bg-[#0C1A2E] border border-[#17293F] hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
-          >
-            <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400 group-hover:bg-purple-500 group-hover:text-slate-950 transition-colors">
-              <Calculator className="w-4 h-4" />
-            </div>
-            <div className="text-left">
-              <p className="font-bold text-xs sm:text-sm text-white">Loans &amp; Credit</p>
-              <p className="text-[10px] text-slate-400 hidden sm:block">Personal &amp; Business</p>
-            </div>
-          </Button>
-        </Link>
-      </div>
-
-      {/* Favourite Contacts */}
-      <FadeIn direction="up">
-        <QuickPayees
-          onSelectPayee={handleOpenTransferWithPayee}
-          onAddPayee={() => handleOpenTransferWithAccount()}
-        />
-      </FadeIn>
 
       {/* Recent Activity / Transactions Ledger */}
       <FadeIn direction="up">
