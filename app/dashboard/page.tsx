@@ -158,7 +158,7 @@ export default function DashboardOverview() {
             </p>
           </div>
 
-          {/* Global Quick Action Toolbar */}
+          {/* Global Action Toolbar */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full sm:w-auto">
             <Button
               variant="outline"
@@ -178,15 +178,6 @@ export default function DashboardOverview() {
             >
               <Download className="w-3.5 h-3.5" />
               <span>Statement</span>
-            </Button>
-
-            <Button
-              size="sm"
-              onClick={() => handleOpenTransferWithAccount()}
-              className="gap-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
-            >
-              <Send className="w-3.5 h-3.5" />
-              <span>Send Money</span>
             </Button>
           </div>
         </div>
@@ -225,11 +216,11 @@ export default function DashboardOverview() {
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Combined balance across all active checking and savings accounts
+                Combined balance across all active accounts
               </p>
             </div>
 
-            {/* Embedded Quick Action Buttons inside Balance Card */}
+            {/* Embedded Primary Quick Action Buttons */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <button
                 type="button"
@@ -279,57 +270,8 @@ export default function DashboardOverview() {
         </div>
       </FadeIn>
 
-      {/* Main KPI Strip */}
-      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
-        <motion.div variants={staggerItem}>
-          <StatCard
-            title="Total Balance"
-            value={hideBalances ? "••••••••" : formatCurrency(totalNetLiquidity)}
-            subtitle="Available liquid funds"
-            delta={{ value: "Active Holdings", positive: true }}
-            icon={Building2}
-            accent="gold"
-          />
-        </motion.div>
-
-        <motion.div variants={staggerItem}>
-          <StatCard
-            title="Active Cards & Facilities"
-            value="Visa Corporate"
-            subtitle="Virtual & Physical Cards"
-            delta={{ value: "Active", positive: true }}
-            icon={CreditCard}
-            accent="emerald"
-          />
-        </motion.div>
-
-        <motion.div variants={staggerItem}>
-          <StatCard
-            title="Account Protection"
-            value={profile?.mfa_enabled ? "2FA Enabled" : "Protected"}
-            subtitle="Secure & Encrypted"
-            delta={{ value: "Active", positive: true }}
-            icon={ShieldCheck}
-            accent="gold"
-          />
-        </motion.div>
-      </StaggerContainer>
-
       {/* Navigation Shortcuts */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <Button
-          onClick={() => handleOpenTransferWithAccount()}
-          className="h-14 flex items-center justify-center gap-3 bg-[#0C1A2E] border border-[#17293F] hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
-        >
-          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
-            <Send className="w-4 h-4" />
-          </div>
-          <div className="text-left">
-            <p className="font-bold text-xs sm:text-sm text-white">Send Money</p>
-            <p className="text-[10px] text-slate-400 hidden sm:block">Instant &amp; Wire Transfers</p>
-          </div>
-        </Button>
-
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
         <Link href="/dashboard/accounts" className="w-full">
           <Button
             variant="outline"
@@ -376,198 +318,147 @@ export default function DashboardOverview() {
         </Link>
       </div>
 
-      {/* Responsive Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Columns */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Cash Flow Analytics */}
-          <FadeIn direction="up">
-            <CashFlowChart />
-          </FadeIn>
+      {/* Favourite Contacts */}
+      <FadeIn direction="up">
+        <QuickPayees
+          onSelectPayee={handleOpenTransferWithPayee}
+          onAddPayee={() => handleOpenTransferWithAccount()}
+        />
+      </FadeIn>
 
-          {/* Transactions / Activity Ledger */}
-          <FadeIn direction="up" delay={0.2}>
-            <GlassCard className="p-5 sm:p-6 bg-[#0C1A2E]/90 border-[#17293F] space-y-5">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div>
-                  <h3 className="text-base font-bold text-white leading-tight">Recent Activity</h3>
-                  <p className="text-xs text-slate-400">Your latest transactions and transfers</p>
-                </div>
+      {/* Recent Activity / Transactions Ledger */}
+      <FadeIn direction="up">
+        <GlassCard className="p-5 sm:p-6 bg-[#0C1A2E]/90 border-[#17293F] space-y-5">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <h3 className="text-base font-bold text-white leading-tight">Recent Activity</h3>
+              <p className="text-xs text-slate-400">Your latest transactions and transfers</p>
+            </div>
 
-                <div className="flex items-center gap-2 self-stretch sm:self-auto">
-                  <div className="relative flex-1 sm:w-48">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Search activity..."
-                      value={txSearch}
-                      onChange={(e) => setTxSearch(e.target.value)}
-                      className="w-full bg-[#080F1A] border border-[#17293F] rounded-xl py-1.5 pl-8 pr-3 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500"
-                    />
-                  </div>
-
-                  {/* Filter tabs */}
-                  <div className="flex bg-[#080F1A] p-0.5 rounded-xl border border-[#17293F]">
-                    <button
-                      type="button"
-                      onClick={() => setTxFilter("all")}
-                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
-                        txFilter === "all" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      All
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTxFilter("inflow")}
-                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
-                        txFilter === "inflow" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      In
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTxFilter("outflow")}
-                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
-                        txFilter === "outflow" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      Out
-                    </button>
-                  </div>
-                </div>
+            <div className="flex items-center gap-2 self-stretch sm:self-auto">
+              <div className="relative flex-1 sm:w-48">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search activity..."
+                  value={txSearch}
+                  onChange={(e) => setTxSearch(e.target.value)}
+                  className="w-full bg-[#080F1A] border border-[#17293F] rounded-xl py-1.5 pl-8 pr-3 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500"
+                />
               </div>
 
-              {/* Transactions Table / List */}
-              <div className="space-y-2">
-                {isLoadingWallet ? (
-                  <div className="text-center py-8 text-xs text-slate-400">Loading activity...</div>
-                ) : filteredTransactions.length === 0 ? (
-                  <div className="text-center py-10 text-slate-400 text-xs space-y-2">
-                    <Receipt className="w-8 h-8 text-slate-500 mx-auto" />
-                    <p className="font-semibold text-slate-300">No Recent Activity</p>
-                    <p className="text-[11px] max-w-xs mx-auto">
-                      Inward and outward transfers will appear here automatically.
-                    </p>
-                  </div>
-                ) : (
-                  filteredTransactions.map((tx: any) => {
-                    const isDeposit =
-                      tx.type?.toLowerCase().includes("deposit") ||
-                      tx.type?.toLowerCase().includes("inward") ||
-                      tx.type?.toLowerCase().includes("credit");
+              {/* Filter tabs */}
+              <div className="flex bg-[#080F1A] p-0.5 rounded-xl border border-[#17293F]">
+                <button
+                  type="button"
+                  onClick={() => setTxFilter("all")}
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
+                    txFilter === "all" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTxFilter("inflow")}
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
+                    txFilter === "inflow" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTxFilter("outflow")}
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
+                    txFilter === "outflow" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  Out
+                </button>
+              </div>
+            </div>
+          </div>
 
-                    return (
+          {/* Transactions Table / List */}
+          <div className="space-y-2">
+            {isLoadingWallet ? (
+              <div className="text-center py-8 text-xs text-slate-400">Loading activity...</div>
+            ) : filteredTransactions.length === 0 ? (
+              <div className="text-center py-10 text-slate-400 text-xs space-y-2">
+                <Receipt className="w-8 h-8 text-slate-500 mx-auto" />
+                <p className="font-semibold text-slate-300">No Recent Activity</p>
+                <p className="text-[11px] max-w-xs mx-auto">
+                  Inward and outward transfers will appear here automatically.
+                </p>
+              </div>
+            ) : (
+              filteredTransactions.map((tx: any) => {
+                const isDeposit =
+                  tx.type?.toLowerCase().includes("deposit") ||
+                  tx.type?.toLowerCase().includes("inward") ||
+                  tx.type?.toLowerCase().includes("credit");
+
+                return (
+                  <div
+                    key={tx.id}
+                    className="flex items-center justify-between p-3.5 rounded-2xl bg-[#080F1A]/70 border border-[#17293F] hover:border-slate-600 transition-all group"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
                       <div
-                        key={tx.id}
-                        className="flex items-center justify-between p-3.5 rounded-2xl bg-[#080F1A]/70 border border-[#17293F] hover:border-slate-600 transition-all group"
+                        className={cn(
+                          "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border",
+                          isDeposit
+                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                            : "bg-[#122140] text-slate-300 border-[#17293F]"
+                        )}
                       >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div
-                            className={cn(
-                              "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border",
-                              isDeposit
-                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                                : "bg-[#122140] text-slate-300 border-[#17293F]"
-                            )}
-                          >
-                            {isDeposit ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
-                          </div>
-
-                          <div className="min-w-0">
-                            <p className="text-sm font-bold text-white truncate group-hover:text-amber-300 transition-colors">
-                              {tx.description || tx.type || "Transfer"}
-                            </p>
-                            <p className="text-xs text-slate-400 truncate">
-                              {tx.reference ? `Ref: ${tx.reference} • ` : ""}
-                              {formatDate(tx.created_at, { month: "short", day: "numeric", year: "numeric" })}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="text-right shrink-0 pl-3">
-                          <p
-                            className={cn(
-                              "text-sm font-bold font-mono",
-                              isDeposit ? "text-emerald-400" : "text-slate-200"
-                            )}
-                          >
-                            {isDeposit ? "+" : "-"}{hideBalances ? "••••" : formatCurrency(tx.amount)}
-                          </p>
-                          <div className="flex items-center justify-end gap-1 mt-0.5">
-                            <span className={cn("w-1.5 h-1.5 rounded-full", tx.status === "completed" ? "bg-emerald-400" : "bg-amber-400")} />
-                            <span className="text-[10px] font-semibold text-slate-400 uppercase">
-                              {tx.status || "Completed"}
-                            </span>
-                          </div>
-                        </div>
+                        {isDeposit ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                       </div>
-                    );
-                  })
-                )}
-              </div>
 
-              {/* View all link */}
-              <div className="pt-2 border-t border-[#17293F] flex items-center justify-between text-xs text-slate-400">
-                <span>Complete history log</span>
-                <Link href="/dashboard/transactions" className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
-                  <span>View All Transactions</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </GlassCard>
-          </FadeIn>
-        </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-white truncate group-hover:text-amber-300 transition-colors">
+                          {tx.description || tx.type || "Transfer"}
+                        </p>
+                        <p className="text-xs text-slate-400 truncate">
+                          {tx.reference ? `Ref: ${tx.reference} • ` : ""}
+                          {formatDate(tx.created_at, { month: "short", day: "numeric", year: "numeric" })}
+                        </p>
+                      </div>
+                    </div>
 
-        {/* Right 1 Column */}
-        <div className="space-y-6">
-          {/* Card Preview Widget */}
-          <FadeIn direction="up" delay={0.05}>
-            <BankCardWidget />
-          </FadeIn>
+                    <div className="text-right shrink-0 pl-3">
+                      <p
+                        className={cn(
+                          "text-sm font-bold font-mono",
+                          isDeposit ? "text-emerald-400" : "text-slate-200"
+                        )}
+                      >
+                        {isDeposit ? "+" : "-"}{hideBalances ? "••••" : formatCurrency(tx.amount)}
+                      </p>
+                      <div className="flex items-center justify-end gap-1 mt-0.5">
+                        <span className={cn("w-1.5 h-1.5 rounded-full", tx.status === "completed" ? "bg-emerald-400" : "bg-amber-400")} />
+                        <span className="text-[10px] font-semibold text-slate-400 uppercase">
+                          {tx.status || "Completed"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
 
-          {/* Favourite Contacts */}
-          <FadeIn direction="up" delay={0.15}>
-            <QuickPayees
-              onSelectPayee={handleOpenTransferWithPayee}
-              onAddPayee={() => handleOpenTransferWithAccount()}
-            />
-          </FadeIn>
-
-          {/* Verification & Account Protection */}
-          <FadeIn direction="up" delay={0.25}>
-            <GlassCard className="p-5 sm:p-6 bg-[#0C1A2E]/90 border-[#17293F] space-y-4">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
-                  <FileCheck className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white leading-tight">Account Protection</h3>
-                  <p className="text-xs text-slate-400">Verified status &amp; safety settings</p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#080F1A]/70 border border-[#17293F] space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Identity Verification</span>
-                  <span className="text-emerald-400 font-bold uppercase">Verified</span>
-                </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Daily Limit</span>
-                  <span className="text-white font-mono font-bold">$250,000.00</span>
-                </div>
-              </div>
-
-              <Link href="/dashboard/documents" className="block">
-                <Button variant="outline" size="sm" className="w-full text-xs font-semibold bg-[#0A1628] border-[#17293F] text-slate-300 hover:text-white hover:bg-[#122140]">
-                  View Verification Documents
-                </Button>
-              </Link>
-            </GlassCard>
-          </FadeIn>
-        </div>
-      </div>
+          {/* View all link */}
+          <div className="pt-2 border-t border-[#17293F] flex items-center justify-between text-xs text-slate-400">
+            <span>Complete history log</span>
+            <Link href="/dashboard/transactions" className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
+              <span>View All Transactions</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </GlassCard>
+      </FadeIn>
 
       {/* Wire & Transfer Modal */}
       <WireTransferModal

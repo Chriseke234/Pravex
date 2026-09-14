@@ -43,17 +43,9 @@ export function Topbar() {
             <Command className="w-2.5 h-2.5" /> K
           </div>
         </div>
-
-        {/* Mobile Compact Balance Badge */}
-        <div className="sm:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20">
-          <span className="text-[10px] font-bold text-slate-400 uppercase">Bal:</span>
-          <span className="text-xs font-bold text-amber-400">
-            {isLoadingWallet ? "…" : formatCurrency(balance)}
-          </span>
-        </div>
       </div>
 
-      {/* Right: Public Site Link + Balance + Notifications + Avatar */}
+      {/* Right: Public Site Link + Notifications + Avatar */}
       <div className="flex items-center gap-2 sm:gap-3">
         <Link href="/" title="Return to Public Website">
           <Button variant="ghost" size="sm" className="hidden sm:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white border border-[#17293F] hover:bg-[#122140] rounded-xl px-3 py-1.5">
@@ -61,18 +53,6 @@ export function Topbar() {
             <span>Public Site</span>
           </Button>
         </Link>
-
-        <div className="hidden md:flex flex-col items-end">
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            Operating Balance
-          </span>
-          <span className="text-sm font-bold text-amber-400 font-mono">
-            {isLoadingWallet ? "—" : formatCurrency(balance)}
-          </span>
-        </div>
-
-        <div className="h-7 w-px bg-[#17293F] hidden md:block mx-1" />
 
         <Link href="/dashboard/notifications" aria-label="Notifications">
           <div
