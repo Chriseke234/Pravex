@@ -19,7 +19,9 @@ export default function DocumentsPage() {
   const { showToast } = useToast();
 
   const [docType, setDocType] = useState<KycDocumentType>("passport");
+  const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
