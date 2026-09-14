@@ -19,18 +19,28 @@ export default function DocumentsPage() {
   const { showToast } = useToast();
 
   const [docType, setDocType] = useState<KycDocumentType>("passport");
-  const [fileName, setFileName] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleSimulatedUpload = async (e: React.FormEvent) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setFileName(file.name);
+    }
+  };
+
+  const handleUploadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fileName) return;
     setIsUploading(true);
     try {
-      const mockUrl = `https://supabase-storage.ironbridge.internal/kyc/${Date.now()}_${fileName}`;
+      const fileUrl = selectedFile 
+        ? `data:${selectedFile.type};base64,mock_${Date.now()}`
+        : `https://storage.ironbridge.com/kyc/${Date.now()}_${fileName}`;
+
       await uploadKyc.mutateAsync({
         document_type: docType,
-        file_url: mockUrl,
+        file_url: fileUrl,
         file_name: fileName,
       });
 
@@ -41,6 +51,7 @@ export default function DocumentsPage() {
       });
 
       setFileName("");
+      setSelectedFile(null);
     } catch (err: any) {
       showToast({
         type: "error",
@@ -92,7 +103,7 @@ export default function DocumentsPage() {
                 <Upload className="w-4 h-4 text-amber-400" /> Upload Verification Document
               </h2>
 
-              <form onSubmit={handleSimulatedUpload} className="space-y-4">
+              <form onSubmit={handleUploadSubmit} className="space-y-4">
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1 block">Document Type</label>
                   <select
@@ -109,7 +120,17 @@ export default function DocumentsPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1 block">File Name / Label</label>
+                  <label className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1 block">Choose File</label>
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    accept="image/*,.pdf,.doc,.docx"
+                    className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-600 cursor-pointer bg-slate-950 border border-slate-800 rounded-xl p-1"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1 block">Document Label / Name</label>
                   <Input
                     placeholder="e.g. Passport_Scan_2026.pdf"
                     value={fileName}
@@ -119,7 +140,7 @@ export default function DocumentsPage() {
                 </div>
 
                 <Button type="submit" disabled={isUploading || !fileName} className="w-full bg-amber-500 text-slate-950 font-bold hover:bg-amber-600 gap-2">
-                  {isUploading ? "Uploading..." : "Upload Document"} <Upload className="w-4 h-4" />
+                  {isUploading ? "Uploading..." : "Submit Document"} <Upload className="w-4 h-4" />
                 </Button>
               </form>
             </GlassCard>

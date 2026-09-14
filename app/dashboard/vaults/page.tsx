@@ -16,6 +16,8 @@ export default function VaultsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [vaultType, setVaultType] = useState<"Single-Sig" | "Multi-Sig">("Single-Sig");
   const [newVaultName, setNewVaultName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState<"all" | "Single-Sig" | "Multi-Sig">("all");
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateVault = async () => {
@@ -36,6 +38,12 @@ export default function VaultsPage() {
       setIsCreating(false);
     }
   };
+
+  const filteredVaults = (vaults || []).filter((v: Vault) => {
+    const matchesSearch = v.name?.toLowerCase().includes(searchQuery.toLowerCase());
+    if (filterType === "all") return matchesSearch;
+    return matchesSearch && ((filterType === "Single-Sig" && v.threshold_n === 1) || (filterType === "Multi-Sig" && v.threshold_n > 1));
+  });
 
   if (isLoading) {
     return (
@@ -86,28 +94,41 @@ export default function VaultsPage() {
         <div className="flex justify-between items-center px-2">
           <h2 className="text-xl font-bold">Your Vaults</h2>
           <div className="flex gap-2">
-            <div className="relative hidden md:block">
+            <div className="relative block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input 
                 type="text" 
                 placeholder="Search vaults..." 
-                className="bg-white/5 border border-white/10 rounded-xl py-1.5 pl-10 pr-4 text-sm focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-white/5 border border-white/10 rounded-xl py-1.5 pl-10 pr-4 text-sm focus:outline-none text-white"
               />
             </div>
-            <Button variant="glass" size="sm">
-              <Filter className="w-4 h-4 mr-2" /> Filter
+            <Button 
+              variant={filterType !== "all" ? "premium" : "glass"} 
+              size="sm"
+              onClick={() => {
+                setFilterType(prev => prev === "all" ? "Single-Sig" : prev === "Single-Sig" ? "Multi-Sig" : "all");
+              }}
+            >
+              <Filter className="w-4 h-4 mr-2" /> {filterType === "all" ? "Filter All" : filterType}
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {vaults?.length === 0 ? (
+          {filteredVaults.length === 0 ? (
             <div className="col-span-full py-20 text-center space-y-4 border-2 border-dashed border-white/5 rounded-[2rem]">
-              <p className="text-muted-foreground">No institutional vaults found.</p>
-              <Button variant="premium">Create Your First Vault</Button>
+              <p className="text-muted-foreground">No institutional vaults found matching criteria.</p>
+              <Button 
+                variant="premium"
+                onClick={() => { setVaultType("Multi-Sig"); setShowCreateModal(true); }}
+              >
+                Create Your First Vault
+              </Button>
             </div>
           ) : (
-            vaults?.map((vault: Vault) => (
+            filteredVaults.map((vault: Vault) => (
               <VaultCard 
                 key={vault.id} 
                 id={vault.id.slice(0, 8)}
@@ -115,7 +136,7 @@ export default function VaultsPage() {
                 balance={`$${vault.balance_usd?.toLocaleString() || "0"}`}
                 threshold={`${vault.threshold_n}-of-${vault.threshold_m}`}
                 signers={vault.vault_signers?.length || 0}
-                pendingActions={0} // Logic for pending actions would go here
+                pendingActions={0}
                 type={vault.type}
               />
             ))
@@ -136,7 +157,13 @@ export default function VaultsPage() {
               Our multi-signature protocol ensures that no single point of failure can compromise your capital.
             </p>
           </div>
-          <Button variant="outline" className="w-full md:w-auto h-12 px-8">Configure Policies</Button>
+          <Button 
+            variant="outline" 
+            className="w-full md:w-auto h-12 px-8"
+            onClick={() => { setVaultType("Multi-Sig"); setShowCreateModal(true); }}
+          >
+            Configure Policies
+          </Button>
         </div>
       </div>
 

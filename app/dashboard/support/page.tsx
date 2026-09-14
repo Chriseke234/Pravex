@@ -143,15 +143,19 @@ export default function UserSupportPage() {
     }
   };
 
-  /** Simulate a file upload (placeholder for real upload logic) */
-  const handleSimulateUpload = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /** Handle real file upload selection */
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
     setIsUploading(true);
-    setTimeout(() => {
-      setAttachmentUrl(
-        "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80"
-      );
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setAttachmentUrl(event.target?.result as string);
       setIsUploading(false);
-    }, 1200);
+    };
+    reader.readAsDataURL(file);
   };
 
   /** Select a conversation from the list */
@@ -466,13 +470,22 @@ export default function UserSupportPage() {
 
         {/* Input row */}
         <div className="flex gap-2">
+          {/* Hidden file input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+            accept="image/*,.pdf,.doc,.docx"
+            className="hidden"
+          />
+
           {/* Attachment button */}
           <Button
             type="button"
             variant="glass"
             size="icon"
             className="rounded-xl shrink-0"
-            onClick={handleSimulateUpload}
+            onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
           >
             {isUploading ? (

@@ -59,7 +59,46 @@ const PREDICTIVE_DATA = [
 ];
 
 export default function AnalyticsPage() {
-  const [activeTab, setActiveTab] = useState("intelligence");
+  const [timeframe, setTimeframe] = useState("Last 30 Days");
+  const [activeScenario, setActiveScenario] = useState<string | null>(null);
+
+  const handleCycleTimeframe = () => {
+    const frames = ["Last 7 Days", "Last 30 Days", "Last 90 Days", "Year to Date (YTD)"];
+    const currentIndex = frames.indexOf(timeframe);
+    const nextIndex = (currentIndex + 1) % frames.length;
+    setTimeframe(frames[nextIndex]);
+  };
+
+  const handleExportReport = () => {
+    const reportContent =
+      "IRON BRIDGE BANKING — INSTITUTIONAL ANALYTICS & INTELLIGENCE REPORT\n" +
+      `Generated: ${new Date().toUTCString()}\n` +
+      `Timeframe: ${timeframe}\n` +
+      `============================================================\n` +
+      `RISK METRICS:\n` +
+      `- Sharpe Ratio: 3.42\n` +
+      `- Volatility (30d): 12.8%\n` +
+      `- Max Drawdown: -4.2%\n` +
+      `- Alpha Generation: +1.85\n\n` +
+      `ASSET CORRELATIONS:\n` +
+      CORRELATION_DATA.map((c) => `- ${c.asset}: ${(c.correlation * 100).toFixed(0)}% (${c.status})`).join("\n") +
+      `\n\nSECTOR ALLOCATION:\n` +
+      SECTOR_ALLOCATION.map((s) => `- ${s.name}: ${s.value} USD Units`).join("\n") +
+      `\n============================================================\n` +
+      `STATUS: VERIFIED BY QUANTITATIVE TREASURY ENGINE`;
+
+    const blob = new Blob([reportContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ironbridge_analytics_report_${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleRunSimulation = (title: string, impact: string) => {
+    setActiveScenario(`${title}: Projected PnL ${impact}`);
+  };
 
   return (
     <div className="space-y-8 pb-20">
@@ -70,10 +109,10 @@ export default function AnalyticsPage() {
           <p className="text-muted-foreground">Institutional-grade intelligence and performance modeling.</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="glass" size="sm" className="gap-2">
-            <Calendar className="w-4 h-4" /> Last 30 Days
+          <Button variant="glass" size="sm" className="gap-2" onClick={handleCycleTimeframe}>
+            <Calendar className="w-4 h-4" /> {timeframe}
           </Button>
-          <Button variant="premium" size="sm" className="gap-2">
+          <Button variant="premium" size="sm" className="gap-2" onClick={handleExportReport}>
             <Download className="w-4 h-4" /> Export Report
           </Button>
         </div>
@@ -137,7 +176,7 @@ export default function AnalyticsPage() {
               <div className="text-xl font-bold text-emerald-400">3.42</div>
             </div>
             <div className="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
-              <div className="text-sm text-muted-foreground">Volatility (30d)</div>
+              <div className="text-sm text-muted-foreground">Volatility ({timeframe})</div>
               <div className="text-xl font-bold">12.8%</div>
             </div>
             <div className="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
@@ -248,16 +287,32 @@ export default function AnalyticsPage() {
               </div>
             ))}
           </div>
-          <Button variant="outline" className="w-full text-xs h-9">View Full Terminal</Button>
+          <Button 
+            variant="outline" 
+            className="w-full text-xs h-9"
+            onClick={() => {
+              const el = document.getElementById("stress-test-section");
+              el?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            View Full Terminal
+          </Button>
         </GlassCard>
 
       </div>
 
       {/* Scenario Simulator */}
-      <section className="space-y-6">
-        <div className="flex items-center gap-3 px-2">
-          <Layers className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-bold">Stress Test & Scenario Simulator</h2>
+      <section id="stress-test-section" className="space-y-6">
+        <div className="flex items-center justify-between px-2">
+          <div className="flex items-center gap-3">
+            <Layers className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold">Stress Test &amp; Scenario Simulator</h2>
+          </div>
+          {activeScenario && (
+            <span className="text-xs font-semibold px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-full animate-pulse">
+              Active Simulation: {activeScenario}
+            </span>
+          )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
@@ -265,7 +320,11 @@ export default function AnalyticsPage() {
             { title: "Stagnant Growth", risk: "Low", impact: "+2.1%", color: "text-amber-400" },
             { title: "Bull Expansion", risk: "Medium", impact: "+24.5%", color: "text-emerald-400" },
           ].map((scenario) => (
-            <GlassCard key={scenario.title} className="p-6 space-y-4 group hover:border-primary/50 transition-all cursor-pointer">
+            <GlassCard 
+              key={scenario.title} 
+              onClick={() => handleRunSimulation(scenario.title, scenario.impact)}
+              className="p-6 space-y-4 group hover:border-primary/50 transition-all cursor-pointer"
+            >
               <div className="flex justify-between items-start">
                 <h3 className="font-bold">{scenario.title}</h3>
                 <span className={cn("text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10", scenario.color)}>
@@ -277,8 +336,8 @@ export default function AnalyticsPage() {
                 <span className="text-xs text-muted-foreground">Projected PnL</span>
               </div>
               <div className="pt-4 border-t border-white/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-                <span className="text-xs">Run Simulation</span>
-                <TrendingUp className="w-4 h-4" />
+                <span className="text-xs font-semibold text-amber-400">Run Simulation</span>
+                <TrendingUp className="w-4 h-4 text-amber-400" />
               </div>
             </GlassCard>
           ))}

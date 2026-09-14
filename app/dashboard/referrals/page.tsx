@@ -10,15 +10,19 @@ import { formatCurrency, formatDate } from "@/lib/utils/formatters";
 import { StatusBadge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/toast";
 
+import { useProfile } from "@/hooks/use-profile";
+
 export default function ReferralsPage() {
   const { referrals, isLoading, inviteFriend } = useReferrals();
+  const { profile } = useProfile();
   const { showToast } = useToast();
 
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
   const [isSending, setIsSending] = useState(false);
 
-  const referralLink = typeof window !== "undefined" ? `${window.location.origin}/signup?ref=CLIENT-${Math.floor(1000 + Math.random() * 9000)}` : "";
+  const refCode = profile?.id ? profile.id.slice(0, 8).toUpperCase() : "VIP2026";
+  const referralLink = typeof window !== "undefined" ? `${window.location.origin}/signup?ref=${refCode}` : "";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink);

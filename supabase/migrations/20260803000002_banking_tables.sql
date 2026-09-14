@@ -208,6 +208,14 @@ DROP POLICY IF EXISTS "Users can view own cards" ON public.cards;
 CREATE POLICY "Users can view own cards" ON public.cards
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert own cards" ON public.cards;
+CREATE POLICY "Users can insert own cards" ON public.cards
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update own cards" ON public.cards;
+CREATE POLICY "Users can update own cards" ON public.cards
+  FOR UPDATE USING (auth.uid() = user_id);
+
 DROP POLICY IF EXISTS "Admins can manage all cards" ON public.cards;
 CREATE POLICY "Admins can manage all cards" ON public.cards
   FOR ALL USING (

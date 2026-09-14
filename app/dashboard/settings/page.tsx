@@ -15,27 +15,49 @@ export default function SettingsPage() {
 
   const [fullName, setFullName] = useState("");
   const [tier, setTier] = useState("Commercial Banking");
+  const [mfaEnabled, setMfaEnabled] = useState(true);
+  const [smsNotifications, setSmsNotifications] = useState(true);
+  const [emailStatements, setEmailStatements] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (profile) {
       setFullName(profile.full_name || "");
       setTier(profile.tier || "Commercial Banking");
+      setMfaEnabled(profile.mfa_enabled ?? true);
     }
   }, [profile]);
 
   const handleSaveProfile = async () => {
     setIsSaving(true);
     try {
-      await updateProfile({
+      const res = await updateProfile({
         full_name: fullName,
         tier,
+        mfa_enabled: mfaEnabled,
       });
-      showToast({ type: "success", title: "Profile Saved", description: "Your account details have been updated." });
+      if (res.error) throw res.error;
+      showToast({ type: "success", title: "Settings Saved", description: "Your account details and security preferences have been updated." });
     } catch (e: any) {
-      showToast({ type: "error", title: "Update Failed", description: e.message || "Failed to update profile." });
+      showToast({ type: "error", title: "Update Failed", description: e.message || "Failed to update profile settings." });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleToggleMfa = async () => {
+    const nextState = !mfaEnabled;
+    setMfaEnabled(nextState);
+    try {
+      await updateProfile({ mfa_enabled: nextState });
+      showToast({
+        type: "success",
+        title: nextState ? "MFA Enabled" : "MFA Disabled",
+        description: nextState ? "Multi-Factor Authentication is now active." : "Multi-Factor Authentication has been disabled.",
+      });
+    } catch (e: any) {
+      setMfaEnabled(!nextState);
+      showToast({ type: "error", title: "MFA Update Failed", description: e.message || "Failed to change MFA status." });
     }
   };
 
@@ -117,10 +139,19 @@ export default function SettingsPage() {
             </p>
             <div className="p-4 bg-slate-950 border border-slate-800 rounded-2xl flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-white">MFA Status: <span className="text-emerald-400">ENABLED</span></p>
+                <p className="text-sm font-semibold text-white">
+                  MFA Status:{" "}
+                  {mfaEnabled ? (
+                    <span className="text-emerald-400">ENABLED</span>
+                  ) : (
+                    <span className="text-amber-500">DISABLED</span>
+                  )}
+                </p>
                 <p className="text-xs text-slate-500">Required for high-value wire transfers</p>
               </div>
-              <Button variant="outline" size="sm">Manage 2FA</Button>
+              <Button variant="outline" size="sm" onClick={handleToggleMfa}>
+                {mfaEnabled ? "Disable 2FA" : "Enable 2FA"}
+              </Button>
             </div>
           </GlassCard>
         </TabsContent>
@@ -132,14 +163,29 @@ export default function SettingsPage() {
               <Bell className="w-5 h-5 text-amber-400" /> Notification Preferences
             </h2>
             <div className="space-y-4 text-sm text-slate-300">
-              <label className="flex items-center gap-3">
-                <input type="checkbox" defaultChecked className="accent-amber-500 rounded" />
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={smsNotifications}
+                  onChange={(e) => setSmsNotifications(e.target.checked)}
+                  className="accent-amber-500 rounded"
+                />
                 <span>Receive instant SMS for transactions over $1,000</span>
               </label>
-              <label className="flex items-center gap-3">
-                <input type="checkbox" defaultChecked className="accent-amber-500 rounded" />
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={emailStatements}
+                  onChange={(e) => setEmailStatements(e.target.checked)}
+                  className="accent-amber-500 rounded"
+                />
                 <span>Email monthly PDF account statements automatically</span>
               </label>
+            </div>
+            <div className="pt-4 border-t border-slate-800 flex justify-end">
+              <Button onClick={handleSaveProfile} disabled={isSaving} className="gap-2 bg-amber-500 text-slate-950 font-bold hover:bg-amber-600">
+                <Save className="w-4 h-4" /> Save Preferences
+              </Button>
             </div>
           </GlassCard>
         </TabsContent>
