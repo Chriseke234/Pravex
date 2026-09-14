@@ -22,6 +22,45 @@ const AVATAR_GRADIENTS = [
   "from-amber-400 to-orange-600",
 ];
 
+const DEFAULT_PAYEES: (Payee & { avatarUrl?: string })[] = [
+  {
+    id: "fav-1",
+    name: "Alina K.",
+    bankName: "Chase Bank",
+    accountNumber: "•••• 4691",
+    avatarColor: "from-amber-500 to-amber-700",
+    initials: "AK",
+    avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "fav-2",
+    name: "Mark T.",
+    bankName: "Bank of America",
+    accountNumber: "•••• 3712",
+    avatarColor: "from-blue-500 to-indigo-700",
+    initials: "MT",
+    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "fav-3",
+    name: "Rachel V.",
+    bankName: "Wells Fargo",
+    accountNumber: "•••• 8901",
+    avatarColor: "from-emerald-500 to-teal-700",
+    initials: "RV",
+    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "fav-4",
+    name: "David S.",
+    bankName: "Citibank",
+    accountNumber: "•••• 5143",
+    avatarColor: "from-purple-500 to-pink-700",
+    initials: "DS",
+    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+  },
+];
+
 export function QuickPayees({
   onSelectPayee,
   onAddPayee,
@@ -29,13 +68,13 @@ export function QuickPayees({
   onSelectPayee: (payee: Payee) => void;
   onAddPayee?: () => void;
 }) {
-  const { transfers, isLoading } = useTransfers();
+  const { transfers } = useTransfers();
 
-  // Extract unique real payees from user's actual transfers
-  const realPayees = useMemo<Payee[]>(() => {
-    if (!transfers || transfers.length === 0) return [];
+  // Extract unique real payees or use default favourite contacts
+  const displayPayees = useMemo<(Payee & { avatarUrl?: string })[]>(() => {
+    if (!transfers || transfers.length === 0) return DEFAULT_PAYEES;
 
-    const map = new Map<string, Payee>();
+    const map = new Map<string, Payee & { avatarUrl?: string }>();
     transfers.forEach((tx, idx) => {
       if (tx.recipient_name && !map.has(tx.recipient_name)) {
         const initials = tx.recipient_name
@@ -48,7 +87,7 @@ export function QuickPayees({
         map.set(tx.recipient_name, {
           id: tx.id || `payee-${idx}`,
           name: tx.recipient_name,
-          bankName: tx.bank_name || "Commercial Bank",
+          bankName: tx.bank_name || "Bank Account",
           accountNumber: tx.recipient_account || "",
           avatarColor: AVATAR_GRADIENTS[idx % AVATAR_GRADIENTS.length],
           initials,
@@ -56,7 +95,8 @@ export function QuickPayees({
       }
     });
 
-    return Array.from(map.values()).slice(0, 8);
+    const result = Array.from(map.values());
+    return result.length > 0 ? result.slice(0, 8) : DEFAULT_PAYEES;
   }, [transfers]);
 
   return (
@@ -67,8 +107,8 @@ export function QuickPayees({
             <UserCheck className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white leading-tight">Frequent Payees</h3>
-            <p className="text-xs text-slate-400">One-click transfers to recent beneficiaries</p>
+            <h3 className="text-base font-bold text-white leading-tight">Favourite Contacts</h3>
+            <p className="text-xs text-slate-400">Quick 1-tap transfers to saved payees</p>
           </div>
         </div>
       </div>
@@ -81,41 +121,43 @@ export function QuickPayees({
           onClick={onAddPayee}
           className="flex flex-col items-center justify-center p-3 rounded-2xl bg-[#080F1A]/70 border border-dashed border-[#17293F] hover:border-amber-500/40 hover:bg-[#122140]/40 transition-all shrink-0 w-24 h-28 group"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#0A1628] border border-[#17293F] group-hover:border-amber-500/30 flex items-center justify-center text-amber-400 mb-1.5 transition-colors">
+          <div className="w-10 h-10 rounded-full bg-[#0A1628] border border-[#17293F] group-hover:border-amber-500/30 flex items-center justify-center text-amber-400 mb-1.5 transition-colors">
             <Plus className="w-5 h-5" />
           </div>
           <span className="text-[11px] font-semibold text-slate-300 group-hover:text-white text-center leading-tight">
-            New Wire
+            Add New
           </span>
         </button>
 
-        {/* Empty state or real payees */}
-        {realPayees.length === 0 ? (
-          <div className="flex items-center gap-2 px-4 text-xs text-slate-400 italic">
-            <span>No saved counterparties yet. Transmit a wire to build your frequent payees list.</span>
-          </div>
-        ) : (
-          realPayees.map((payee) => (
-            <button
-              key={payee.id}
-              type="button"
-              onClick={() => onSelectPayee(payee)}
-              className="flex flex-col items-center justify-center p-3 rounded-2xl bg-[#080F1A]/70 border border-[#17293F] hover:border-amber-500/50 hover:bg-[#122140]/40 transition-all shrink-0 w-28 h-28 group text-center"
-            >
+        {/* Display payees */}
+        {displayPayees.map((payee) => (
+          <button
+            key={payee.id}
+            type="button"
+            onClick={() => onSelectPayee(payee)}
+            className="flex flex-col items-center justify-center p-3 rounded-2xl bg-[#080F1A]/70 border border-[#17293F] hover:border-amber-500/50 hover:bg-[#122140]/40 transition-all shrink-0 w-24 h-28 group text-center"
+          >
+            {payee.avatarUrl ? (
+              <img
+                src={payee.avatarUrl}
+                alt={payee.name}
+                className="w-10 h-10 rounded-full object-cover border-2 border-amber-500/30 group-hover:scale-105 transition-transform mb-1.5"
+              />
+            ) : (
               <div
-                className={`w-10 h-10 rounded-xl bg-gradient-to-br ${payee.avatarColor} flex items-center justify-center text-white font-bold text-xs shadow-md shadow-amber-500/5 group-hover:scale-105 transition-transform mb-1.5`}
+                className={`w-10 h-10 rounded-full bg-gradient-to-br ${payee.avatarColor} flex items-center justify-center text-white font-bold text-xs shadow-md group-hover:scale-105 transition-transform mb-1.5`}
               >
                 {payee.initials}
               </div>
-              <span className="text-xs font-semibold text-white truncate w-full group-hover:text-amber-300">
-                {payee.name}
-              </span>
-              <span className="text-[10px] text-slate-400 truncate w-full mt-0.5">
-                {payee.bankName}
-              </span>
-            </button>
-          ))
-        )}
+            )}
+            <span className="text-xs font-semibold text-white truncate w-full group-hover:text-amber-300">
+              {payee.name}
+            </span>
+            <span className="text-[10px] text-slate-400 truncate w-full mt-0.5">
+              {payee.bankName}
+            </span>
+          </button>
+        ))}
       </div>
     </GlassCard>
   );

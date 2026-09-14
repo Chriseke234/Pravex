@@ -36,7 +36,7 @@ export function BankAccountsCard({ onOpenTransferModal }: { onOpenTransferModal?
           </div>
           <div>
             <h3 className="text-base font-bold text-white leading-tight">Bank Accounts</h3>
-            <p className="text-xs text-slate-400">Operating &amp; High-Yield Reserves</p>
+            <p className="text-xs text-slate-400">Checking &amp; Savings Accounts</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -56,20 +56,15 @@ export function BankAccountsCard({ onOpenTransferModal }: { onOpenTransferModal?
         ) : accounts.length === 0 ? (
           <div className="p-6 rounded-2xl bg-[#080F1A]/60 border border-dashed border-[#17293F] text-center space-y-2">
             <Landmark className="w-8 h-8 text-slate-500 mx-auto" />
-            <p className="text-sm font-semibold text-white">No Dedicated Bank Accounts</p>
+            <p className="text-sm font-semibold text-white">Your Main Account</p>
             <p className="text-xs text-slate-400 max-w-xs mx-auto">
-              Open a checking, high-yield savings, or commercial deposit account.
+              Primary checking account is ready.
             </p>
-            <Link href="/dashboard/accounts" className="inline-block pt-1">
-              <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs gap-1.5">
-                <Plus className="w-3.5 h-3.5" /> Open Account
-              </Button>
-            </Link>
           </div>
         ) : (
           accounts.map((acc: any) => {
             const isSavings = acc.account_type === "savings" || acc.account_type === "fixed_deposit" || acc.account_type === "notice_deposit";
-            const apy = isSavings ? "4.85% APY" : "Daily Liquidity";
+            const apy = isSavings ? "4.85% APY" : "Active Checking";
 
             return (
               <div
@@ -148,7 +143,7 @@ export function BankAccountsCard({ onOpenTransferModal }: { onOpenTransferModal?
       <Link href="/dashboard/accounts" className="block">
         <div className="p-3 rounded-xl border border-dashed border-[#17293F] hover:border-amber-500/40 hover:bg-[#122140]/40 flex items-center justify-center gap-2 text-xs font-semibold text-slate-300 hover:text-amber-400 transition-all cursor-pointer">
           <Plus className="w-4 h-4 text-amber-400" />
-          <span>Open Dedicated High-Yield or Multi-Currency Account</span>
+          <span>Open New Savings or Multi-Currency Account</span>
         </div>
       </Link>
     </GlassCard>

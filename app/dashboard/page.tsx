@@ -20,6 +20,11 @@ import {
   TrendingUp,
   Receipt,
   FileCheck,
+  ArrowDownCircle,
+  ArrowUpCircle,
+  QrCode,
+  Wallet as WalletIcon,
+  CreditCard as PaymentIcon,
 } from "lucide-react";
 import { StatCard } from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
@@ -53,10 +58,13 @@ export default function DashboardOverview() {
   const [txSearch, setTxSearch] = useState("");
 
   // Real financial aggregates from Supabase
-  const primaryOperatingBalance = wallet?.balance || 0;
-  const dedicatedAccountsTotal = accounts.reduce((acc, a) => acc + (a.balance || 0), 0);
-  const totalNetLiquidity = primaryOperatingBalance + dedicatedAccountsTotal;
-  const activeAccountsCount = accounts.length + 1; // Primary wallet + dedicated sub-accounts
+  const totalNetLiquidity = wallet?.balance || 0;
+
+  // Extract user's first name for greeting
+  const firstName =
+    profile?.full_name?.trim().split(" ")[0] ||
+    (profile as any)?.first_name ||
+    "there";
 
   const handleOpenTransferWithPayee = (payee: Payee) => {
     setSelectedPayee(payee);
@@ -69,20 +77,27 @@ export default function DashboardOverview() {
     setShowWireModal(true);
   };
 
+  const handleActionToast = (actionName: string) => {
+    showToast({
+      type: "info",
+      title: actionName,
+      description: `${actionName} feature is ready. Select an account or recipient to continue.`,
+    });
+  };
+
   const handleDownloadStatement = () => {
     const userName = profile?.full_name || "Valued Client";
     const reportText =
       `==============================================================\n` +
-      `       IRON BRIDGE COMMERCIAL BANKING — FINANCIAL STATEMENT    \n` +
+      `                   ACCOUNT FINANCIAL STATEMENT                 \n` +
       `==============================================================\n\n` +
       `Client: ${userName}\n` +
       `Generated: ${new Date().toUTCString()}\n\n` +
-      `CONSOLIDATED LIQUIDITY SUMMARY:\n` +
+      `SUMMARY OF HOLDINGS:\n` +
       `--------------------------------------------------------------\n` +
-      `Total Net Liquidity:    ${formatCurrency(totalNetLiquidity)}\n` +
-      `Primary Operating Cash: ${formatCurrency(primaryOperatingBalance)}\n` +
-      `Dedicated Accounts:     ${accounts.length} Sub-Accounts\n\n` +
-      `TRANSACTION LEDGER AUDIT:\n` +
+      `Total Balance:          ${formatCurrency(totalNetLiquidity)}\n` +
+      `Available Cash:         ${formatCurrency(totalNetLiquidity)}\n\n` +
+      `RECENT TRANSACTIONS:\n` +
       `--------------------------------------------------------------\n` +
       (transactions && transactions.length > 0
         ? transactions
@@ -91,29 +106,32 @@ export default function DashboardOverview() {
                 `[${formatDate(t.created_at)}] ${t.type.padEnd(14)} | ${formatCurrency(t.amount).padEnd(14)} | Status: ${t.status}`
             )
             .join("\n")
-        : "No transaction records on file.") +
+        : "No transaction records available.") +
       `\n\n==============================================================\n` +
-      `End of Official Statement • Iron Bridge Banking PLC`;
+      `End of Statement`;
 
     const blob = new Blob([reportText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `IronBridge_Statement_${Date.now()}.txt`;
+    link.download = `Statement_${Date.now()}.txt`;
     link.click();
     URL.revokeObjectURL(url);
 
     showToast({
       type: "success",
       title: "Statement Downloaded",
-      description: "Official financial statement generated successfully.",
+      description: "Financial statement generated successfully.",
     });
   };
 
-  // Real filtered transactions from Supabase
+  // Filter transactions
   const realTransactions = transactions || [];
   const filteredTransactions = realTransactions.filter((tx: any) => {
-    const isDeposit = tx.type?.toLowerCase().includes("deposit") || tx.type?.toLowerCase().includes("inward") || tx.type?.toLowerCase().includes("credit");
+    const isDeposit =
+      tx.type?.toLowerCase().includes("deposit") ||
+      tx.type?.toLowerCase().includes("inward") ||
+      tx.type?.toLowerCase().includes("credit");
     if (txFilter === "inflow" && !isDeposit) return false;
     if (txFilter === "outflow" && isDeposit) return false;
     if (txSearch) {
@@ -128,24 +146,19 @@ export default function DashboardOverview() {
 
   return (
     <div className="space-y-8 pb-12">
-      {/* Top Banking Banner */}
+      {/* Top Header Banner with Hello Greeting */}
       <FadeIn>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-5 pb-2 border-b border-[#17293F]">
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white tracking-tight">
-              Commercial Treasury &amp; Overview
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-2 border-b border-[#17293F]">
+          <div className="space-y-1">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+              Hello, {firstName}!
             </h1>
-
-            <p className="text-sm text-slate-400 max-w-xl">
-              Welcome back,{" "}
-              <span className="text-white font-medium">
-                {profile?.full_name || "Valued Client"}
-              </span>
-              . Manage your operating accounts, cash liquidity, payment cards, and wire transfers.
+            <p className="text-sm text-slate-400">
+              Here is your financial summary and quick account actions.
             </p>
           </div>
 
-          {/* Quick Global Actions */}
+          {/* Global Quick Action Toolbar */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full sm:w-auto">
             <Button
               variant="outline"
@@ -173,20 +186,107 @@ export default function DashboardOverview() {
               className="gap-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
             >
               <Send className="w-3.5 h-3.5" />
-              <span>Send Wire</span>
+              <span>Send Money</span>
             </Button>
           </div>
         </div>
       </FadeIn>
 
-      {/* Main KPI Strip with Real Supabase Data */}
-      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      {/* Featured Hero Total Balance Card (Inspired by reference design) */}
+      <FadeIn>
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#132A4A] via-[#0C1A2E] to-[#080F1A] border border-amber-500/30 p-6 sm:p-8 shadow-xl shadow-amber-500/5">
+          {/* Subtle background glow */}
+          <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            {/* Balance & Trend Info */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-semibold uppercase tracking-wider text-amber-400/90 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                  Total Balance
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setHideBalances(!hideBalances)}
+                  className="text-slate-400 hover:text-white transition-colors"
+                  aria-label="Toggle Balance Visibility"
+                >
+                  {hideBalances ? <Eye className="w-4 h-4 text-amber-400" /> : <EyeOff className="w-4 h-4" />}
+                </button>
+              </div>
+
+              <div className="flex items-baseline gap-4">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-mono text-white tracking-tight">
+                  {hideBalances ? "••••••••" : formatCurrency(totalNetLiquidity)}
+                </h2>
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <TrendingUp className="w-3.5 h-3.5" />
+                  +24% Last week
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                Combined balance across all active checking and savings accounts
+              </p>
+            </div>
+
+            {/* Embedded Quick Action Buttons inside Balance Card */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <button
+                type="button"
+                onClick={() => handleOpenTransferWithAccount()}
+                className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-[#0A1628]/90 border border-amber-500/30 hover:border-amber-400 hover:bg-amber-500/10 text-white transition-all group"
+              >
+                <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 group-hover:scale-110 transition-transform mb-1.5">
+                  <Send className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold text-white">Send</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleActionToast("Request Payment")}
+                className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-[#0A1628]/90 border border-[#17293F] hover:border-amber-500/30 hover:bg-[#122140] text-white transition-all group"
+              >
+                <div className="p-2.5 rounded-xl bg-blue-500/20 text-blue-400 group-hover:scale-110 transition-transform mb-1.5">
+                  <ArrowDownCircle className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold text-white">Request</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleActionToast("Bill Payment")}
+                className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-[#0A1628]/90 border border-[#17293F] hover:border-amber-500/30 hover:bg-[#122140] text-white transition-all group"
+              >
+                <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 group-hover:scale-110 transition-transform mb-1.5">
+                  <PaymentIcon className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold text-white">Payment</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleActionToast("Withdraw Cash")}
+                className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-[#0A1628]/90 border border-[#17293F] hover:border-amber-500/30 hover:bg-[#122140] text-white transition-all group"
+              >
+                <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-400 group-hover:scale-110 transition-transform mb-1.5">
+                  <ArrowUpCircle className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold text-white">Withdraw</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* Main KPI Strip */}
+      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Consolidated Net Liquidity"
+            title="Total Balance"
             value={hideBalances ? "••••••••" : formatCurrency(totalNetLiquidity)}
-            subtitle="Immediate cash &amp; reserves"
-            delta={{ value: "Aggregated Holdings", positive: true }}
+            subtitle="Available liquid funds"
+            delta={{ value: "Active Holdings", positive: true }}
             icon={Building2}
             accent="gold"
           />
@@ -194,31 +294,20 @@ export default function DashboardOverview() {
 
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Primary Operating Balance"
-            value={hideBalances ? "••••••••" : formatCurrency(primaryOperatingBalance)}
-            subtitle="Liquid settlement cash"
-            delta={{ value: "Available Now", positive: true }}
-            icon={Landmark}
-            accent="blue"
-          />
-        </motion.div>
-
-        <motion.div variants={staggerItem}>
-          <StatCard
-            title="Dedicated Accounts"
-            value={hideBalances ? "••••" : String(activeAccountsCount)}
-            subtitle="Checking &amp; high-yield reserves"
-            delta={{ value: "Active & Verified", positive: true }}
-            icon={TrendingUp}
+            title="Active Cards & Facilities"
+            value="Visa Corporate"
+            subtitle="Virtual & Physical Cards"
+            delta={{ value: "Active", positive: true }}
+            icon={CreditCard}
             accent="emerald"
           />
         </motion.div>
 
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Security Status"
-            value={profile?.mfa_enabled ? "2FA Active" : "Verified"}
-            subtitle="Encrypted &amp; Protected"
+            title="Account Protection"
+            value={profile?.mfa_enabled ? "2FA Enabled" : "Protected"}
+            subtitle="Secure & Encrypted"
             delta={{ value: "Active", positive: true }}
             icon={ShieldCheck}
             accent="gold"
@@ -226,7 +315,7 @@ export default function DashboardOverview() {
         </motion.div>
       </StaggerContainer>
 
-      {/* Quick Action Navigation Pills */}
+      {/* Navigation Shortcuts */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <Button
           onClick={() => handleOpenTransferWithAccount()}
@@ -236,8 +325,8 @@ export default function DashboardOverview() {
             <Send className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <p className="font-bold text-xs sm:text-sm text-white">Send Wire</p>
-            <p className="text-[10px] text-slate-400 hidden sm:block">SWIFT / ACH Wire</p>
+            <p className="font-bold text-xs sm:text-sm text-white">Send Money</p>
+            <p className="text-[10px] text-slate-400 hidden sm:block">Instant &amp; Wire Transfers</p>
           </div>
         </Button>
 
@@ -266,7 +355,7 @@ export default function DashboardOverview() {
             </div>
             <div className="text-left">
               <p className="font-bold text-xs sm:text-sm text-white">Payment Cards</p>
-              <p className="text-[10px] text-slate-400 hidden sm:block">Visa Corporate</p>
+              <p className="text-[10px] text-slate-400 hidden sm:block">Virtual &amp; Physical Cards</p>
             </div>
           </Button>
         </Link>
@@ -280,34 +369,29 @@ export default function DashboardOverview() {
               <Calculator className="w-4 h-4" />
             </div>
             <div className="text-left">
-              <p className="font-bold text-xs sm:text-sm text-white">Credit &amp; Loans</p>
-              <p className="text-[10px] text-slate-400 hidden sm:block">Commercial Facilities</p>
+              <p className="font-bold text-xs sm:text-sm text-white">Loans &amp; Credit</p>
+              <p className="text-[10px] text-slate-400 hidden sm:block">Personal &amp; Business</p>
             </div>
           </Button>
         </Link>
       </div>
 
-      {/* Main Responsive Grid Layout */}
+      {/* Responsive Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Columns: Bank Accounts + Cash Flow Chart + Transaction Ledger */}
+        {/* Left 2 Columns */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Active Bank Accounts List */}
-          <FadeIn direction="up">
-            <BankAccountsCard onOpenTransferModal={handleOpenTransferWithAccount} />
-          </FadeIn>
-
           {/* Cash Flow Analytics */}
-          <FadeIn direction="up" delay={0.1}>
+          <FadeIn direction="up">
             <CashFlowChart />
           </FadeIn>
 
-          {/* Banking Activity / Transaction Ledger */}
+          {/* Transactions / Activity Ledger */}
           <FadeIn direction="up" delay={0.2}>
             <GlassCard className="p-5 sm:p-6 bg-[#0C1A2E]/90 border-[#17293F] space-y-5">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
-                  <h3 className="text-base font-bold text-white leading-tight">Transaction Ledger</h3>
-                  <p className="text-xs text-slate-400">Audited settlement history &amp; wire tracking</p>
+                  <h3 className="text-base font-bold text-white leading-tight">Recent Activity</h3>
+                  <p className="text-xs text-slate-400">Your latest transactions and transfers</p>
                 </div>
 
                 <div className="flex items-center gap-2 self-stretch sm:self-auto">
@@ -315,7 +399,7 @@ export default function DashboardOverview() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                     <input
                       type="text"
-                      placeholder="Search transactions..."
+                      placeholder="Search activity..."
                       value={txSearch}
                       onChange={(e) => setTxSearch(e.target.value)}
                       className="w-full bg-[#080F1A] border border-[#17293F] rounded-xl py-1.5 pl-8 pr-3 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500"
@@ -358,18 +442,21 @@ export default function DashboardOverview() {
               {/* Transactions Table / List */}
               <div className="space-y-2">
                 {isLoadingWallet ? (
-                  <div className="text-center py-8 text-xs text-slate-400">Loading transaction ledger...</div>
+                  <div className="text-center py-8 text-xs text-slate-400">Loading activity...</div>
                 ) : filteredTransactions.length === 0 ? (
                   <div className="text-center py-10 text-slate-400 text-xs space-y-2">
                     <Receipt className="w-8 h-8 text-slate-500 mx-auto" />
-                    <p className="font-semibold text-slate-300">No Transactions Recorded</p>
+                    <p className="font-semibold text-slate-300">No Recent Activity</p>
                     <p className="text-[11px] max-w-xs mx-auto">
-                      Inward and outward transfers will automatically appear here once initiated.
+                      Inward and outward transfers will appear here automatically.
                     </p>
                   </div>
                 ) : (
                   filteredTransactions.map((tx: any) => {
-                    const isDeposit = tx.type?.toLowerCase().includes("deposit") || tx.type?.toLowerCase().includes("inward") || tx.type?.toLowerCase().includes("credit");
+                    const isDeposit =
+                      tx.type?.toLowerCase().includes("deposit") ||
+                      tx.type?.toLowerCase().includes("inward") ||
+                      tx.type?.toLowerCase().includes("credit");
 
                     return (
                       <div
@@ -390,10 +477,11 @@ export default function DashboardOverview() {
 
                           <div className="min-w-0">
                             <p className="text-sm font-bold text-white truncate group-hover:text-amber-300 transition-colors">
-                              {tx.description || tx.type || "Wire Transfer"}
+                              {tx.description || tx.type || "Transfer"}
                             </p>
                             <p className="text-xs text-slate-400 truncate">
-                              {tx.reference ? `Ref: ${tx.reference} • ` : ""}{formatDate(tx.created_at, { month: "short", day: "numeric", year: "numeric" })}
+                              {tx.reference ? `Ref: ${tx.reference} • ` : ""}
+                              {formatDate(tx.created_at, { month: "short", day: "numeric", year: "numeric" })}
                             </p>
                           </div>
                         </div>
@@ -410,7 +498,7 @@ export default function DashboardOverview() {
                           <div className="flex items-center justify-end gap-1 mt-0.5">
                             <span className={cn("w-1.5 h-1.5 rounded-full", tx.status === "completed" ? "bg-emerald-400" : "bg-amber-400")} />
                             <span className="text-[10px] font-semibold text-slate-400 uppercase">
-                              {tx.status || "CLEARED"}
+                              {tx.status || "Completed"}
                             </span>
                           </div>
                         </div>
@@ -422,9 +510,9 @@ export default function DashboardOverview() {
 
               {/* View all link */}
               <div className="pt-2 border-t border-[#17293F] flex items-center justify-between text-xs text-slate-400">
-                <span>Audited clearing ledger</span>
+                <span>Complete history log</span>
                 <Link href="/dashboard/transactions" className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
-                  <span>Full Ledger</span>
+                  <span>View All Transactions</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -432,14 +520,14 @@ export default function DashboardOverview() {
           </FadeIn>
         </div>
 
-        {/* Right 1 Column: Interactive Card + Frequent Payees + Security */}
+        {/* Right 1 Column */}
         <div className="space-y-6">
-          {/* Visual Interactive Visa Card */}
+          {/* Card Preview Widget */}
           <FadeIn direction="up" delay={0.05}>
             <BankCardWidget />
           </FadeIn>
 
-          {/* Frequent Payees & Fast Wires */}
+          {/* Favourite Contacts */}
           <FadeIn direction="up" delay={0.15}>
             <QuickPayees
               onSelectPayee={handleOpenTransferWithPayee}
@@ -447,7 +535,7 @@ export default function DashboardOverview() {
             />
           </FadeIn>
 
-          {/* Verification & KYC Status Shortcut */}
+          {/* Verification & Account Protection */}
           <FadeIn direction="up" delay={0.25}>
             <GlassCard className="p-5 sm:p-6 bg-[#0C1A2E]/90 border-[#17293F] space-y-4">
               <div className="flex items-center gap-2.5">
@@ -455,25 +543,25 @@ export default function DashboardOverview() {
                   <FileCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white leading-tight">Compliance &amp; KYC</h3>
-                  <p className="text-xs text-slate-400">Verified Corporate Standing</p>
+                  <h3 className="text-base font-bold text-white leading-tight">Account Protection</h3>
+                  <p className="text-xs text-slate-400">Verified status &amp; safety settings</p>
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#080F1A]/70 border border-[#17293F] space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400">Identity Verification</span>
-                  <span className="text-emerald-400 font-bold uppercase">Approved</span>
+                  <span className="text-emerald-400 font-bold uppercase">Verified</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Daily Transfer Limit</span>
+                  <span className="text-slate-400">Daily Limit</span>
                   <span className="text-white font-mono font-bold">$250,000.00</span>
                 </div>
               </div>
 
               <Link href="/dashboard/documents" className="block">
                 <Button variant="outline" size="sm" className="w-full text-xs font-semibold bg-[#0A1628] border-[#17293F] text-slate-300 hover:text-white hover:bg-[#122140]">
-                  View Compliance Documents
+                  View Verification Documents
                 </Button>
               </Link>
             </GlassCard>
