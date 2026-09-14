@@ -159,18 +159,18 @@ export function Sidebar() {
       <aside
         className={cn(
           "w-64 h-screen fixed left-0 top-0 flex flex-col z-50",
-          "bg-slate-950 border-r border-slate-800/70",
+          "bg-[#0A1628] border-r border-[#17293F]",
           "transition-transform duration-300 ease-in-out",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Brand Header */}
-        <div className="px-5 h-16 flex items-center justify-between border-b border-slate-800/60 shrink-0">
+        <div className="px-5 h-16 flex items-center justify-between border-b border-[#17293F] shrink-0">
           <Logo size="sm" href="/dashboard" onClick={mobileClose} />
           <Button
             variant="ghost"
             size="icon-sm"
-            className="lg:hidden text-slate-400"
+            className="lg:hidden text-slate-400 hover:text-white"
             onClick={closeSidebar}
             aria-label="Close sidebar"
           >
@@ -261,8 +261,8 @@ export function Sidebar() {
         </nav>
 
         {/* User Footer */}
-        <div className="p-3 border-t border-slate-800/60 bg-slate-900/40 shrink-0">
-          <div className="flex items-center gap-3 p-2 rounded-xl bg-slate-900/80 border border-slate-800/80">
+        <div className="p-3 border-t border-[#17293F] bg-[#080F1A]/80 shrink-0">
+          <div className="flex items-center gap-3 p-2 rounded-xl bg-[#0C1A2E] border border-[#17293F]">
             <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs shrink-0">
               {initial}
             </div>
@@ -277,7 +277,7 @@ export function Sidebar() {
             </div>
             <button
               onClick={handleSignOut}
-              className="text-slate-500 hover:text-rose-400 p-1 rounded-lg hover:bg-slate-800/60 transition-colors"
+              className="text-slate-400 hover:text-rose-400 p-1 rounded-lg hover:bg-[#122140] transition-colors"
               title="Sign Out"
               aria-label="Sign Out"
             >

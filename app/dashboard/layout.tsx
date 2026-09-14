@@ -10,7 +10,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SessionProvider>
-      <div className="min-h-screen bg-[#050505]">
+      <div className="min-h-screen bg-[#080F1A] text-slate-100">
         {/* Sidebar - Fixed on desktop, slide drawer on mobile */}
         <Sidebar />
 

@@ -20,11 +20,11 @@ export function Topbar() {
   const unreadCount = notifications?.filter((n) => !n.read).length || 0;
 
   return (
-    <header className="h-16 fixed top-0 right-0 left-0 lg:left-64 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/70 flex items-center justify-between px-3 sm:px-4 lg:px-6 z-40">
+    <header className="h-16 fixed top-0 right-0 left-0 lg:left-64 bg-[#0A1628]/95 backdrop-blur-md border-b border-[#17293F] flex items-center justify-between px-3 sm:px-4 lg:px-6 z-40">
       {/* Left: Mobile Hamburger + Search */}
       <div className="flex items-center gap-2 sm:gap-3 flex-1">
         <button
-          className="lg:hidden w-9 h-9 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center justify-center text-slate-400 hover:text-white hover:border-amber-500/40 transition-colors focus:outline-none"
+          className="lg:hidden w-9 h-9 rounded-xl bg-[#0C1A2E] border border-[#17293F] flex items-center justify-center text-slate-400 hover:text-white hover:border-amber-500/40 transition-colors focus:outline-none"
           onClick={openSidebar}
           aria-label="Open sidebar menu"
         >
@@ -32,14 +32,14 @@ export function Topbar() {
         </button>
 
         <div className="relative w-full max-w-xs hidden sm:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="search"
             placeholder="Search transactions, payees, accounts..."
             aria-label="Search"
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 pl-9 pr-10 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500/50 transition-all"
+            className="w-full bg-[#0C1A2E] border border-[#17293F] rounded-xl py-2 pl-9 pr-10 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500/50 transition-all"
           />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] font-bold text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] font-bold text-slate-400 bg-[#122140] px-1.5 py-0.5 rounded border border-[#17293F]">
             <Command className="w-2.5 h-2.5" /> K
           </div>
         </div>
@@ -56,7 +56,7 @@ export function Topbar() {
       {/* Right: Public Site Link + Balance + Notifications + Avatar */}
       <div className="flex items-center gap-2 sm:gap-3">
         <Link href="/" title="Return to Public Website">
-          <Button variant="ghost" size="sm" className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 hover:text-white border border-slate-800/80 hover:bg-slate-900 rounded-xl px-3 py-1.5">
+          <Button variant="ghost" size="sm" className="hidden sm:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white border border-[#17293F] hover:bg-[#122140] rounded-xl px-3 py-1.5">
             <Globe className="w-3.5 h-3.5 text-amber-400" />
             <span>Public Site</span>
           </Button>
@@ -72,16 +72,16 @@ export function Topbar() {
           </span>
         </div>
 
-        <div className="h-7 w-px bg-slate-800 hidden md:block mx-1" />
+        <div className="h-7 w-px bg-[#17293F] hidden md:block mx-1" />
 
         <Link href="/dashboard/notifications" aria-label="Notifications">
           <div
-            className="relative w-9 h-9 rounded-xl bg-slate-900/80 border border-slate-800/80 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="relative w-9 h-9 rounded-xl bg-[#0C1A2E] border border-[#17293F] hover:border-slate-600 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full border-2 border-slate-950 animate-pulse" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full border-2 border-[#0A1628] animate-pulse" />
             )}
           </div>
         </Link>

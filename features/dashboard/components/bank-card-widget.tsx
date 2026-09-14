@@ -67,7 +67,7 @@ export function BankCardWidget() {
   };
 
   return (
-    <GlassCard className="p-5 sm:p-6 bg-slate-900/80 border-slate-800 space-y-5 flex flex-col justify-between">
+    <GlassCard className="p-5 sm:p-6 bg-[#0C1A2E]/90 border-[#17293F] space-y-5 flex flex-col justify-between">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -88,8 +88,8 @@ export function BankCardWidget() {
 
       {/* Visual Debit Card */}
       {!primaryCard && !isLoading ? (
-        <div className="p-6 rounded-2xl border border-dashed border-slate-800 bg-slate-950/50 text-center space-y-3">
-          <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center mx-auto text-slate-500 border border-slate-800">
+        <div className="p-6 rounded-2xl border border-dashed border-[#17293F] bg-[#080F1A]/60 text-center space-y-3">
+          <div className="w-10 h-10 rounded-full bg-[#0A1628] flex items-center justify-center mx-auto text-slate-500 border border-[#17293F]">
             <CreditCard className="w-5 h-5" />
           </div>
           <div>
@@ -107,12 +107,12 @@ export function BankCardWidget() {
             className={cn(
               "w-full aspect-[1.586/1] rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all duration-300 shadow-xl flex flex-col justify-between select-none",
               isFrozen
-                ? "bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 opacity-70 grayscale-[50%]"
-                : "bg-gradient-to-br from-[#1c1811] via-[#121316] to-[#090b0e] border border-amber-500/30 shadow-amber-500/5 hover:border-amber-500/50"
+                ? "bg-gradient-to-br from-[#080F1A] via-[#0C1A2E] to-[#080F1A] border border-[#17293F] opacity-70 grayscale-[50%]"
+                : "bg-gradient-to-br from-[#1C3254] via-[#0C1A2E] to-[#080F1A] border border-amber-500/30 shadow-amber-500/5 hover:border-amber-500/50"
             )}
           >
             {/* Background Texture Accents */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/15 via-transparent to-transparent pointer-events-none" />
             <div className="absolute -bottom-10 -right-10 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
 
             {/* Top Bar: Bank Logo & Contactless */}
@@ -208,7 +208,7 @@ export function BankCardWidget() {
               size="sm"
               onClick={handleToggleFreeze}
               className={cn(
-                "h-9 text-xs font-semibold gap-1.5 bg-slate-900/90 border-slate-800 transition-all",
+                "h-9 text-xs font-semibold gap-1.5 bg-[#0A1628] border-[#17293F] transition-all",
                 isFrozen ? "text-emerald-400 hover:text-emerald-300 hover:border-emerald-500/40" : "text-slate-300 hover:text-rose-400 hover:border-rose-500/40"
               )}
             >
@@ -227,7 +227,7 @@ export function BankCardWidget() {
               variant="outline"
               size="sm"
               onClick={() => setShowDetails(!showDetails)}
-              className="h-9 text-xs font-semibold gap-1.5 bg-slate-900/90 border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all"
+              className="h-9 text-xs font-semibold gap-1.5 bg-[#0A1628] border-[#17293F] text-slate-300 hover:text-white hover:bg-[#122140] transition-all"
             >
               {showDetails ? <EyeOff className="w-3.5 h-3.5 text-slate-400" /> : <Eye className="w-3.5 h-3.5 text-amber-400" />}
               {showDetails ? "Hide PIN / CVV" : "Show Details"}
@@ -237,7 +237,7 @@ export function BankCardWidget() {
       )}
 
       {/* Security & Limit footer */}
-      <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+      <div className="pt-3 border-t border-[#17293F] flex items-center justify-between text-[11px] text-slate-400">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
           <span>3D Secure 2.0 &amp; Apple Pay</span>

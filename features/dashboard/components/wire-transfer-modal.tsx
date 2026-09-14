@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Send, Globe, Building2, CheckCircle2, ShieldCheck, AlertCircle } from "lucide-react";
+import { Send, Globe, Building2, ShieldCheck } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTransfers } from "@/hooks/use-transfers";
 import { useAccounts } from "@/hooks/use-accounts";
+import { useWallet } from "@/hooks/use-wallet";
 import { formatCurrency } from "@/lib/utils/formatters";
 import { useToast } from "@/components/ui/toast";
 import { Payee } from "./quick-payees";
@@ -26,6 +27,7 @@ export function WireTransferModal({
 }: WireTransferModalProps) {
   const { createTransfer } = useTransfers();
   const { accounts } = useAccounts();
+  const { wallet } = useWallet();
   const { showToast } = useToast();
 
   const [wireType, setWireType] = useState<"domestic" | "international">("domestic");
@@ -35,15 +37,8 @@ export function WireTransferModal({
   const [routingCode, setRoutingCode] = useState("");
   const [amount, setAmount] = useState("");
   const [reference, setReference] = useState("");
-  const [selectedSource, setSelectedSource] = useState(defaultSourceAccount || accounts?.[0]?.account_number || "Primary Checking");
+  const [selectedSource, setSelectedSource] = useState(defaultSourceAccount || accounts?.[0]?.account_number || "Primary");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Synchronize when defaultPayee changes
-  const handleSetPayee = (payee: Payee) => {
-    setRecipient(payee.name);
-    setAccountNum(payee.accountNumber);
-    setBankName(payee.bankName);
-  };
 
   const wireFee = wireType === "domestic" ? 0.0 : 15.0;
 
@@ -104,7 +99,7 @@ export function WireTransferModal({
     >
       <form onSubmit={handleSend} className="space-y-5">
         {/* Wire Type Selector */}
-        <div className="grid grid-cols-2 gap-2 p-1 bg-slate-950 rounded-xl border border-slate-800">
+        <div className="grid grid-cols-2 gap-2 p-1 bg-[#080F1A] rounded-xl border border-[#17293F]">
           <button
             type="button"
             onClick={() => setWireType("domestic")}
@@ -139,16 +134,16 @@ export function WireTransferModal({
           <select
             value={selectedSource}
             onChange={(e) => setSelectedSource(e.target.value)}
-            className="w-full h-10 px-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+            className="w-full h-10 px-3 bg-[#080F1A] border border-[#17293F] rounded-xl text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
           >
             {accounts.length > 0 ? (
               accounts.map((acc) => (
                 <option key={acc.id} value={acc.account_number}>
-                  {acc.account_name} ({acc.account_number}) — {formatCurrency(acc.balance, acc.currency)}
+                  {acc.account_name} ({acc.account_number}) — {formatCurrency(acc.balance || 0, acc.currency || "USD")}
                 </option>
               ))
             ) : (
-              <option value="primary">Primary Commercial Checking (IBB4920194821) — $148,500.00</option>
+              <option value="primary">Primary Liquid Balance — {formatCurrency(wallet?.balance || 0)}</option>
             )}
           </select>
         </div>
@@ -226,7 +221,7 @@ export function WireTransferModal({
               Payment Reference / Memo
             </label>
             <Input
-              placeholder="e.g. Invoice #2026-889"
+              placeholder="e.g. Commercial Invoice #2026-889"
               value={reference}
               onChange={(e) => setReference(e.target.value)}
             />
@@ -234,10 +229,10 @@ export function WireTransferModal({
         </div>
 
         {/* Fee & Compliance Notice */}
-        <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+        <div className="p-3.5 rounded-xl bg-[#080F1A] border border-[#17293F] flex items-center justify-between text-xs text-slate-400">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>Encrypted SWIFT/Fedwire protocol</span>
+            <span>Encrypted SWIFT / Fedwire Clearing</span>
           </div>
           <span className="font-mono text-slate-200">
             Network Fee: <span className="text-amber-400 font-bold">${wireFee.toFixed(2)}</span>
@@ -245,8 +240,8 @@ export function WireTransferModal({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 pt-2 border-t border-slate-800">
-          <Button type="button" variant="outline" className="flex-1" onClick={onClose}>
+        <div className="flex gap-3 pt-2 border-t border-[#17293F]">
+          <Button type="button" variant="outline" className="flex-1 bg-[#080F1A] border-[#17293F] text-slate-300 hover:text-white" onClick={onClose}>
             Cancel
           </Button>
           <Button
