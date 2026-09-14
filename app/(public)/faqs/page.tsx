@@ -12,7 +12,6 @@ const FAQ_CATEGORIES = [
     name: "General & Security",
     items: [
       { q: "What is Iron Bridge Banking?", a: "Iron Bridge Banking is a licensed digital banking and wealth platform providing personal current accounts, private wealth management, business trade finance, and mortgage lending." },
-      { q: "Are my funds protected by the FSCS?", a: "Yes. Eligible personal and SME deposit accounts held with Iron Bridge Banking are protected up to £85,000 per depositor under the Financial Services Compensation Scheme (FSCS)." },
       { q: "How is my account secured online?", a: "We enforce multi-factor authentication (MFA), 256-bit AES data encryption, hardware security modules, and automated anomaly detection on all client accounts." },
     ],
   },
@@ -51,7 +50,7 @@ export default function FAQsPage() {
 
           <div className="pt-4 max-w-md mx-auto">
             <Input
-              placeholder="Search questions (e.g. FSCS, Trade Finance, Notice Deposit)..."
+              placeholder="Search questions (e.g. Trade Finance, Notice Deposit)..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               leftIcon={<Search className="w-4 h-4 text-slate-500" />}

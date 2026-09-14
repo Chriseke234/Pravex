@@ -17,7 +17,6 @@ export default function WalletPage() {
     const content =
       "IRON BRIDGE BANKING PLC — CASH TREASURY AUDIT STATEMENT\n" +
       `Generated: ${new Date().toUTCString()}\n` +
-      `Regulatory Protection: FSCS Protected up to £85,000\n` +
       `============================================================\n` +
       `Primary Cash Balance: ${formatCurrency(wallet?.balance || 0)}\n` +
       `Currency Standard: USD Clearing\n` +
@@ -51,7 +50,7 @@ export default function WalletPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-[#17293F] pb-5">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">
             <Landmark className="w-4 h-4" />
@@ -67,7 +66,7 @@ export default function WalletPage() {
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 bg-slate-900 border-slate-800 text-slate-300 hover:text-white"
+            className="gap-2 bg-[#0C1A2E] border-[#17293F] text-slate-300 hover:text-white"
             onClick={handleExportStatement}
           >
             <Download className="w-4 h-4" />
@@ -81,19 +80,6 @@ export default function WalletPage() {
             </Button>
           </Link>
         </div>
-      </div>
-
-      {/* Security Banner */}
-      <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0" />
-          <p className="text-xs text-slate-300">
-            Treasury funds are safeguarded in segregated tier-1 clearing banks under FSCS / FCA regulatory frameworks.
-          </p>
-        </div>
-        <span className="text-[11px] font-bold text-amber-400 uppercase tracking-widest hidden sm:inline-block">
-          TIER-1 PROTECTED
-        </span>
       </div>
 
       {/* Fiat Treasury Core */}

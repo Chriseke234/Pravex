@@ -119,17 +119,6 @@ export default function BankAccountsPage() {
         )}
       </div>
 
-      {/* Account Info Banner */}
-      <div className="p-8 rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 space-y-3">
-        <div className="flex items-center gap-3">
-          <ShieldCheck className="w-6 h-6 text-amber-400" />
-          <h3 className="text-lg font-bold text-white">FSCS Deposit Protection Guarantee</h3>
-        </div>
-        <p className="text-xs text-slate-400 leading-relaxed max-w-3xl">
-          All eligible deposits across your Iron Bridge personal and business accounts are aggregated and protected up to £85,000 under the Financial Services Compensation Scheme.
-        </p>
-      </div>
-
       {/* Open Account Modal */}
       <Modal
         isOpen={showModal}

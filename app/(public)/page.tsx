@@ -49,13 +49,6 @@ function HeroSection() {
   return (
     <section className="relative pt-24 pb-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 overflow-hidden">
       <div className="flex-1 space-y-8 z-10">
-        <AnimateIn>
-          <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 text-sm font-semibold px-4 py-2 rounded-full border border-amber-500/20">
-            <ShieldCheck className="w-4 h-4 text-amber-400" />
-            FCA Regulated &amp; FSCS Protected Up To £85,000
-          </div>
-        </AnimateIn>
-
         <AnimateIn delay={100}>
           <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight">
             Enterprise Banking for a <span className="text-gradient-gold">Global Future</span>.
@@ -325,7 +318,6 @@ function Testimonials() {
 
 function FAQsSection() {
   const faqs = [
-    { q: "How are my deposits protected with Iron Bridge Banking?", a: "Iron Bridge Banking is authorized and regulated. Eligible personal and small business deposits are protected up to £85,000 (or currency equivalent) per account holder under the Financial Services Compensation Scheme (FSCS)." },
     { q: "What accounts are available under Personal Banking?", a: "We offer Savings Accounts (high-yield flexible savings), Current Accounts (daily transactions with contactless debit cards), Fixed Deposit Accounts (locked terms for maximum interest), and Notice Deposit Accounts." },
     { q: "What sub-services do you offer for Private Banking?", a: "Private clients enjoy access to Credit Card Services, Discretionary Portfolios, Investor Visa Portfolios, Execution Only Portfolios, Portfolio Secured Lending, Luxury Property Loans, and Notice Deposit Accounts with bespoke rates." },
     { q: "How can my business apply for Trade Finance or Direct Lending?", a: "Business customers can open a Corporate Business Account online, then request Trade Finance letters of credit or Direct Lending facilities directly via the dashboard or with your assigned corporate manager." },

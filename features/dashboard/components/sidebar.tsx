@@ -138,9 +138,8 @@ export function Sidebar() {
     if (window.innerWidth < 1024) closeSidebar();
   };
 
-  const initial = profile?.full_name?.charAt(0).toUpperCase() || profile?.email?.charAt(0).toUpperCase() || "U";
-  const name = profile?.full_name || profile?.email || "Unknown User";
-  const tier = profile?.tier || "Starter";
+  const initial = profile?.full_name?.charAt(0).toUpperCase() || "U";
+  const name = profile?.full_name || "Valued Client";
   const isAdmin = profile && ["admin", "superuser", "super_admin"].includes(profile.role);
 
   const isActive = (href: string) =>
@@ -270,9 +269,7 @@ export function Sidebar() {
               <p className="text-xs font-semibold text-white truncate">{name}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-                <Badge variant="outline" className="text-[9px] py-0 px-1 border-amber-500/30 text-amber-400">
-                  {tier}
-                </Badge>
+                <span className="text-[10px] text-slate-400 font-medium">Active</span>
               </div>
             </div>
             <button

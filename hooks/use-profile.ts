@@ -33,6 +33,11 @@ export function useProfile() {
           return;
         }
 
+        const userMeta = session.user.user_metadata || {};
+        const metaName = userMeta.first_name
+          ? `${userMeta.first_name} ${userMeta.last_name || ""}`.trim()
+          : userMeta.full_name || userMeta.name || null;
+
         const { data: profileData, error: profileError } = await supabase
           .from("profiles")
           .select("*")
@@ -40,10 +45,34 @@ export function useProfile() {
           .single();
 
         if (profileError && profileError.code !== 'PGRST116') {
-          throw profileError;
+          console.warn("Profile fetch warning:", profileError.message);
         }
 
-        if (isMounted) setProfile(profileData || null);
+        const resolvedFullName = profileData?.full_name || metaName;
+
+        if (!profileData) {
+          const fallbackProfile: Profile = {
+            id: session.user.id,
+            full_name: resolvedFullName,
+            email: session.user.email || "",
+            avatar_url: null,
+            role: userMeta.role || "user",
+            tier: "Enterprise",
+            risk_score: "Low",
+            mfa_enabled: false,
+          };
+          try {
+            await supabase.from("profiles").upsert([fallbackProfile]);
+          } catch (_) {}
+          if (isMounted) setProfile(fallbackProfile);
+        } else {
+          if (isMounted) {
+            setProfile({
+              ...profileData,
+              full_name: resolvedFullName,
+            });
+          }
+        }
       } catch (e: any) {
         if (isMounted) setError(e);
       } finally {
@@ -65,12 +94,28 @@ export function useProfile() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .update(updates)
-        .eq("id", session.user.id)
+        .upsert({
+          id: session.user.id,
+          email: session.user.email || "",
+          ...updates,
+          updated_at: new Date().toISOString(),
+        })
         .select()
         .single();
 
       if (error) throw error;
+
+      if (updates.full_name) {
+        try {
+          await supabase.auth.updateUser({
+            data: {
+              full_name: updates.full_name,
+              name: updates.full_name,
+            },
+          });
+        } catch (_) {}
+      }
+
       setProfile(data);
       return { data, error: null };
     } catch (e: any) {

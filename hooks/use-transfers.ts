@@ -40,7 +40,8 @@ export function useTransfers() {
 
       const ref = "TRF-" + Math.random().toString(36).substring(2, 9).toUpperCase();
 
-      const { data, error } = await supabase
+      // 1. Create completed transfer record
+      const { data: transferData, error: transferError } = await supabase
         .from("transfers")
         .insert([{
           sender_id: session.user.id,
@@ -52,16 +53,46 @@ export function useTransfers() {
           type: payload.type || "domestic",
           description: payload.description || "Bank Transfer",
           reference: ref,
-          status: "pending",
+          status: "completed",
         }])
         .select()
         .single();
 
-      if (error) throw error;
-      return data;
+      if (transferError) throw transferError;
+
+      // 2. Fetch or initialize wallet to reflect transaction immediately on dashboard
+      const { data: walletData } = await supabase
+        .from("wallets")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      if (walletData) {
+        // Record wallet transaction
+        await supabase.from("wallet_transactions").insert([{
+          wallet_id: walletData.id,
+          amount: payload.amount,
+          type: "debit",
+          status: "completed",
+          reference: ref,
+          description: `Wire to ${payload.recipient_name} (${payload.bank_name || "Commercial Transfer"})`,
+        }]);
+
+        // Deduct wallet balance
+        const newBalance = Math.max(0, (walletData.balance || 0) - payload.amount);
+        await supabase
+          .from("wallets")
+          .update({ balance: newBalance, updated_at: new Date().toISOString() })
+          .eq("id", walletData.id);
+      }
+
+      return transferData;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transfers"] });
+      queryClient.invalidateQueries({ queryKey: ["wallet"] });
+      queryClient.invalidateQueries({ queryKey: ["wallet-transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["bank-accounts"] });
     },
   });
 

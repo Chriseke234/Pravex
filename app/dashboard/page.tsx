@@ -70,15 +70,13 @@ export default function DashboardOverview() {
   };
 
   const handleDownloadStatement = () => {
-    const userName = profile?.full_name || profile?.email || "Commercial Banking Client";
+    const userName = profile?.full_name || "Valued Client";
     const reportText =
       `==============================================================\n` +
       `       IRON BRIDGE COMMERCIAL BANKING — FINANCIAL STATEMENT    \n` +
       `==============================================================\n\n` +
       `Client: ${userName}\n` +
-      `Account Tier: ${profile?.tier || "Enterprise"} Commercial\n` +
-      `Generated: ${new Date().toUTCString()}\n` +
-      `Regulatory Protection: FSCS Insured up to £85,000 / FCA Regulated\n\n` +
+      `Generated: ${new Date().toUTCString()}\n\n` +
       `CONSOLIDATED LIQUIDITY SUMMARY:\n` +
       `--------------------------------------------------------------\n` +
       `Total Net Liquidity:    ${formatCurrency(totalNetLiquidity)}\n` +
@@ -134,16 +132,6 @@ export default function DashboardOverview() {
       <FadeIn>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-5 pb-2 border-b border-[#17293F]">
           <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                FSCS Protected &amp; FCA Regulated
-              </span>
-              <span className="text-xs font-semibold text-slate-300 px-2.5 py-0.5 rounded-full bg-[#0C1A2E] border border-[#17293F]">
-                {profile?.tier || "Enterprise"} Banking Tier
-              </span>
-            </div>
-
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white tracking-tight">
               Commercial Treasury &amp; Overview
             </h1>
@@ -151,7 +139,7 @@ export default function DashboardOverview() {
             <p className="text-sm text-slate-400 max-w-xl">
               Welcome back,{" "}
               <span className="text-white font-medium">
-                {profile?.full_name || profile?.email || "Valued Client"}
+                {profile?.full_name || "Valued Client"}
               </span>
               . Manage your operating accounts, cash liquidity, payment cards, and wire transfers.
             </p>
@@ -228,10 +216,10 @@ export default function DashboardOverview() {
 
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Account Security Status"
+            title="Security Status"
             value={profile?.mfa_enabled ? "2FA Active" : "Verified"}
-            subtitle="FSCS Deposit Protection"
-            delta={{ value: "Tier-1 Clearing", positive: true }}
+            subtitle="Encrypted &amp; Protected"
+            delta={{ value: "Active", positive: true }}
             icon={ShieldCheck}
             accent="gold"
           />
@@ -478,10 +466,6 @@ export default function DashboardOverview() {
                   <span className="text-emerald-400 font-bold uppercase">Approved</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Account Tier</span>
-                  <span className="text-amber-400 font-bold">{profile?.tier || "Enterprise"}</span>
-                </div>
-                <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400">Daily Transfer Limit</span>
                   <span className="text-white font-mono font-bold">$250,000.00</span>
                 </div>
@@ -493,19 +477,6 @@ export default function DashboardOverview() {
                 </Button>
               </Link>
             </GlassCard>
-          </FadeIn>
-
-          {/* FSCS Protection Guarantee Card */}
-          <FadeIn direction="up" delay={0.3}>
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-[#0C1A2E] via-[#0A1628] to-[#080F1A] border border-[#17293F] space-y-3">
-              <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Regulatory Security Guarantee</span>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Eligible deposits are aggregated and protected up to £85,000 per banking license under the Financial Services Compensation Scheme.
-              </p>
-            </div>
           </FadeIn>
         </div>
       </div>

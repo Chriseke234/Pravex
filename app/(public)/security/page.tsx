@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { GlassCard } from "@/components/shared/glass-card";
 import { Button } from "@/components/ui/button";
@@ -70,7 +70,7 @@ const COMPLIANCE_ITEMS = [
   { title: "SOC 2 Type II Certified", desc: "Rigorous independent audit verifying system security, availability, and confidentiality.", badge: "Certified" },
   { title: "ISO 27001 Standards", desc: "Highest international benchmark for robust information security management systems.", badge: "Compliant" },
   { title: "GDPR Compliant", desc: "Strict adherence to European privacy guidelines to protect all customer and transaction data.", badge: "Protected" },
-  { title: "FCA Compliance Framework", desc: "Aligned with regulatory capital requirements and operational integrity parameters.", badge: "Aligned" }
+  { title: "Tier-1 Compliance Framework", desc: "Aligned with institutional capital requirements and operational integrity parameters.", badge: "Aligned" }
 ];
 
 export default function SecurityPage() {

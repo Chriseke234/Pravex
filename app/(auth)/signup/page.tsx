@@ -156,7 +156,6 @@ export default function SignupPage() {
         <Link href="/terms" className="underline hover:text-slate-400">Terms of Service</Link>
         {" "}and{" "}
         <Link href="/privacy" className="underline hover:text-slate-400">Privacy Policy</Link>.
-        Iron Bridge Banking is FCA-regulated.
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Shield, Lock, Award, CheckCircle } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 
@@ -55,11 +55,11 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-6 text-xs font-semibold text-slate-700 dark:text-slate-300">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-amber-500" />
-            <span>FCA Regulated &amp; Authorized</span>
+            <span>Institutional Grade Security</span>
           </div>
           <div className="flex items-center gap-2">
             <Lock className="w-4 h-4 text-amber-500" />
-            <span>£85,000 FSCS Deposit Protected</span>
+            <span>Segregated Client Vaults</span>
           </div>
           <div className="flex items-center gap-2">
             <Award className="w-4 h-4 text-amber-500" />
@@ -113,7 +113,7 @@ export function Footer() {
       <div className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/50 dark:bg-slate-950/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4 text-xs text-slate-500 leading-relaxed">
           <p>
-            <strong>Regulatory &amp; Compensation Disclosure:</strong> Iron Bridge Banking is a trading name of Iron Bridge Banking Ltd. Eligible personal, private, and small business deposits held with Iron Bridge Banking are protected up to £85,000 per depositor by the Financial Services Compensation Scheme (FSCS). For joint accounts, the protection limit is £170,000.
+            <strong>Regulatory &amp; Security Disclosure:</strong> Iron Bridge Banking is a premier digital banking platform providing corporate treasury, private wealth management, and commercial settlement solutions. All digital infrastructure and treasury vaults operate under zero-trust protocols and multi-institution security architectures.
           </p>
           <p>
             <strong>Lending &amp; Investment Risk Warning:</strong> Mortgages, loans, and credit facilities are subject to status and affordability assessment. Your home or property may be repossessed if you do not keep up repayments on your mortgage or other debt secured on it. Discretionary portfolio investments and foreign exchange contracts may fluctuate in value; past performance is no guarantee of future returns.

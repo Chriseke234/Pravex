@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { GlassCard } from "@/components/shared/glass-card";
 import { Button } from "@/components/ui/button";
@@ -88,8 +88,8 @@ const VALUES = [
 
 const COMPLIANCE_CARDS = [
   {
-    title: "FCA Registration",
-    description: "Registered cryptoasset business conforming to strict anti-money laundering regulations.",
+    title: "Global Compliance",
+    description: "Registered institutional business conforming to strict anti-money laundering regulations.",
     icon: CheckCircle2,
     badge: "Active"
   },

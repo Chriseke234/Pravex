@@ -50,8 +50,8 @@ export default function SavingsAccountPage() {
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-white">FSCS Protected</h3>
-                <p className="text-xs text-slate-400 mt-1">Deposits up to £85,000 are guaranteed under the UK Financial Services Compensation Scheme.</p>
+                <h3 className="font-semibold text-white">Tier-1 Security</h3>
+                <p className="text-xs text-slate-400 mt-1">High-yield deposits are safeguarded with institutional banking grade risk controls.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">

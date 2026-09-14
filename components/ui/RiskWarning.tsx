@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { AlertTriangle, ShieldCheck } from "lucide-react";
@@ -50,7 +50,7 @@ export function RiskWarning() {
         {/* Warning Body */}
         <div className="space-y-4 text-xs md:text-sm text-muted-foreground leading-relaxed max-h-[300px] overflow-y-auto pr-2 scrollbar-thin">
           <p>
-            Digital asset investment and trading are subject to extreme market volatility, technical complexities, and regulatory instability. Cryptocurrencies, security tokens, and stablecoins are highly speculative high-risk instruments and lack the regulatory guarantees, capital protections, and deposit insurance schemes (such as the US FDIC or UK FSCS) common in traditional retail and commercial banking products.
+            Digital asset investment and trading are subject to extreme market volatility, technical complexities, and regulatory instability. Cryptocurrencies, security tokens, and stablecoins are highly speculative high-risk instruments and lack the regulatory guarantees, capital protections, and deposit insurance schemes common in traditional retail and commercial banking products.
           </p>
           <p>
             The risk of total financial loss exists when holding, trading, or collateralizing digital assets. Iron Bridge Banking provides high-performance execution, custody architectures, and order routing platforms on an as-is, zero-trust basis. No content, analysis, or market data provided on this platform constitutes professional financial, legal, tax, or investment advice.

@@ -1,4 +1,4 @@
-﻿import { ShieldCheck, Calendar, ArrowRight } from "lucide-react";
+import { ShieldCheck, Calendar, ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Privacy Policy | Iron Bridge Banking",
@@ -93,7 +93,7 @@ export default function PrivacyPage() {
                 We do not sell, rent, or lease your personal or corporate data to third parties. Information is shared strictly under confidential arrangements with trusted third-party service providers, banking partners, and custody aggregators who help operate our systems.
               </p>
               <p>
-                Furthermore, Iron Bridge Banking reserves the right to disclose client data to national security bodies, regulatory authorities (e.g., the FCA or SEC), or judicial tribunals if required by binding subpoena, regulatory reporting mandates, or AML inquiries.
+                Furthermore, Iron Bridge Banking reserves the right to disclose client data to national security bodies, regulatory authorities (e.g., relevant financial or banking regulators), or judicial tribunals if required by binding subpoena, regulatory reporting mandates, or AML inquiries.
               </p>
             </section>
 

@@ -47,7 +47,7 @@ export default function PersonalBankingLanding() {
             Personal Banking Designed for <span className="text-gradient-gold">Your Financial Freedom</span>.
           </h1>
           <p className="text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
-            Manage your daily funds, grow your savings with top-tier deposit yields, and enjoy seamless digital management backed by £85,000 FSCS deposit protection.
+            Manage your daily funds, grow your savings with top-tier deposit yields, and enjoy seamless digital management.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-2">
             <Link href="/signup">
@@ -115,8 +115,8 @@ export default function PersonalBankingLanding() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           <div className="space-y-3 p-6 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm dark:shadow-none">
             <CheckCircle2 className="w-6 h-6 text-amber-500" />
-            <h3 className="font-bold text-lg text-slate-900 dark:text-white">FSCS Deposit Protection</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Your personal funds are protected up to £85,000 under the Financial Services Compensation Scheme.</p>
+            <h3 className="font-bold text-lg text-slate-900 dark:text-white">Institutional Security</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Your personal funds are safeguarded with multi-layered bank encryption and 24/7 fraud monitoring.</p>
           </div>
           <div className="space-y-3 p-6 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm dark:shadow-none">
             <CheckCircle2 className="w-6 h-6 text-amber-500" />

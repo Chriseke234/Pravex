@@ -14,13 +14,13 @@ export default function SettingsPage() {
   const { showToast } = useToast();
 
   const [fullName, setFullName] = useState("");
-  const [tier, setTier] = useState("Starter");
+  const [tier, setTier] = useState("Commercial Banking");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (profile) {
       setFullName(profile.full_name || "");
-      setTier(profile.tier || "Starter");
+      setTier(profile.tier || "Commercial Banking");
     }
   }, [profile]);
 
@@ -91,9 +91,9 @@ export default function SettingsPage() {
                   onChange={(e) => setTier(e.target.value)}
                   className="w-full h-10 px-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
                 >
-                  <option value="Starter">Starter Member</option>
-                  <option value="Professional">Professional Banking</option>
-                  <option value="Enterprise">Enterprise / Private Client</option>
+                  <option value="Commercial Banking">Commercial Banking</option>
+                  <option value="Professional Banking">Professional Banking</option>
+                  <option value="Enterprise / Private Client">Enterprise / Private Client</option>
                 </select>
               </div>
             </div>
