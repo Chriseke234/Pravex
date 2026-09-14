@@ -63,10 +63,11 @@ export function Topbar() {
         </Link>
 
         <div className="hidden md:flex flex-col items-end">
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-            Wallet Balance
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            Operating Balance
           </span>
-          <span className="text-sm font-bold text-amber-400">
+          <span className="text-sm font-bold text-amber-400 font-mono">
             {isLoadingWallet ? "—" : formatCurrency(balance)}
           </span>
         </div>

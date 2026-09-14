@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect } from "react";
 import Link from "next/link";
@@ -34,24 +34,24 @@ import { cn } from "@/lib/utils";
 /* ─── Navigation Config ─────────────────────────────────────────── */
 const MAIN_ITEMS = [
   { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "Main Website", icon: Globe, href: "/" },
   { label: "My Accounts", icon: Landmark, href: "/dashboard/accounts" },
-  { label: "Fiat Wallet", icon: Wallet, href: "/dashboard/wallet" },
-  { label: "Transactions", icon: History, href: "/dashboard/transactions" },
+  { label: "Cash & Treasury", icon: Wallet, href: "/dashboard/wallet" },
+  { label: "Transaction Ledger", icon: History, href: "/dashboard/transactions" },
+  { label: "Main Website", icon: Globe, href: "/" },
 ];
 
 const BANKING_ITEMS = [
-  { label: "Transfers", icon: Send, href: "/dashboard/transfers" },
-  { label: "My Loans", icon: Calculator, href: "/dashboard/loans" },
-  { label: "Cards", icon: CreditCard, href: "/dashboard/cards" },
+  { label: "Transfers & Wires", icon: Send, href: "/dashboard/transfers" },
+  { label: "Payment Cards", icon: CreditCard, href: "/dashboard/cards" },
+  { label: "Credit & Lending", icon: Calculator, href: "/dashboard/loans" },
 ];
 
 const ACCOUNT_ITEMS = [
-  { label: "Referrals", icon: Gift, href: "/dashboard/referrals" },
   { label: "Documents & KYC", icon: FileCheck, href: "/dashboard/documents" },
+  { label: "Referral Program", icon: Gift, href: "/dashboard/referrals" },
   { label: "Notifications", icon: Bell, href: "/dashboard/notifications" },
-  { label: "Support Chat", icon: MessageSquare, href: "/dashboard/support" },
-  { label: "Settings", icon: Settings, href: "/dashboard/settings" },
+  { label: "Support Desk", icon: MessageSquare, href: "/dashboard/support" },
+  { label: "Settings & Security", icon: Settings, href: "/dashboard/settings" },
 ];
 
 const DEVELOPER_ITEMS = [

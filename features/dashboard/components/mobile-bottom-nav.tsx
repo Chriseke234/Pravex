@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Landmark, Send, Wallet, Menu } from 'lucide-react';
+import { LayoutDashboard, Landmark, Send, CreditCard, Menu } from 'lucide-react';
 import { useUiStore } from '@/store/ui-store';
 import { cn } from '@/lib/utils';
 
@@ -31,10 +31,10 @@ export function MobileBottomNav() {
       isActive: pathname === '/dashboard/transfers',
     },
     {
-      label: 'Wallet',
-      icon: Wallet,
-      href: '/dashboard/wallet',
-      isActive: pathname === '/dashboard/wallet',
+      label: 'Cards',
+      icon: CreditCard,
+      href: '/dashboard/cards',
+      isActive: pathname === '/dashboard/cards',
     },
   ];
 

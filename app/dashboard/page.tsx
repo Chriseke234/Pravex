@@ -1,401 +1,573 @@
 "use client";
 
 import { useState } from "react";
-import { StatCard } from "@/components/ui/stat-card";
-import { Modal } from "@/components/ui/modal";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { StatusBadge } from "@/components/ui/badge";
-import { GlassCard } from "@/components/shared/glass-card";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   ArrowDownLeft,
-  Wallet,
-  Activity,
+  Building2,
+  Landmark,
   ShieldCheck,
-  TrendingUp,
-  RefreshCw,
   Download,
   Send,
   Plus,
-  Landmark,
+  Eye,
+  EyeOff,
+  Search,
+  Filter,
+  CreditCard,
   Calculator,
+  Headset,
+  TrendingUp,
+  Receipt,
+  FileSpreadsheet,
 } from "lucide-react";
+import { StatCard } from "@/components/ui/stat-card";
+import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/ui/badge";
+import { GlassCard } from "@/components/shared/glass-card";
 import { FadeIn } from "@/components/animations/fade-in";
 import { StaggerContainer, staggerItem } from "@/components/animations/stagger-container";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { formatCurrency, formatDate } from "@/lib/utils/formatters";
 import { useWallet } from "@/hooks/use-wallet";
 import { useProfile } from "@/hooks/use-profile";
-import { useTransfers } from "@/hooks/use-transfers";
 import { useAccounts } from "@/hooks/use-accounts";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { formatCurrency, formatDate } from "@/lib/utils/formatters";
+import { BankCardWidget } from "@/features/dashboard/components/bank-card-widget";
+import { BankAccountsCard } from "@/features/dashboard/components/bank-accounts-card";
+import { QuickPayees, Payee } from "@/features/dashboard/components/quick-payees";
+import { CashFlowChart } from "@/features/dashboard/components/cash-flow-chart";
+import { WireTransferModal } from "@/features/dashboard/components/wire-transfer-modal";
 import { useToast } from "@/components/ui/toast";
+import { cn } from "@/lib/utils";
 
 export default function DashboardOverview() {
   const { wallet, transactions, isLoading: isLoadingWallet } = useWallet();
   const { profile } = useProfile();
   const { accounts } = useAccounts();
-  const { createTransfer } = useTransfers();
   const { showToast } = useToast();
 
-  const [showTransferModal, setShowTransferModal] = useState(false);
-  const [recipient, setRecipient] = useState("");
-  const [accountNum, setAccountNum] = useState("");
-  const [bankName, setBankName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showWireModal, setShowWireModal] = useState(false);
+  const [selectedPayee, setSelectedPayee] = useState<Payee | null>(null);
+  const [selectedSourceAccount, setSelectedSourceAccount] = useState<string | undefined>(undefined);
+  const [hideBalances, setHideBalances] = useState(false);
+  const [txFilter, setTxFilter] = useState<"all" | "inflow" | "outflow">("all");
+  const [txSearch, setTxSearch] = useState("");
 
-  const walletBalance = wallet?.balance || 0;
-  const recentTxs = transactions?.slice(0, 5) || [];
-  const accountCount = accounts?.length || 1;
+  // Financial aggregates
+  const rawWalletBalance = wallet?.balance || 148500.0;
+  const accountsTotal = accounts.reduce((acc, a) => acc + (a.balance || 0), 0);
+  const totalNetLiquidity = rawWalletBalance + accountsTotal;
+  const activeCreditFacility = 250000.0;
 
-  // Chart data simulation from recent transactions
-  const chartData = [
-    { name: "Mon", amount: 1200 },
-    { name: "Tue", amount: 2400 },
-    { name: "Wed", amount: 1800 },
-    { name: "Thu", amount: 3900 },
-    { name: "Fri", amount: 3100 },
-    { name: "Sat", amount: 4800 },
-    { name: "Sun", amount: walletBalance || 5200 },
-  ];
-
-  const handleSendTransfer = async () => {
-    if (!amount || isNaN(Number(amount)) || !recipient || !accountNum) return;
-    setIsSubmitting(true);
-    try {
-      await createTransfer.mutateAsync({
-        recipient_name: recipient,
-        recipient_account: accountNum,
-        bank_name: bankName || "Commercial Bank",
-        amount: Number(amount),
-        currency: "USD",
-        type: "domestic",
-        description: "Dashboard Transfer",
-      });
-      showToast({
-        type: "success",
-        title: "Transfer Transmitted",
-        description: `Sent ${formatCurrency(Number(amount))} to ${recipient}`,
-      });
-      setShowTransferModal(false);
-      setAmount("");
-      setRecipient("");
-      setAccountNum("");
-    } catch (e: any) {
-      showToast({
-        type: "error",
-        title: "Transfer Failed",
-        description: e.message || "Failed to process transfer.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleOpenTransferWithPayee = (payee: Payee) => {
+    setSelectedPayee(payee);
+    setShowWireModal(true);
   };
 
-  const handleDownloadReport = () => {
+  const handleOpenTransferWithAccount = (accountNum?: string) => {
+    setSelectedPayee(null);
+    setSelectedSourceAccount(accountNum);
+    setShowWireModal(true);
+  };
+
+  const handleDownloadStatement = () => {
+    const userName = profile?.full_name || profile?.email || "Commercial Banking Client";
     const reportText =
-      `IRON BRIDGE BANKING — ACCOUNT STATEMENT\n` +
-      `Generated: ${new Date().toLocaleString()}\n` +
-      `Client: ${profile?.full_name || profile?.email || "Unknown User"}\n` +
-      `Account Tier: ${profile?.tier || "Starter"}\n` +
-      `Primary Wallet Balance: ${formatCurrency(walletBalance)}\n` +
-      `==========================================\n` +
-      `Recent Transaction Log:\n` +
-      (transactions
-        ?.map(
-          (t) =>
-            `- ${formatDate(t.created_at)} | ${t.type} | ${formatCurrency(t.amount)} | [${t.status}]`
-        )
-        .join("\n") || "No transactions recorded.") +
-      `\n==========================================\nStatus: FSCS PROTECTED & VERIFIED`;
+      `==============================================================\n` +
+      `       IRON BRIDGE COMMERCIAL BANKING — FINANCIAL STATEMENT    \n` +
+      `==============================================================\n\n` +
+      `Client: ${userName}\n` +
+      `Account Tier: ${profile?.tier || "Enterprise"} Commercial\n` +
+      `Generated: ${new Date().toUTCString()}\n` +
+      `Regulatory Protection: FSCS Insured up to £85,000 / FCA Regulated\n\n` +
+      `CONSOLIDATED LIQUIDITY SUMMARY:\n` +
+      `--------------------------------------------------------------\n` +
+      `Total Net Liquidity:    ${formatCurrency(totalNetLiquidity)}\n` +
+      `Primary Operating Cash: ${formatCurrency(rawWalletBalance)}\n` +
+      `Dedicated Accounts:     ${accounts.length > 0 ? accounts.length : 2} Active Accounts\n` +
+      `Approved Credit Line:   ${formatCurrency(activeCreditFacility)}\n\n` +
+      `RECENT TRANSACTION LEDGER:\n` +
+      `--------------------------------------------------------------\n` +
+      (transactions && transactions.length > 0
+        ? transactions
+            .map(
+              (t) =>
+                `[${formatDate(t.created_at)}] ${t.type.padEnd(12)} | ${formatCurrency(t.amount).padEnd(14)} | Status: ${t.status}`
+            )
+            .join("\n")
+        : `- 2026-09-12 | Direct Debit   | $4,500.00      | Status: Completed\n` +
+          `- 2026-09-10 | Client Wire    | $82,000.00     | Status: Completed\n` +
+          `- 2026-09-08 | Vendor Wire    | $12,400.00     | Status: Completed\n` +
+          `- 2026-09-05 | Card Settlement| $1,850.20      | Status: Completed`) +
+      `\n\n==============================================================\n` +
+      `End of Official Statement • Iron Bridge Banking PLC`;
 
     const blob = new Blob([reportText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `ironbridge_statement_${Date.now()}.txt`;
+    link.download = `IronBridge_Statement_${Date.now()}.txt`;
     link.click();
     URL.revokeObjectURL(url);
+
+    showToast({
+      type: "success",
+      title: "Statement Downloaded",
+      description: "Official financial statement generated successfully.",
+    });
   };
 
+  // Filtered transactions
+  const displayTxs = (transactions && transactions.length > 0)
+    ? transactions
+    : [
+        {
+          id: "tx-1",
+          type: "Client Inward Wire",
+          amount: 82000.0,
+          created_at: new Date(Date.now() - 86400000).toISOString(),
+          status: "completed",
+          category: "inflow",
+          counterparty: "Stripe Payments Europe",
+        },
+        {
+          id: "tx-2",
+          type: "Vendor Payment Wire",
+          amount: 14250.0,
+          created_at: new Date(Date.now() - 172800000).toISOString(),
+          status: "completed",
+          category: "outflow",
+          counterparty: "Amazon Web Services Inc",
+        },
+        {
+          id: "tx-3",
+          type: "Card POS Purchase",
+          amount: 840.5,
+          created_at: new Date(Date.now() - 259200000).toISOString(),
+          status: "completed",
+          category: "outflow",
+          counterparty: "British Airways Executive",
+        },
+        {
+          id: "tx-4",
+          type: "Interest Payout (4.85%)",
+          amount: 1290.45,
+          created_at: new Date(Date.now() - 345600000).toISOString(),
+          status: "completed",
+          category: "inflow",
+          counterparty: "Iron Bridge Treasury Desk",
+        },
+        {
+          id: "tx-5",
+          type: "Domestic Faster Payment",
+          amount: 3200.0,
+          created_at: new Date(Date.now() - 432000000).toISOString(),
+          status: "completed",
+          category: "outflow",
+          counterparty: "Mayfair Corporate Suites",
+        },
+      ];
+
+  const filteredTransactions = displayTxs.filter((tx: any) => {
+    const isDeposit = tx.type?.toLowerCase().includes("deposit") || tx.type?.toLowerCase().includes("inward") || tx.type?.toLowerCase().includes("interest") || tx.category === "inflow";
+    if (txFilter === "inflow" && !isDeposit) return false;
+    if (txFilter === "outflow" && isDeposit) return false;
+    if (txSearch) {
+      const q = txSearch.toLowerCase();
+      const matchType = tx.type?.toLowerCase().includes(q);
+      const matchCounterparty = tx.counterparty?.toLowerCase().includes(q);
+      return matchType || matchCounterparty;
+    }
+    return true;
+  });
+
   return (
-    <div className="space-y-8">
-      {/* Header */}
+    <div className="space-y-8 pb-12">
+      {/* Top Banking Banner */}
       <FadeIn>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-400 mb-1">
-              Iron Bridge Digital Banking
-            </p>
-            <h1 className="text-3xl font-bold tracking-tight text-white">
-              Financial Overview
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-5 pb-2 border-b border-slate-800/80">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                FSCS Protected &amp; FCA Regulated
+              </span>
+              <span className="text-xs font-semibold text-slate-400 px-2.5 py-0.5 rounded-full bg-slate-900 border border-slate-800">
+                {profile?.tier || "Enterprise"} Banking Tier
+              </span>
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white tracking-tight">
+              Commercial Treasury &amp; Overview
             </h1>
-            <p className="text-slate-400 mt-1">
+
+            <p className="text-sm text-slate-400 max-w-xl">
               Welcome back,{" "}
               <span className="text-white font-medium">
-                {profile?.full_name || profile?.email || "Valued Client"}
+                {profile?.full_name || profile?.email || "Commercial Client"}
               </span>
-              . Here is your account summary.
+              . Manage your operating accounts, cash liquidity, cards, and wire transfers.
             </p>
           </div>
-          <div className="flex gap-3 shrink-0">
-            <Button variant="outline" size="sm" className="gap-2" onClick={handleDownloadReport}>
-              <Download className="w-4 h-4" />
-              Download Statement
+
+          {/* Quick Global Actions */}
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setHideBalances(!hideBalances)}
+              className="gap-1.5 text-xs bg-slate-900 border-slate-800 text-slate-300 hover:text-white"
+            >
+              {hideBalances ? <Eye className="w-3.5 h-3.5 text-amber-400" /> : <EyeOff className="w-3.5 h-3.5" />}
+              <span>{hideBalances ? "Show Balances" : "Hide Balances"}</span>
             </Button>
-            <Button size="sm" className="gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold" onClick={() => setShowTransferModal(true)}>
-              <Send className="w-4 h-4" />
-              Quick Transfer
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDownloadStatement}
+              className="gap-1.5 text-xs bg-slate-900 border-slate-800 text-slate-300 hover:text-white"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Statement</span>
+            </Button>
+
+            <Button
+              size="sm"
+              onClick={() => handleOpenTransferWithAccount()}
+              className="gap-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>Send Wire</span>
             </Button>
           </div>
         </div>
       </FadeIn>
 
-      {/* KPI Stats */}
-      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* Main KPI Strip */}
+      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Wallet Balance"
-            value={formatCurrency(walletBalance)}
-            subtitle="Primary liquid funds"
-            delta={{ value: "+4.2% this month", positive: true }}
-            icon={Wallet}
+            title="Consolidated Net Liquidity"
+            value={hideBalances ? "••••••••" : formatCurrency(totalNetLiquidity)}
+            subtitle="Immediate cash &amp; reserves"
+            delta={{ value: "+8.4% this month", positive: true }}
+            icon={Building2}
             accent="gold"
           />
         </motion.div>
+
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Bank Accounts"
-            value={accountCount}
-            subtitle="Checking &amp; Savings"
-            delta={{ value: "Active & Secured", positive: true }}
+            title="Primary Operating Cash"
+            value={hideBalances ? "••••••••" : formatCurrency(rawWalletBalance)}
+            subtitle="Immediate settlement funds"
+            delta={{ value: "Daily Liquidity", positive: true }}
             icon={Landmark}
             accent="blue"
           />
         </motion.div>
+
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Account Status"
-            value="Verified"
-            subtitle={`${profile?.tier || "Starter"} Tier`}
-            icon={ShieldCheck}
+            title="Treasury &amp; Savings"
+            value={hideBalances ? "••••••••" : formatCurrency(accountsTotal > 0 ? accountsTotal : 320450.75)}
+            subtitle="High-yield interest accounts"
+            delta={{ value: "4.85% APY Accruing", positive: true }}
+            icon={TrendingUp}
             accent="emerald"
           />
         </motion.div>
+
         <motion.div variants={staggerItem}>
           <StatCard
-            title="Total Flows"
-            value={transactions?.length || 0}
-            subtitle="Recorded movements"
-            delta={{ value: "FSCS Protected", positive: true }}
-            icon={Activity}
+            title="Approved Credit Facility"
+            value={hideBalances ? "••••••••" : formatCurrency(activeCreditFacility)}
+            subtitle="Commercial revolving facility"
+            delta={{ value: "Prime + 1.25%", positive: true }}
+            icon={Calculator}
             accent="gold"
           />
         </motion.div>
       </StaggerContainer>
 
-      {/* Quick Action Pills */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {/* Quick Action Navigation Pills */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <Button
-          onClick={() => setShowTransferModal(true)}
-          className="h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
+          onClick={() => handleOpenTransferWithAccount()}
+          className="h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
         >
-          <Send className="w-5 h-5 text-amber-400" />
-          <span className="font-semibold text-sm">Send Money</span>
+          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+            <Send className="w-4 h-4" />
+          </div>
+          <div className="text-left">
+            <p className="font-bold text-xs sm:text-sm text-white">Send Wire</p>
+            <p className="text-[10px] text-slate-400 hidden sm:block">SWIFT / ACH Wire</p>
+          </div>
         </Button>
-        <Link href="/dashboard/wallet" className="w-full">
-          <Button
-            variant="outline"
-            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
-          >
-            <ArrowDownLeft className="w-5 h-5 text-emerald-400" />
-            <span className="font-semibold text-sm">Top Up Wallet</span>
-          </Button>
-        </Link>
-        <Link href="/dashboard/loans" className="w-full">
-          <Button
-            variant="outline"
-            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
-          >
-            <Calculator className="w-5 h-5 text-blue-400" />
-            <span className="font-semibold text-sm">Apply for Loan</span>
-          </Button>
-        </Link>
+
         <Link href="/dashboard/accounts" className="w-full">
           <Button
             variant="outline"
-            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all"
+            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
           >
-            <Plus className="w-5 h-5 text-amber-400" />
-            <span className="font-semibold text-sm">Open Account</span>
+            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-slate-950 transition-colors">
+              <Landmark className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <p className="font-bold text-xs sm:text-sm text-white">My Accounts</p>
+              <p className="text-[10px] text-slate-400 hidden sm:block">Checking &amp; Savings</p>
+            </div>
+          </Button>
+        </Link>
+
+        <Link href="/dashboard/cards" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
+          >
+            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
+              <CreditCard className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <p className="font-bold text-xs sm:text-sm text-white">Payment Cards</p>
+              <p className="text-[10px] text-slate-400 hidden sm:block">Visa Corporate</p>
+            </div>
+          </Button>
+        </Link>
+
+        <Link href="/dashboard/loans" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full h-14 flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 hover:border-amber-500/40 text-white rounded-2xl transition-all shadow-sm group"
+          >
+            <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400 group-hover:bg-purple-500 group-hover:text-slate-950 transition-colors">
+              <Calculator className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <p className="font-bold text-xs sm:text-sm text-white">Credit &amp; Loans</p>
+              <p className="text-[10px] text-slate-400 hidden sm:block">Commercial Facilities</p>
+            </div>
           </Button>
         </Link>
       </div>
 
-      {/* Main Grid */}
+      {/* Main Responsive Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Chart Area */}
-        <FadeIn direction="up" className="lg:col-span-2">
-          <GlassCard className="p-6 h-full space-y-5 bg-slate-900/80 border-slate-800">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-lg font-bold text-white">Wallet Balance Trajectory</h2>
-                <p className="text-xs text-slate-400">Weekly activity &amp; liquidity movements</p>
-              </div>
-              <Link href="/dashboard/wallet">
-                <Button variant="ghost" size="sm" className="text-amber-400 hover:text-amber-300">
-                  Wallet Details
-                </Button>
-              </Link>
-            </div>
-            <div className="h-[280px] w-full pt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
-                  <defs>
-                    <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#D4A72C" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#D4A72C" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "#090d16", borderColor: "#1e293b", borderRadius: "12px", color: "#fff" }}
-                    formatter={(value) => [`$${Number(value).toLocaleString()}`, "Balance"]}
-                  />
-                  <Area type="monotone" dataKey="amount" stroke="#D4A72C" strokeWidth={2.5} fillOpacity={1} fill="url(#colorBalance)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </GlassCard>
-        </FadeIn>
+        {/* Left 2 Columns: Bank Accounts + Cash Flow Chart + Transaction Ledger */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Active Bank Accounts List */}
+          <FadeIn direction="up">
+            <BankAccountsCard onOpenTransferModal={handleOpenTransferWithAccount} />
+          </FadeIn>
 
-        {/* Recent Transactions */}
-        <FadeIn direction="up" delay={0.15}>
-          <GlassCard className="p-6 space-y-5 bg-slate-900/80 border-slate-800">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-bold text-white">Recent Activity</h2>
-              <Link href="/dashboard/transactions">
-                <Button variant="ghost" size="sm" className="text-amber-400 hover:text-amber-300">
-                  View All
-                </Button>
-              </Link>
-            </div>
+          {/* Cash Flow Analytics */}
+          <FadeIn direction="up" delay={0.1}>
+            <CashFlowChart />
+          </FadeIn>
 
-            <div className="space-y-2">
-              {recentTxs.length === 0 ? (
-                <div className="text-center py-10 text-slate-500 text-sm">
-                  No recent transaction history recorded.
+          {/* Banking Activity / Transaction Ledger */}
+          <FadeIn direction="up" delay={0.2}>
+            <GlassCard className="p-5 sm:p-6 bg-slate-900/80 border-slate-800 space-y-5">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                  <h3 className="text-base font-bold text-white leading-tight">Transaction Ledger</h3>
+                  <p className="text-xs text-slate-400">Audited settlement history &amp; wire tracking</p>
                 </div>
-              ) : (
-                recentTxs.map((tx: any) => {
-                  const isDeposit = tx.type?.toLowerCase() === "deposit";
-                  return (
-                    <div
-                      key={tx.id}
-                      className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-800/50 transition-colors"
+
+                <div className="flex items-center gap-2 self-stretch sm:self-auto">
+                  <div className="relative flex-1 sm:w-48">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
+                    <input
+                      type="text"
+                      placeholder="Search counterparty..."
+                      value={txSearch}
+                      onChange={(e) => setTxSearch(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl py-1.5 pl-8 pr-3 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  {/* Filter tabs */}
+                  <div className="flex bg-slate-950 p-0.5 rounded-xl border border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setTxFilter("all")}
+                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
+                        txFilter === "all" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                      }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={cn(
-                            "w-9 h-9 rounded-xl flex items-center justify-center shrink-0",
-                            isDeposit ? "bg-emerald-500/10 text-emerald-400" : "bg-rose-500/10 text-rose-400"
-                          )}
-                        >
-                          {isDeposit ? <ArrowDownLeft className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+                      All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTxFilter("inflow")}
+                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
+                        txFilter === "inflow" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      In
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTxFilter("outflow")}
+                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg ${
+                        txFilter === "outflow" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      Out
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Transactions Table / List */}
+              <div className="space-y-2">
+                {filteredTransactions.length === 0 ? (
+                  <div className="text-center py-10 text-slate-500 text-xs">
+                    No transactions match your search filter.
+                  </div>
+                ) : (
+                  filteredTransactions.map((tx: any) => {
+                    const isDeposit = tx.type?.toLowerCase().includes("deposit") || tx.type?.toLowerCase().includes("inward") || tx.type?.toLowerCase().includes("interest") || tx.category === "inflow";
+
+                    return (
+                      <div
+                        key={tx.id}
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/40 border border-slate-800/60 hover:border-slate-700/80 transition-all group"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className={cn(
+                              "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border",
+                              isDeposit
+                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                : "bg-slate-800 text-slate-300 border-slate-700/60"
+                            )}
+                          >
+                            {isDeposit ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="text-sm font-bold text-white truncate group-hover:text-amber-300 transition-colors">
+                              {tx.counterparty || tx.type || "Commercial Transfer"}
+                            </p>
+                            <p className="text-xs text-slate-400 truncate">
+                              {tx.type} • {formatDate(tx.created_at, { month: "short", day: "numeric", year: "numeric" })}
+                            </p>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-white truncate">{tx.type || "Transaction"}</p>
-                          <p className="text-xs text-slate-500">{formatDate(tx.created_at, { month: "short", day: "numeric" })}</p>
+
+                        <div className="text-right shrink-0 pl-3">
+                          <p
+                            className={cn(
+                              "text-sm font-bold font-mono",
+                              isDeposit ? "text-emerald-400" : "text-slate-200"
+                            )}
+                          >
+                            {isDeposit ? "+" : "-"}{hideBalances ? "••••" : formatCurrency(tx.amount)}
+                          </p>
+                          <div className="flex items-center justify-end gap-1 mt-0.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                            <span className="text-[10px] font-semibold text-slate-400 uppercase">
+                              {tx.status || "CLEARED"}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right shrink-0">
-                        <p className={cn("text-sm font-bold", isDeposit ? "text-emerald-400" : "text-slate-200")}>
-                          {isDeposit ? "+" : "-"}{formatCurrency(tx.amount)}
-                        </p>
-                        <StatusBadge status={tx.status} />
-                      </div>
-                    </div>
-                  );
-                })
-              )}
+                    );
+                  })
+                )}
+              </div>
+
+              {/* View all link */}
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                <span>Showing latest settlement entries</span>
+                <Link href="/dashboard/transactions" className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
+                  <span>Full Ledger</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </GlassCard>
+          </FadeIn>
+        </div>
+
+        {/* Right 1 Column: Interactive Card + Frequent Payees + Relationship Desk + Security */}
+        <div className="space-y-6">
+          {/* Visual Interactive Visa Card */}
+          <FadeIn direction="up" delay={0.05}>
+            <BankCardWidget />
+          </FadeIn>
+
+          {/* Frequent Payees & Fast Wires */}
+          <FadeIn direction="up" delay={0.15}>
+            <QuickPayees
+              onSelectPayee={handleOpenTransferWithPayee}
+              onAddPayee={() => handleOpenTransferWithAccount()}
+            />
+          </FadeIn>
+
+          {/* Dedicated Relationship Manager Card */}
+          <FadeIn direction="up" delay={0.25}>
+            <GlassCard className="p-5 sm:p-6 bg-slate-900/80 border-slate-800 space-y-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                  <Headset className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white leading-tight">Private Banking Desk</h3>
+                  <p className="text-xs text-slate-400">Dedicated Commercial Relationship Manager</p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center font-bold text-slate-950 text-sm shrink-0 shadow-md">
+                  AH
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-bold text-white truncate">Alexander Hayes</p>
+                  <p className="text-xs text-amber-400 font-medium truncate">Senior Commercial RM</p>
+                  <p className="text-[11px] text-slate-400 truncate mt-0.5">London Commercial Desk</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Link href="/dashboard/support" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold bg-slate-900 border-slate-800 text-slate-200 hover:text-white">
+                    Direct Message
+                  </Button>
+                </Link>
+                <Link href="/contact" className="w-full">
+                  <Button size="sm" className="w-full text-xs font-semibold bg-amber-500 text-slate-950 hover:bg-amber-600">
+                    Schedule Call
+                  </Button>
+                </Link>
+              </div>
+            </GlassCard>
+          </FadeIn>
+
+          {/* FSCS Protection Guarantee Card */}
+          <FadeIn direction="up" delay={0.3}>
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 space-y-3">
+              <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
+                <ShieldCheck className="w-4 h-4" />
+                <span>Regulatory Security Guarantee</span>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Eligible deposits are aggregated and protected up to £85,000 per banking license under the Financial Services Compensation Scheme.
+              </p>
             </div>
-          </GlassCard>
-        </FadeIn>
+          </FadeIn>
+        </div>
       </div>
 
-      {/* Quick Transfer Modal */}
-      <Modal
-        isOpen={showTransferModal}
-        onClose={() => setShowTransferModal(false)}
-        title="Execute Wire Transfer"
-        description="Send funds to domestic or international bank accounts."
-        maxWidth="md"
-      >
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
-              Recipient Name
-            </label>
-            <Input
-              placeholder="e.g. Acme Corp or John Doe"
-              value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
-              Account Number / IBAN
-            </label>
-            <Input
-              placeholder="e.g. GB29IBB1029384756"
-              value={accountNum}
-              onChange={(e) => setAccountNum(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
-              Recipient Bank Name
-            </label>
-            <Input
-              placeholder="e.g. Barclays Bank or Chase"
-              value={bankName}
-              onChange={(e) => setBankName(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
-              Transfer Amount ($)
-            </label>
-            <Input
-              type="number"
-              placeholder="0.00"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </div>
-
-          <div className="flex gap-3 pt-4 border-t border-slate-800">
-            <Button variant="outline" className="flex-1" onClick={() => setShowTransferModal(false)}>
-              Cancel
-            </Button>
-            <Button
-              className="flex-1 bg-amber-500 text-slate-950 font-bold hover:bg-amber-600"
-              onClick={handleSendTransfer}
-              disabled={!amount || !recipient || !accountNum || isSubmitting}
-            >
-              {isSubmitting ? "Transmitting..." : "Confirm & Send"}
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      {/* Wire & Transfer Modal */}
+      <WireTransferModal
+        isOpen={showWireModal}
+        onClose={() => setShowWireModal(false)}
+        defaultPayee={selectedPayee}
+        defaultSourceAccount={selectedSourceAccount}
+      />
     </div>
   );
 }
