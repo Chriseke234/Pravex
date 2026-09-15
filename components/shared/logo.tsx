@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -169,13 +169,13 @@ export function Logo({
           <span
             className={cn(
               "font-serif font-bold transition-colors duration-200",
-              "text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400",
+              "text-white group-hover:text-amber-400",
               textSizeClasses[size],
               textClassName
             )}
           >
             Iron Bridge{" "}
-            <span className="font-sans font-extrabold tracking-normal text-amber-600 dark:text-amber-400">
+            <span className="font-sans font-extrabold tracking-normal text-amber-400">
               Banking
             </span>
           </span>
