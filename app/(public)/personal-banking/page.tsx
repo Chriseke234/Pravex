@@ -36,13 +36,10 @@ const subProducts = [
 
 export default function PersonalBankingLanding() {
   return (
-    <div className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white min-h-screen transition-colors duration-300">
+    <div className="bg-slate-50 text-slate-900 min-h-screen">
       {/* Hero */}
       <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-semibold">
-            <ShieldCheck className="w-4 h-4" /> Personal Banking Services
-          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight">
             Personal Banking Designed for <span className="text-gradient-gold">Your Financial Freedom</span>.
           </h1>

@@ -125,10 +125,6 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-6 space-y-6">
               <AnimateIn direction="up">
-                <div className="inline-flex items-center gap-2 bg-card/5 border border-border/30 rounded-full px-4 py-2 text-sm font-medium mb-4">
-                  <Building2 className="w-4 h-4 text-gold" />
-                  <span>Founded 2020</span>
-                </div>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight font-serif text-foreground">
                   Built by Finance Veterans, <br />
                   <span className="text-gradient">Engineered for Institutions</span>
