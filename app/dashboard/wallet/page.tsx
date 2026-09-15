@@ -54,11 +54,11 @@ export default function WalletPage() {
         <div>
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">
             <Landmark className="w-4 h-4" />
-            <span>Commercial Treasury Management</span>
+            <span>Account Overview</span>
           </div>
-          <h1 className="text-3xl font-serif font-bold tracking-tight text-white">Cash &amp; Liquidity Treasury</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white">My Account</h1>
           <p className="text-slate-400 text-sm mt-1">
-            Manage your operating cash reserves, domestic clearing, and instant liquidity withdrawals.
+            Manage your account balance, deposits, and withdrawals.
           </p>
         </div>
 

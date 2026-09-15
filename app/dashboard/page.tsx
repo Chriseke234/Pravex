@@ -207,13 +207,9 @@ export default function DashboardOverview() {
               </div>
 
               <div className="flex items-baseline gap-4">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-mono text-white tracking-tight">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight font-sans">
                   {hideBalances ? "••••••••" : formatCurrency(totalNetLiquidity)}
                 </h2>
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  <TrendingUp className="w-3.5 h-3.5" />
-                  +24% Last week
-                </span>
               </div>
               <p className="text-xs text-slate-400">
                 Combined balance across all active accounts

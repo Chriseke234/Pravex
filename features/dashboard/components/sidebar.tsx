@@ -34,9 +34,8 @@ import { cn } from "@/lib/utils";
 /* ─── Navigation Config ─────────────────────────────────────────── */
 const MAIN_ITEMS = [
   { label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "My Accounts", icon: Landmark, href: "/dashboard/accounts" },
-  { label: "Cash & Treasury", icon: Wallet, href: "/dashboard/wallet" },
-  { label: "Transaction Ledger", icon: History, href: "/dashboard/transactions" },
+  { label: "My Account", icon: Wallet, href: "/dashboard/wallet" },
+  { label: "Transactions", icon: History, href: "/dashboard/transactions" },
   { label: "Main Website", icon: Globe, href: "/" },
 ];
 

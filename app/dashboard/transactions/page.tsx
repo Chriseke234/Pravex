@@ -90,9 +90,9 @@ export default function TransactionsPage() {
             <div className="p-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-400">
               <History className="w-5 h-5" />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Transaction Logs</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-white">Transactions</h1>
           </div>
-          <p className="text-slate-400 text-sm">Full audit history of all inbound deposits, outbound transfers, and charges.</p>
+          <p className="text-slate-400 text-sm">History of all inbound deposits, outbound transfers, and payments.</p>
         </div>
         <Button variant="outline" className="gap-2" onClick={handleExportCsv}>
           <Download className="w-4 h-4" /> Export CSV
