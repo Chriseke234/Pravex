@@ -50,13 +50,13 @@ function HeroSection() {
     <section className="relative pt-24 pb-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 overflow-hidden">
       <div className="flex-1 space-y-8 z-10">
         <AnimateIn delay={100}>
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight">
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-slate-900 leading-tight">
             Enterprise Banking for a <span className="text-gradient-gold">Global Future</span>.
           </h1>
         </AnimateIn>
 
         <AnimateIn delay={200}>
-          <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-xl">
+          <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
             Iron Bridge Banking delivers sophisticated personal banking, private wealth management, commercial financing, and competitive credit solutions.
           </p>
         </AnimateIn>
@@ -65,13 +65,13 @@ function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/signup"
-              className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg shadow-amber-500/25 hover:scale-[1.02]"
+              className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-md shadow-amber-500/20 hover:scale-[1.02]"
             >
               Open Account <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/contact"
-              className="flex items-center justify-center gap-2 bg-slate-900/80 border border-slate-800 hover:border-slate-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 hover:scale-[1.02]"
+              className="flex items-center justify-center gap-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-900 font-bold py-4 px-8 rounded-xl transition-all duration-200 hover:scale-[1.02] shadow-sm"
             >
               Talk to a Manager
             </Link>
@@ -79,16 +79,16 @@ function HeroSection() {
         </AnimateIn>
 
         <AnimateIn delay={400}>
-          <div className="flex flex-wrap items-center gap-6 pt-4 text-sm text-slate-400 font-medium">
-            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-amber-400" /> No hidden fees</div>
-            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-amber-400" /> 24/7 Global Transfers</div>
-            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-amber-400" /> Dedicated RM for Private Clients</div>
+          <div className="flex flex-wrap items-center gap-6 pt-4 text-sm text-slate-700 font-medium">
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-amber-600" /> No hidden fees</div>
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-amber-600" /> 24/7 Global Transfers</div>
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-amber-600" /> Dedicated RM for Private Clients</div>
           </div>
         </AnimateIn>
       </div>
 
       <div className="flex-1 w-full relative z-10">
-        <AnimateIn delay={200} className="relative h-[300px] md:h-[500px] w-full rounded-3xl overflow-hidden border border-slate-800 shadow-2xl shadow-amber-500/5 group">
+        <AnimateIn delay={200} className="relative h-[300px] md:h-[500px] w-full rounded-3xl overflow-hidden border border-slate-200 shadow-xl group">
           <Image
             src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1000&q=80"
             alt="Iron Bridge Digital Banking Interface"
@@ -97,8 +97,8 @@ function HeroSection() {
             priority
             sizes="(max-width: 768px) 100vw, 50vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6 p-6 bg-slate-950/80 backdrop-blur-md rounded-2xl border border-slate-800/80 space-y-2">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+          <div className="absolute bottom-6 left-6 right-6 p-6 bg-slate-950/85 backdrop-blur-md rounded-2xl border border-slate-800 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Security Standard</span>
               <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1"><Lock className="w-3 h-3" /> Encrypted</span>
@@ -113,24 +113,24 @@ function HeroSection() {
 
 function StatsBar() {
   return (
-    <section className="py-16 border-y border-slate-800/80 bg-slate-950/60 backdrop-blur-md">
+    <section className="py-16 border-y border-slate-200 bg-slate-100/70">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x divide-slate-800">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x divide-slate-200">
           <AnimateIn className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white">$<AnimatedCounter target={45} suffix="B+" /></div>
-            <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Client Assets Managed</div>
+            <div className="text-4xl md:text-5xl font-bold text-slate-900">$<AnimatedCounter target={45} suffix="B+" /></div>
+            <div className="text-xs text-slate-600 font-bold uppercase tracking-wider">Client Assets Managed</div>
           </AnimateIn>
           <AnimateIn delay={100} className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white"><AnimatedCounter target={180} suffix="k+" /></div>
-            <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Active Personal &amp; Corporate Clients</div>
+            <div className="text-4xl md:text-5xl font-bold text-slate-900"><AnimatedCounter target={180} suffix="k+" /></div>
+            <div className="text-xs text-slate-600 font-bold uppercase tracking-wider">Active Personal &amp; Corporate Clients</div>
           </AnimateIn>
           <AnimateIn delay={200} className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white"><AnimatedCounter target={95} suffix="+" /></div>
-            <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Global Countries Served</div>
+            <div className="text-4xl md:text-5xl font-bold text-slate-900"><AnimatedCounter target={95} suffix="+" /></div>
+            <div className="text-xs text-slate-600 font-bold uppercase tracking-wider">Global Countries Served</div>
           </AnimateIn>
           <AnimateIn delay={300} className="text-center space-y-2">
-            <div className="text-4xl md:text-5xl font-bold text-white"><AnimatedCounter target={99} suffix=".99%" /></div>
-            <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Platform &amp; Payment Uptime</div>
+            <div className="text-4xl md:text-5xl font-bold text-slate-900"><AnimatedCounter target={99} suffix=".99%" /></div>
+            <div className="text-xs text-slate-600 font-bold uppercase tracking-wider">Platform &amp; Payment Uptime</div>
           </AnimateIn>
         </div>
       </div>
@@ -178,10 +178,10 @@ function PillarsGrid() {
     <section className="py-24 px-4 max-w-7xl mx-auto">
       <div className="text-center space-y-4 mb-16">
         <AnimateIn>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white">Four Core Banking Pillars</h2>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900">Four Core Banking Pillars</h2>
         </AnimateIn>
         <AnimateIn delay={100}>
-          <p className="text-slate-400 max-w-2xl mx-auto text-base md:text-lg">
+          <p className="text-slate-600 max-w-2xl mx-auto text-base md:text-lg">
             Whether you need a daily current account or complex international trade finance, Iron Bridge Banking has a solution engineered for you.
           </p>
         </AnimateIn>
@@ -190,23 +190,23 @@ function PillarsGrid() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {pillars.map((p, i) => (
           <AnimateIn key={i} delay={i * 100} className="h-full">
-            <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl h-full flex flex-col justify-between hover:border-amber-500/40 transition-all duration-300 group hover:-translate-y-1">
+            <div className="bg-white border border-slate-200 p-6 rounded-3xl h-full flex flex-col justify-between hover:border-amber-500/40 transition-all duration-300 group hover:-translate-y-1 shadow-sm">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
                     <p.icon className="w-6 h-6" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-slate-800 text-slate-300 rounded-full">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-amber-500/10 text-amber-700 border border-amber-500/20 rounded-full">
                     {p.badge}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-white">{p.title}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{p.desc}</p>
+                <h3 className="text-xl font-bold text-slate-900">{p.title}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{p.desc}</p>
 
-                <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+                <div className="pt-2 border-t border-slate-100 space-y-1.5">
                   {p.subItems.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-300 font-medium">
-                      <ChevronRight className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-700 font-medium">
+                      <ChevronRight className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                       <span>{item}</span>
                     </div>
                   ))}
@@ -216,7 +216,7 @@ function PillarsGrid() {
               <div className="pt-6">
                 <Link
                   href={p.href}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-white font-semibold text-sm transition-all duration-200"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-100 border border-slate-200 hover:bg-amber-500 hover:text-slate-950 text-slate-900 font-semibold text-sm transition-all duration-200"
                 >
                   Explore Pillar <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -240,20 +240,20 @@ function WhyChooseUs() {
   ];
 
   return (
-    <section className="py-24 bg-slate-950 border-y border-slate-800/80">
+    <section className="py-24 bg-slate-100/70 border-y border-slate-200">
       <div className="max-w-7xl mx-auto px-4">
         <AnimateIn className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white">Engineered for Absolute Trust</h2>
-          <p className="text-slate-400 mt-2 max-w-xl mx-auto">Bank-grade security coupled with modern financial technology.</p>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900">Engineered for Absolute Trust</h2>
+          <p className="text-slate-600 mt-2 max-w-xl mx-auto">Bank-grade security coupled with modern financial technology.</p>
         </AnimateIn>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((f, i) => (
             <AnimateIn key={i} delay={i * 100} className="h-full">
-              <div className="bg-slate-900/40 border border-slate-800/80 p-8 rounded-3xl h-full hover:border-amber-500/30 transition-all">
-                <f.icon className="w-8 h-8 text-amber-400 mb-5" />
-                <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+              <div className="bg-white border border-slate-200 p-8 rounded-3xl h-full shadow-sm hover:border-amber-500/40 transition-all">
+                <f.icon className="w-8 h-8 text-amber-600 mb-5" />
+                <h3 className="text-lg font-bold text-slate-900 mb-2">{f.title}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
               </div>
             </AnimateIn>
           ))}
@@ -288,24 +288,24 @@ function Testimonials() {
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto">
       <AnimateIn className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-serif font-bold text-white">Trusted by Personal &amp; Institutional Clients</h2>
+        <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900">Trusted by Personal &amp; Institutional Clients</h2>
       </AnimateIn>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {reviews.map((r, i) => (
           <AnimateIn key={i} delay={i * 150} className="h-full">
-            <div className="bg-slate-900/60 border border-slate-800 p-8 rounded-3xl h-full flex flex-col justify-between">
+            <div className="bg-white border border-slate-200 p-8 rounded-3xl h-full flex flex-col justify-between shadow-sm">
               <div className="space-y-4">
-                <div className="text-amber-400 text-sm tracking-widest">★★★★★</div>
-                <p className="text-slate-300 italic text-base leading-relaxed">&quot;{r.quote}&quot;</p>
+                <div className="text-amber-500 text-sm tracking-widest">★★★★★</div>
+                <p className="text-slate-700 italic text-base leading-relaxed">&quot;{r.quote}&quot;</p>
               </div>
-              <div className="flex items-center gap-4 pt-6 mt-6 border-t border-slate-800">
+              <div className="flex items-center gap-4 pt-6 mt-6 border-t border-slate-100">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-amber-500/30">
                   <Image src={r.avatar} alt={r.name} fill className="object-cover" />
                 </div>
                 <div>
-                  <div className="font-bold text-white text-sm">{r.name}</div>
-                  <div className="text-xs text-slate-400">{r.role}</div>
+                  <div className="font-bold text-slate-900 text-sm">{r.name}</div>
+                  <div className="text-xs text-slate-600">{r.role}</div>
                 </div>
               </div>
             </div>
@@ -325,11 +325,11 @@ function FAQsSection() {
   ];
 
   return (
-    <section className="py-24 bg-slate-950 border-t border-slate-800">
+    <section className="py-24 bg-slate-100/70 border-t border-slate-200">
       <div className="max-w-4xl mx-auto px-4 space-y-12">
         <AnimateIn className="text-center space-y-3">
-          <h2 className="text-3xl font-serif font-bold text-white">Frequently Asked Questions</h2>
-          <p className="text-slate-400 text-sm">Everything you need to know about banking with Iron Bridge.</p>
+          <h2 className="text-3xl font-serif font-bold text-slate-900">Frequently Asked Questions</h2>
+          <p className="text-slate-600 text-sm">Everything you need to know about banking with Iron Bridge.</p>
         </AnimateIn>
 
         <AnimateIn delay={100}>
@@ -349,13 +349,13 @@ function FAQsSection() {
 
 function CTABanner() {
   return (
-    <section className="py-24 relative overflow-hidden bg-gradient-to-b from-slate-950 to-slate-900 border-t border-slate-800">
+    <section className="py-24 relative overflow-hidden bg-slate-50 border-t border-slate-200">
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-8">
         <AnimateIn>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white">Open Your Iron Bridge Account Today</h2>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900">Open Your Iron Bridge Account Today</h2>
         </AnimateIn>
         <AnimateIn delay={100}>
-          <p className="text-slate-400 text-lg max-w-xl mx-auto">
+          <p className="text-slate-600 text-lg max-w-xl mx-auto">
             Experience next-generation digital banking. Seamless onboarding, bank-grade protection, and dedicated support.
           </p>
         </AnimateIn>
@@ -363,13 +363,13 @@ function CTABanner() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/signup"
-              className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] shadow-lg shadow-amber-500/25"
+              className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] shadow-md shadow-amber-500/20"
             >
               Open Digital Account <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/contact"
-              className="flex items-center justify-center gap-2 bg-slate-900 border border-slate-700 hover:border-slate-600 text-white font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02]"
+              className="flex items-center justify-center gap-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-900 font-bold py-4 px-8 rounded-xl transition-transform hover:scale-[1.02] shadow-sm"
             >
               Contact Advisory Team
             </Link>
@@ -382,7 +382,7 @@ function CTABanner() {
 
 export default function Homepage() {
   return (
-    <div className="bg-slate-950 min-h-screen text-foreground">
+    <div className="bg-slate-50 min-h-screen text-slate-900">
       <HeroSection />
       <StatsBar />
       <PillarsGrid />

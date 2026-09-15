@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 export interface LogoProps {
   /** Size variant: "sm" (h-8), "md" (h-9), "lg" (h-11) */
   size?: "sm" | "md" | "lg";
+  /** Color theme variant: "light" (dark text on light bg) or "dark" (white text on dark bg) */
+  variant?: "light" | "dark";
   /** Whether to render brand name text next to the emblem */
   showText?: boolean;
   /** Custom destination link or null for plain container */
@@ -142,6 +144,7 @@ export function LogoIcon({
  */
 export function Logo({
   size = "md",
+  variant = "light",
   showText = true,
   href = "/",
   className,
@@ -153,6 +156,8 @@ export function Logo({
     md: "text-base sm:text-lg",
     lg: "text-lg sm:text-xl lg:text-2xl",
   };
+
+  const isDark = variant === "dark";
 
   const content = (
     <div
@@ -169,13 +174,18 @@ export function Logo({
           <span
             className={cn(
               "font-serif font-bold transition-colors duration-200",
-              "text-white group-hover:text-amber-400",
+              isDark ? "text-white group-hover:text-amber-400" : "text-slate-900 group-hover:text-amber-600",
               textSizeClasses[size],
               textClassName
             )}
           >
             Iron Bridge{" "}
-            <span className="font-sans font-extrabold tracking-normal text-amber-400">
+            <span
+              className={cn(
+                "font-sans font-extrabold tracking-normal",
+                isDark ? "text-amber-400" : "text-amber-600"
+              )}
+            >
               Banking
             </span>
           </span>
