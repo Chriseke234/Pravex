@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
@@ -173,8 +173,8 @@ export function Navbar() {
         className={cn(
           "fixed top-0 w-full z-50 transition-all duration-300",
           scrolled
-            ? "bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 shadow-xl shadow-slate-950/40"
-            : "bg-slate-950/80 backdrop-blur-sm border-b border-slate-900"
+            ? "bg-[#0A1628]/95 backdrop-blur-md border-b border-[#17293F] shadow-xl shadow-[#080F1A]/40"
+            : "bg-[#080F1A]/90 backdrop-blur-sm border-b border-[#17293F]"
         )}
         onMouseLeave={() => setActiveMenu(null)}
       >
@@ -197,16 +197,16 @@ export function Navbar() {
                       "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 inline-flex items-center gap-1",
                       pathname?.startsWith(menu.href)
                         ? "text-amber-400 bg-amber-500/10 font-semibold"
-                        : "text-slate-300 hover:text-white hover:bg-slate-800/70"
+                        : "text-slate-300 hover:text-amber-400 hover:bg-[#122140]"
                     )}
                   >
                     {menu.title}
-                    <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200 text-slate-500", activeMenu === menu.title && "rotate-180 text-amber-400")} />
+                    <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200 text-slate-400", activeMenu === menu.title && "rotate-180 text-amber-400")} />
                   </Link>
 
                   {/* Dropdown Card */}
                   {activeMenu === menu.title && (
-                    <div className="absolute top-full left-0 w-80 mt-1 bg-slate-950 border border-slate-800 rounded-2xl p-3 shadow-2xl backdrop-blur-xl animate-fade-in z-50">
+                    <div className="absolute top-full left-0 w-80 mt-1 bg-[#0C1A2E] border border-[#17293F] rounded-2xl p-3 shadow-2xl backdrop-blur-xl animate-fade-in z-50">
                       <div className="space-y-1">
                         {menu.items.map((sub) => {
                           const SubIcon = sub.icon;
@@ -215,7 +215,7 @@ export function Navbar() {
                               key={sub.name}
                               href={sub.href}
                               onClick={closeMenu}
-                              className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-900 transition-colors group"
+                              className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#122140] transition-colors group"
                             >
                               <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
                                 <SubIcon className="w-3.5 h-3.5" />
