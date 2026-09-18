@@ -1,5 +1,6 @@
 import { GlassCard } from "@/components/shared/glass-card";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { 
   Activity, 
   Cpu, 
@@ -12,19 +13,21 @@ import {
 
 export default function AdminMonitoringPage() {
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8">
+
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">System Monitoring</h1>
-          <p className="text-muted-foreground">Real-time platform health and transaction throughput.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">System Monitoring</h1>
+          <p className="text-muted-foreground text-sm mt-1">Real-time platform health and transaction throughput.</p>
         </div>
-        <Button variant="ghost" size="sm" className="gap-2">
+        <Button variant="ghost" size="sm" className="gap-2 w-full sm:w-auto justify-center">
           <RefreshCw className="w-4 h-4" /> Refresh Status
         </Button>
       </div>
 
       {/* Health Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
         <GlassCard className="p-6 space-y-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -71,7 +74,7 @@ export default function AdminMonitoringPage() {
           </div>
         </GlassCard>
 
-        <GlassCard className="p-6 space-y-6">
+        <GlassCard className="p-6 space-y-6 sm:col-span-2 md:col-span-1">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-amber-500/10 rounded-xl">
@@ -95,16 +98,19 @@ export default function AdminMonitoringPage() {
         </GlassCard>
       </div>
 
-      {/* Incident Log Placeholder */}
+      {/* Incident Log */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold px-2">Recent System Events</h2>
+        <h2 className="text-xl font-bold px-1">Recent System Events</h2>
         <GlassCard className="p-0 overflow-hidden">
           <div className="divide-y divide-white/5">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="p-4 flex items-center justify-between hover:bg-white/[0.01] transition-colors">
-                <div className="flex items-center gap-4">
+              <div
+                key={i}
+                className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/[0.01] transition-colors"
+              >
+                <div className="flex items-start sm:items-center gap-4">
                   <div className={cn(
-                    "w-8 h-8 rounded-full flex items-center justify-center",
+                    "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
                     i === 1 ? "bg-amber-500/10 text-amber-500" : "bg-emerald-500/10 text-emerald-500"
                   )}>
                     {i === 1 ? <AlertTriangle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
@@ -113,10 +119,12 @@ export default function AdminMonitoringPage() {
                     <div className="text-sm font-bold">
                       {i === 1 ? "Increased API latency in EU-Central" : "Automated backup completed successfully"}
                     </div>
-                    <div className="text-xs text-muted-foreground">Region: {i === 1 ? "FRA-1" : "NYC-3"} • Today, 09:12 AM</div>
+                    <div className="text-xs text-muted-foreground">
+                      Region: {i === 1 ? "FRA-1" : "NYC-3"} • Today, 09:12 AM
+                    </div>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm">Details</Button>
+                <Button variant="ghost" size="sm" className="w-full sm:w-auto">Details</Button>
               </div>
             ))}
           </div>
@@ -125,5 +133,3 @@ export default function AdminMonitoringPage() {
     </div>
   );
 }
-
-import { cn } from "@/lib/utils";

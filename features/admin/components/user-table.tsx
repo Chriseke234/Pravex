@@ -8,9 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
   ShieldCheck, 
-  ShieldAlert, 
-  Mail, 
   Ban, 
+  Mail, 
   UserCheck,
   PlusCircle,
   Receipt,
@@ -23,7 +22,9 @@ import {
   CheckCircle2,
   Clock,
   XCircle,
-  DollarSign
+  DollarSign,
+  ArrowDownLeft,
+  ArrowUpRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -173,7 +174,6 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
       const ref = `INC-${Math.floor(100000 + Math.random() * 900000)}`;
       const desc = increaseReason.trim() || "Account balance increase by administrator";
 
-      // Insert transaction - DB trigger handle_new_wallet_transaction updates balance when completed
       const { error: txErr } = await supabase
         .from("wallet_transactions")
         .insert([{
@@ -187,7 +187,6 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
 
       if (txErr) throw txErr;
 
-      // Audit Log
       await supabase.from("audit_logs").insert([{
         actor_id: session?.user?.id,
         actor_role: "admin",
@@ -240,7 +239,6 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
 
       if (txErr) throw txErr;
 
-      // Audit Log
       await supabase.from("audit_logs").insert([{
         actor_id: session?.user?.id,
         actor_role: "admin",
@@ -278,7 +276,6 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
     try {
       const { data: { session } } = await supabase.auth.getSession();
 
-      // 1. Update the wallet transaction record
       const { error: updateErr } = await supabase
         .from("wallet_transactions")
         .update({
@@ -292,9 +289,7 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
 
       if (updateErr) throw updateErr;
 
-      // 2. Adjust balance if status or amount/type changed
       let balanceDelta = 0;
-      // Revert old effect if old tx was completed
       if (editingTx.status === "completed") {
         if (editingTx.type === "deposit" || editingTx.type === "credit") {
           balanceDelta -= Number(editingTx.amount);
@@ -302,7 +297,6 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
           balanceDelta += Number(editingTx.amount);
         }
       }
-      // Apply new effect if new status is completed
       if (editStatus === "completed") {
         if (editType === "deposit" || editType === "credit") {
           balanceDelta += newAmt;
@@ -327,7 +321,6 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
         }
       }
 
-      // Audit Log
       await supabase.from("audit_logs").insert([{
         actor_id: session?.user?.id,
         actor_role: "admin",
@@ -386,8 +379,8 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
   return (
     <div className="space-y-4">
       {/* Search Header */}
-      <div className="flex justify-between items-center bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
+        <div className="relative w-full sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input 
             value={searchQuery}
@@ -396,12 +389,13 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
             className="bg-black/20 border-white/10 rounded-xl pl-10 text-xs focus:ring-1 focus:ring-primary"
           />
         </div>
-        <div className="text-xs text-muted-foreground font-medium">
+        <div className="text-xs text-muted-foreground font-medium shrink-0">
           Total Accounts: {filteredUsers.length}
         </div>
       </div>
 
-      <GlassCard className="p-0 overflow-hidden border-white/5">
+      {/* ── DESKTOP TABLE (lg+) ──────────────────────────────────────── */}
+      <GlassCard className="hidden lg:block p-0 overflow-hidden border-white/5">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -426,7 +420,7 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                   <tr key={user.id} className="hover:bg-white/[0.01] transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center font-bold text-sm text-amber-400">
+                        <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center font-bold text-sm text-amber-400 shrink-0">
                           {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -471,58 +465,35 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-1.5">
-                        {/* Increase Balance Button */}
                         <Button
                           variant="ghost"
                           size="sm"
                           className="h-8 px-2.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 gap-1 text-xs border border-emerald-500/20"
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setIncreaseAmount("");
-                            setIncreaseReason("");
-                            setErrorMsg("");
-                            setShowIncreaseBalanceModal(true);
-                          }}
+                          onClick={() => { setSelectedUser(user); setIncreaseAmount(""); setIncreaseReason(""); setErrorMsg(""); setShowIncreaseBalanceModal(true); }}
                           title="Increase Account Balance"
                         >
                           <PlusCircle className="w-3.5 h-3.5" />
                           <span>Increase Balance</span>
                         </Button>
-
-                        {/* Create Transaction Button */}
                         <Button
                           variant="ghost"
                           size="sm"
                           className="h-8 px-2.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 gap-1 text-xs border border-blue-500/20"
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setTxAmount("");
-                            setTxReference("");
-                            setTxDescription("");
-                            setErrorMsg("");
-                            setShowCreateTxModal(true);
-                          }}
+                          onClick={() => { setSelectedUser(user); setTxAmount(""); setTxReference(""); setTxDescription(""); setErrorMsg(""); setShowCreateTxModal(true); }}
                           title="Create Transaction Record"
                         >
                           <Receipt className="w-3.5 h-3.5" />
                           <span>Add History</span>
                         </Button>
-
-                        {/* View & Edit Transaction History Button */}
                         <Button
                           variant="ghost"
                           size="sm"
                           className="h-8 px-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 gap-1 text-xs border border-amber-500/20"
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setShowHistoryModal(true);
-                          }}
+                          onClick={() => { setSelectedUser(user); setShowHistoryModal(true); }}
                           title="View and Edit Transaction History"
                         >
                           <History className="w-3.5 h-3.5" />
                         </Button>
-
-                        {/* Suspension Toggle */}
                         <Button 
                           variant="ghost" 
                           size="icon" 
@@ -545,7 +516,121 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
         </div>
       </GlassCard>
 
-      {/* ── MODAL 1: INCREASE BALANCE DIRECTLY ────────────────────── */}
+      {/* ── MOBILE / TABLET CARDS (< lg) ──────────────────────────────── */}
+      <div className="lg:hidden space-y-3">
+        {filteredUsers.length === 0 ? (
+          <GlassCard className="p-6 text-center text-xs text-muted-foreground">
+            No registered user accounts found.
+          </GlassCard>
+        ) : (
+          filteredUsers.map((user) => (
+            <GlassCard key={user.id} className="p-4 space-y-4 border-white/5">
+              {/* User identity row */}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center font-bold text-sm text-amber-400 shrink-0">
+                    {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-bold truncate">{user.full_name || "Account User"}</div>
+                    <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5 truncate">
+                      <Mail className="w-3 h-3 shrink-0" />
+                      <span className="truncate">{user.email}</span>
+                    </div>
+                  </div>
+                </div>
+                {/* Status badge */}
+                <div className={cn(
+                  "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase tracking-wider shrink-0",
+                  !user.suspended ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-rose-500/10 text-rose-500 border-rose-500/20"
+                )}>
+                  {!user.suspended ? <ShieldCheck className="w-2.5 h-2.5" /> : <Ban className="w-2.5 h-2.5" />}
+                  {!user.suspended ? "Active" : "Suspended"}
+                </div>
+              </div>
+
+              {/* Info grid */}
+              <div className="grid grid-cols-3 gap-2 bg-white/[0.02] rounded-xl p-3">
+                <div>
+                  <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider mb-0.5">Balance</p>
+                  <p className="text-sm font-bold font-mono text-white">
+                    ${user.wallets?.balance.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider mb-0.5">Tier</p>
+                  <span className={cn(
+                    "text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border",
+                    user.tier === "Enterprise" ? "bg-primary/10 text-primary border-primary/20" : 
+                    user.tier === "Professional" ? "bg-blue-500/10 text-blue-500 border-blue-500/20" : 
+                    "bg-muted/10 text-muted-foreground border-white/5"
+                  )}>
+                    {user.tier || "Starter"}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider mb-0.5">Risk</p>
+                  <span className={cn(
+                    "text-xs font-bold",
+                    (user.risk_score || "Low") === "Low" ? "text-emerald-500" : 
+                    user.risk_score === "Medium" ? "text-amber-500" : 
+                    "text-rose-500"
+                  )}>
+                    {user.risk_score || "Low"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action buttons — 2-col grid on mobile */}
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 gap-1.5 text-xs border border-emerald-500/20 w-full justify-center"
+                  onClick={() => { setSelectedUser(user); setIncreaseAmount(""); setIncreaseReason(""); setErrorMsg(""); setShowIncreaseBalanceModal(true); }}
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  Increase Balance
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 gap-1.5 text-xs border border-blue-500/20 w-full justify-center"
+                  onClick={() => { setSelectedUser(user); setTxAmount(""); setTxReference(""); setTxDescription(""); setErrorMsg(""); setShowCreateTxModal(true); }}
+                >
+                  <Receipt className="w-3.5 h-3.5" />
+                  Add Transaction
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 gap-1.5 text-xs border border-amber-500/20 w-full justify-center"
+                  onClick={() => { setSelectedUser(user); setShowHistoryModal(true); }}
+                >
+                  <History className="w-3.5 h-3.5" />
+                  View History
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cn(
+                    "h-9 rounded-xl gap-1.5 text-xs border w-full justify-center",
+                    user.suspended 
+                      ? "bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border-emerald-500/20"
+                      : "bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border-rose-500/20"
+                  )}
+                  onClick={() => toggleSuspensionMutation.mutate({ userId: user.id, suspended: !user.suspended })}
+                >
+                  {user.suspended ? <UserCheck className="w-3.5 h-3.5" /> : <Ban className="w-3.5 h-3.5" />}
+                  {user.suspended ? "Activate" : "Suspend"}
+                </Button>
+              </div>
+            </GlassCard>
+          ))
+        )}
+      </div>
+
+      {/* ── MODAL 1: INCREASE BALANCE DIRECTLY ─────────────────────── */}
       {showIncreaseBalanceModal && selectedUser && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <GlassCard className="max-w-md w-full p-6 space-y-6 relative border-emerald-500/30">
@@ -608,7 +693,7 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
         </div>
       )}
 
-      {/* ── MODAL 2: CREATE TRANSACTION HISTORY ───────────────────── */}
+      {/* ── MODAL 2: CREATE TRANSACTION HISTORY ─────────────────────── */}
       {showCreateTxModal && selectedUser && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <GlassCard className="max-w-md w-full p-6 space-y-6 relative border-blue-500/30">
@@ -707,11 +792,11 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
         </div>
       )}
 
-      {/* ── MODAL 3: VIEW & EDIT TRANSACTION HISTORY ────────────────── */}
+      {/* ── MODAL 3: VIEW & EDIT TRANSACTION HISTORY ──────────────────── */}
       {showHistoryModal && selectedUser && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <GlassCard className="max-w-3xl w-full p-6 space-y-6 relative border-amber-500/30 max-h-[85vh] flex flex-col">
-            <div className="flex justify-between items-center border-b border-white/10 pb-4 shrink-0">
+          <GlassCard className="max-w-3xl w-full p-4 sm:p-6 space-y-4 sm:space-y-6 relative border-amber-500/30 max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-start border-b border-white/10 pb-4 shrink-0 gap-2">
               <div>
                 <h2 className="text-base font-bold flex items-center gap-2 text-amber-400">
                   <History className="w-5 h-5" /> Account Transaction History
@@ -720,7 +805,7 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                   User: <strong>{selectedUser.full_name || selectedUser.email}</strong>
                 </p>
               </div>
-              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => { setShowHistoryModal(false); setEditingTx(null); }}>
+              <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" onClick={() => { setShowHistoryModal(false); setEditingTx(null); }}>
                 <X className="w-4 h-4" />
               </Button>
             </div>
@@ -737,7 +822,7 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="text-[9px] font-bold uppercase text-muted-foreground">Type</label>
                     <select
@@ -777,7 +862,7 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-[9px] font-bold uppercase text-muted-foreground">Reference</label>
                     <Input
@@ -807,14 +892,14 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                 <div className="flex justify-end gap-2 pt-2">
                   <Button type="button" variant="ghost" size="sm" className="h-7 text-xs" onClick={() => setEditingTx(null)}>Cancel</Button>
                   <Button type="submit" variant="premium" size="sm" className="h-7 text-xs bg-amber-600 hover:bg-amber-500 text-white font-bold" disabled={submitting}>
-                    {submitting ? "Updating..." : "Save Transaction Changes"}
+                    {submitting ? "Updating..." : "Save Changes"}
                   </Button>
                 </div>
               </form>
             ) : null}
 
             {/* Transactions List */}
-            <div className="overflow-y-auto flex-1 pr-1 custom-scrollbar">
+            <div className="overflow-y-auto flex-1 pr-1">
               {userTxQuery.isLoading ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="w-6 h-6 text-amber-500 animate-spin" />
@@ -824,63 +909,106 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                   No transaction history records found for this account.
                 </div>
               ) : (
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-white/[0.02] border-b border-white/5">
-                      <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Type</th>
-                      <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Amount</th>
-                      <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Ref & Description</th>
-                      <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Date</th>
-                      <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Status</th>
-                      <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {userTxQuery.data.map((tx) => (
-                      <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="px-3 py-2.5 text-xs font-bold capitalize text-white">{tx.type}</td>
-                        <td className="px-3 py-2.5 text-xs font-mono font-bold text-white">
-                          ${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                        </td>
-                        <td className="px-3 py-2.5 text-xs">
-                          <div className="font-mono text-[10px] text-muted-foreground">{tx.reference || "N/A"}</div>
-                          <div className="text-[11px] text-slate-300 truncate max-w-[180px]">{tx.description || "—"}</div>
-                        </td>
-                        <td className="px-3 py-2.5 text-[10px] text-muted-foreground">
-                          {new Date(tx.created_at).toLocaleString()}
-                        </td>
-                        <td className="px-3 py-2.5">
-                          <span className={cn(
-                            "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase",
-                            tx.status === "completed" && "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
-                            tx.status === "pending" && "bg-amber-500/10 text-amber-400 border border-amber-500/20",
-                            tx.status === "failed" && "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                          )}>
-                            {tx.status}
-                          </span>
-                        </td>
-                        <td className="px-3 py-2.5 text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-7 px-2 text-xs text-amber-400 hover:bg-amber-500/10 border border-amber-500/20 rounded-lg gap-1"
-                            onClick={() => {
-                              setEditingTx(tx);
-                              setEditAmount(String(tx.amount));
-                              setEditType(tx.type);
-                              setEditStatus(tx.status);
-                              setEditReference(tx.reference || "");
-                              setEditDescription(tx.description || "");
-                              setErrorMsg("");
-                            }}
-                          >
-                            <Edit className="w-3 h-3" /> Edit
-                          </Button>
-                        </td>
+                <>
+                  {/* Desktop inner table */}
+                  <table className="hidden sm:table w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-white/[0.02] border-b border-white/5">
+                        <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Type</th>
+                        <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Amount</th>
+                        <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Ref & Description</th>
+                        <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Date</th>
+                        <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase">Status</th>
+                        <th className="px-3 py-2 text-[9px] font-bold text-muted-foreground uppercase text-right">Action</th>
                       </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {userTxQuery.data.map((tx) => (
+                        <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="px-3 py-2.5 text-xs font-bold capitalize text-white">{tx.type}</td>
+                          <td className="px-3 py-2.5 text-xs font-mono font-bold text-white">
+                            ${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          </td>
+                          <td className="px-3 py-2.5 text-xs">
+                            <div className="font-mono text-[10px] text-muted-foreground">{tx.reference || "N/A"}</div>
+                            <div className="text-[11px] text-slate-300 truncate max-w-[180px]">{tx.description || "—"}</div>
+                          </td>
+                          <td className="px-3 py-2.5 text-[10px] text-muted-foreground">
+                            {new Date(tx.created_at).toLocaleString()}
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <span className={cn(
+                              "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase",
+                              tx.status === "completed" && "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+                              tx.status === "pending" && "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+                              tx.status === "failed" && "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                            )}>
+                              {tx.status === "completed" && <CheckCircle2 className="w-2.5 h-2.5" />}
+                              {tx.status === "pending" && <Clock className="w-2.5 h-2.5" />}
+                              {tx.status === "failed" && <XCircle className="w-2.5 h-2.5" />}
+                              {tx.status}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2.5 text-right">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-2 text-xs text-amber-400 hover:bg-amber-500/10 border border-amber-500/20 rounded-lg gap-1"
+                              onClick={() => { setEditingTx(tx); setEditAmount(String(tx.amount)); setEditType(tx.type); setEditStatus(tx.status); setEditReference(tx.reference || ""); setEditDescription(tx.description || ""); setErrorMsg(""); }}
+                            >
+                              <Edit className="w-3 h-3" /> Edit
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {/* Mobile inner cards */}
+                  <div className="sm:hidden space-y-2">
+                    {userTxQuery.data.map((tx) => (
+                      <div key={tx.id} className="p-3 bg-white/[0.02] border border-white/5 rounded-xl space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className={cn(
+                            "inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded border",
+                            (tx.type === "deposit" || tx.type === "credit") ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                          )}>
+                            {(tx.type === "deposit" || tx.type === "credit") ? <ArrowDownLeft className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
+                            {tx.type}
+                          </span>
+                          <span className="font-mono text-sm font-bold text-white">
+                            ${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between gap-2">
+                          <div>
+                            <div className="font-mono text-[10px] text-muted-foreground">{tx.reference || "N/A"}</div>
+                            <div className="text-[11px] text-slate-300">{tx.description || "—"}</div>
+                            <div className="text-[10px] text-muted-foreground mt-0.5">{new Date(tx.created_at).toLocaleString()}</div>
+                          </div>
+                          <div className="flex flex-col items-end gap-1.5 shrink-0">
+                            <span className={cn(
+                              "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase",
+                              tx.status === "completed" && "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+                              tx.status === "pending" && "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+                              tx.status === "failed" && "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                            )}>
+                              {tx.status}
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 px-2 text-[10px] text-amber-400 hover:bg-amber-500/10 border border-amber-500/20 rounded-lg gap-1"
+                              onClick={() => { setEditingTx(tx); setEditAmount(String(tx.amount)); setEditType(tx.type); setEditStatus(tx.status); setEditReference(tx.reference || ""); setEditDescription(tx.description || ""); setErrorMsg(""); }}
+                            >
+                              <Edit className="w-3 h-3" /> Edit
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                </>
               )}
             </div>
           </GlassCard>
