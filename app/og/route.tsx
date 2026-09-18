@@ -75,7 +75,7 @@ export async function GET(request: Request) {
                 letterSpacing: "-0.5px",
               }}
             >
-              Iron Bridge <span style={{ color: "#D4AF37" }}>Institutional</span>
+              Iron Bridge Finance <span style={{ color: "#D4AF37" }}>Institutional</span>
             </span>
           </div>
 

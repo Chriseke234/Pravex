@@ -11,7 +11,7 @@ const FAQ_CATEGORIES = [
   {
     name: "General & Security",
     items: [
-      { q: "What is Iron Bridge?", a: "Iron Bridge is a licensed digital banking and wealth platform providing personal current accounts, private wealth management, business trade finance, and mortgage lending." },
+      { q: "What is Iron Bridge Finance?", a: "Iron Bridge Finance is a licensed digital banking and wealth platform providing personal current accounts, private wealth management, business trade finance, and mortgage lending." },
       { q: "How is my account secured online?", a: "We enforce multi-factor authentication (MFA), 256-bit AES data encryption, hardware security modules, and automated anomaly detection on all client accounts." },
     ],
   },
@@ -27,7 +27,7 @@ const FAQ_CATEGORIES = [
     name: "Business Banking & Loans",
     items: [
       { q: "What documents are required to open a Business Account?", a: "You will need Certificate of Incorporation, Memorandum & Articles of Association, Proof of Address for the business, and photo ID/KYC documents for all directors and ultimate beneficial owners (UBOs holding 25%+)." },
-      { q: "How do Trade Finance Letters of Credit work?", a: "Iron Bridge issues an irrevocable Letter of Credit guaranteeing payment to your overseas supplier upon presentation of verified shipping documents (Bill of Lading, Commercial Invoice)." },
+      { q: "How do Trade Finance Letters of Credit work?", a: "Iron Bridge Finance issues an irrevocable Letter of Credit guaranteeing payment to your overseas supplier upon presentation of verified shipping documents (Bill of Lading, Commercial Invoice)." },
       { q: "What loan types do you provide?", a: "We offer Residential Mortgages, Commercial Real Estate Loans, Property Bridging Finance, Corporate Direct Lending, and Portfolio-Secured Lines of Credit." },
     ],
   },

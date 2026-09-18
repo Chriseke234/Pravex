@@ -32,7 +32,7 @@ export function WalletBalanceCard({
             {formatCurrency(balance, currency)}
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Protected by Iron Bridge Institutional Multi-Custodial Security
+            Protected by Iron Bridge Finance Institutional Multi-Custodial Security
           </p>
         </div>
 

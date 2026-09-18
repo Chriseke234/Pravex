@@ -23,7 +23,7 @@ export default function LoginPage() {
           Welcome back
         </h1>
         <p className="text-slate-400">
-          Sign in to your Iron Bridge institutional portal.
+          Sign in to your Iron Bridge Finance institutional portal.
         </p>
       </div>
 
@@ -117,7 +117,7 @@ export default function LoginPage() {
 
       {/* Register link */}
       <p className="text-center text-sm text-slate-500">
-        New to Iron Bridge?{" "}
+        New to Iron Bridge Finance?{" "}
         <Link href="/signup" className="text-amber-400 hover:text-amber-300 font-semibold transition-colors">
           Open an Institutional Account
         </Link>

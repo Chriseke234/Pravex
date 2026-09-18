@@ -28,7 +28,7 @@ export default function ContactPage() {
       showToast({
         type: "success",
         title: "Message Transmitted",
-        description: "An Iron Bridge client manager will respond within 4 business hours.",
+        description: "An Iron Bridge Finance client manager will respond within 4 business hours.",
       });
     }, 1000);
   };
@@ -37,7 +37,7 @@ export default function ContactPage() {
     <div className="bg-slate-50 text-slate-900 min-h-screen py-20">
       <div className="max-w-6xl mx-auto px-4 space-y-16">
         <div className="space-y-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-slate-900">Contact Iron Bridge</h1>
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-slate-900">Contact Iron Bridge Finance</h1>
           <p className="text-slate-600 text-lg max-w-xl mx-auto">
             Get in touch with our personal advisors, private wealth managers, or corporate trade desk.
           </p>
@@ -56,7 +56,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-bold text-slate-900 text-sm">Global Headquarters</h3>
                   <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                    Iron Bridge Tower, 25 Bank Street<br />Canary Wharf, London, E14 5JP, UK
+                    Iron Bridge Finance Tower, 25 Bank Street<br />Canary Wharf, London, E14 5JP, UK
                   </p>
                 </div>
               </div>

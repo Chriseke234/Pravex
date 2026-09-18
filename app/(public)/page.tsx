@@ -57,7 +57,7 @@ function HeroSection() {
 
         <AnimateIn delay={200}>
           <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
-            Iron Bridge delivers sophisticated personal banking, private wealth management, commercial financing, and competitive credit solutions.
+            Iron Bridge Finance delivers sophisticated personal banking, private wealth management, commercial financing, and competitive credit solutions.
           </p>
         </AnimateIn>
 
@@ -85,7 +85,7 @@ function HeroSection() {
         <AnimateIn delay={200} className="relative h-[300px] md:h-[500px] w-full rounded-3xl overflow-hidden border border-slate-200 shadow-xl group">
           <Image
             src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1000&q=80"
-            alt="Iron Bridge Digital Banking Interface"
+            alt="Iron Bridge Finance Digital Banking Interface"
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-700"
             priority
@@ -176,7 +176,7 @@ function PillarsGrid() {
         </AnimateIn>
         <AnimateIn delay={100}>
           <p className="text-slate-600 max-w-2xl mx-auto text-base md:text-lg">
-            Whether you need a daily current account or complex international trade finance, Iron Bridge has a solution engineered for you.
+            Whether you need a daily current account or complex international trade finance, Iron Bridge Finance has a solution engineered for you.
           </p>
         </AnimateIn>
       </div>
@@ -262,7 +262,7 @@ function Testimonials() {
     {
       name: "Marcus Vance",
       role: "Managing Director, Vance Group",
-      quote: "Iron Bridge's Trade Finance team processed our cross-border machinery letter of credit in under 24 hours. Phenomenal efficiency.",
+      quote: "Iron Bridge Finance's Trade Finance team processed our cross-border machinery letter of credit in under 24 hours. Phenomenal efficiency.",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80",
     },
     {
@@ -274,7 +274,7 @@ function Testimonials() {
     {
       name: "David Chen",
       role: "Founder, Apex Logistics",
-      quote: "Switching our business accounts and corporate notice deposits to Iron Bridge increased our yield significantly while keeping funds liquid.",
+      quote: "Switching our business accounts and corporate notice deposits to Iron Bridge Finance increased our yield significantly while keeping funds liquid.",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
     },
   ];
@@ -323,7 +323,7 @@ function FAQsSection() {
       <div className="max-w-4xl mx-auto px-4 space-y-12">
         <AnimateIn className="text-center space-y-3">
           <h2 className="text-3xl font-serif font-bold text-slate-900">Frequently Asked Questions</h2>
-          <p className="text-slate-600 text-sm">Everything you need to know about banking with Iron Bridge.</p>
+          <p className="text-slate-600 text-sm">Everything you need to know about banking with Iron Bridge Finance.</p>
         </AnimateIn>
 
         <AnimateIn delay={100}>
@@ -346,7 +346,7 @@ function CTABanner() {
     <section className="py-24 relative overflow-hidden bg-slate-50 border-t border-slate-200">
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-8">
         <AnimateIn>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900">Open Your Iron Bridge Account Today</h2>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900">Open Your Iron Bridge Finance Account Today</h2>
         </AnimateIn>
         <AnimateIn delay={100}>
           <p className="text-slate-600 text-lg max-w-xl mx-auto">

@@ -1,7 +1,7 @@
 ﻿import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Iron Bridge",
+  title: "About Iron Bridge Finance",
   description: "Learn about our mission to architect the future of digital capital.",
   alternates: {
     canonical: "/about",

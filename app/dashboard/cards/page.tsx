@@ -20,7 +20,7 @@ export default function CardsPage() {
       showToast({
         type: "success",
         title: "Card Issued",
-        description: `Your new Iron Bridge ${type} Visa card is ready.`,
+        description: `Your new Iron Bridge Finance ${type} Visa card is ready.`,
       });
     } catch (e: any) {
       showToast({

@@ -179,14 +179,14 @@ export function Logo({
               textClassName
             )}
           >
-            Iron{" "}
+            Iron Bridge{" "}
             <span
               className={cn(
                 "font-sans font-extrabold tracking-normal",
                 isDark ? "text-amber-400" : "text-amber-600"
               )}
             >
-              Bridge
+              Finance
             </span>
           </span>
         </div>
@@ -196,7 +196,7 @@ export function Logo({
 
   if (href) {
     return (
-      <Link href={href} aria-label="Iron Bridge Home">
+      <Link href={href} aria-label="Iron Bridge Finance Home">
         {content}
       </Link>
     );

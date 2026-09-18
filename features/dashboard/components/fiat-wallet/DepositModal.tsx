@@ -62,7 +62,7 @@ export function DepositModal({ isOpen, onClose, onSubmit, isLoading }: DepositMo
 
         <h3 className="text-xl font-bold text-white mb-1">Deposit Fiat Funds</h3>
         <p className="text-sm text-slate-400 mb-6">
-          Submit wire transfer details for Iron Bridge Treasury validation.
+          Submit wire transfer details for Iron Bridge Finance Treasury validation.
         </p>
 
         {errorMsg && (

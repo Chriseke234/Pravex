@@ -137,7 +137,7 @@ export function WithdrawalModal({
             </label>
             <Input
               type="text"
-              placeholder="e.g. Iron Bridge Capital Holdings"
+              placeholder="e.g. Iron Bridge Finance Capital Holdings"
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
               className="bg-slate-950 border-slate-800 text-white rounded-xl"

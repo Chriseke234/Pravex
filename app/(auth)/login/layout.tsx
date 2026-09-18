@@ -2,7 +2,7 @@
 
 export const metadata: Metadata = {
   title: "Client Login",
-  description: "Secure access to your Iron Bridge institutional dashboard.",
+  description: "Secure access to your Iron Bridge Finance institutional dashboard.",
   alternates: {
     canonical: "/login",
   },

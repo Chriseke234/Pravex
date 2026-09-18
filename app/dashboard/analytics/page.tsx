@@ -71,7 +71,7 @@ export default function AnalyticsPage() {
 
   const handleExportReport = () => {
     const reportContent =
-      "IRON BRIDGE — INSTITUTIONAL ANALYTICS & INTELLIGENCE REPORT\n" +
+      "IRON BRIDGE FINANCE — INSTITUTIONAL ANALYTICS & INTELLIGENCE REPORT\n" +
       `Generated: ${new Date().toUTCString()}\n` +
       `Timeframe: ${timeframe}\n` +
       `============================================================\n` +

@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Iron Bridge | Premium Enterprise Digital Banking",
+  title: "Iron Bridge Finance | Premium Enterprise Digital Banking",
   description: "Premier digital banking, private wealth management, commercial lending, and flexible personal accounts.",
   alternates: {
     canonical: "/",

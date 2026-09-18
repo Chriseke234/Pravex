@@ -1,8 +1,8 @@
 import { ShieldCheck, Calendar, ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy | Iron Bridge",
-  description: "Privacy Policy governing the processing and protection of client and corporate information by Iron Bridge.",
+  title: "Privacy Policy | Iron Bridge Finance",
+  description: "Privacy Policy governing the processing and protection of client and corporate information by Iron Bridge Finance.",
 };
 
 const SECTIONS = [
@@ -66,7 +66,7 @@ export default function PrivacyPage() {
                 1. Information Collection
               </h2>
               <p>
-                Iron Bridge collects personal and corporate data to fulfill legal requirements, perform verification, and deliver digital asset services. This includes identifying corporate representatives (names, email addresses, phone numbers, passport credentials), corporate records (articles of association, ultimate beneficial ownership details, corporate registration files), and transaction log records.
+                Iron Bridge Finance collects personal and corporate data to fulfill legal requirements, perform verification, and deliver digital asset services. This includes identifying corporate representatives (names, email addresses, phone numbers, passport credentials), corporate records (articles of association, ultimate beneficial ownership details, corporate registration files), and transaction log records.
               </p>
               <p>
                 Additionally, we automatically capture telemetry, network logs, and device data (IP addresses, operating system specifications, access timestamps, and API usage stats) to safeguard account access and prevent unauthorized transactions.
@@ -93,7 +93,7 @@ export default function PrivacyPage() {
                 We do not sell, rent, or lease your personal or corporate data to third parties. Information is shared strictly under confidential arrangements with trusted third-party service providers, banking partners, and custody aggregators who help operate our systems.
               </p>
               <p>
-                Furthermore, Iron Bridge reserves the right to disclose client data to national security bodies, regulatory authorities (e.g., relevant financial or banking regulators), or judicial tribunals if required by binding subpoena, regulatory reporting mandates, or AML inquiries.
+                Furthermore, Iron Bridge Finance reserves the right to disclose client data to national security bodies, regulatory authorities (e.g., relevant financial or banking regulators), or judicial tribunals if required by binding subpoena, regulatory reporting mandates, or AML inquiries.
               </p>
             </section>
 
@@ -102,7 +102,7 @@ export default function PrivacyPage() {
                 4. Cryptographic Security
               </h2>
               <p>
-                Client records and transactional databases are guarded using bank-grade cryptographic protocols. Iron Bridge implements AES-256 encryption for data at rest and Transport Layer Security (TLS 1.3) for data in transit.
+                Client records and transactional databases are guarded using bank-grade cryptographic protocols. Iron Bridge Finance implements AES-256 encryption for data at rest and Transport Layer Security (TLS 1.3) for data in transit.
               </p>
               <p>
                 Access controls are strictly partitioned within our network. Cryptographic key materials are segmented across highly secure, hardware security modules (HSMs) and verified using Multi-Party Computation protocols, ensuring zero centralized vulnerabilities.
@@ -114,7 +114,7 @@ export default function PrivacyPage() {
                 5. International Transfers
               </h2>
               <p>
-                Because Iron Bridge serves a global market, client information may be stored, processed, or transferred across international boundaries, including locations outside the UK, the European Economic Area (EEA), or the United States.
+                Because Iron Bridge Finance serves a global market, client information may be stored, processed, or transferred across international boundaries, including locations outside the UK, the European Economic Area (EEA), or the United States.
               </p>
               <p>
                 All cross-border data transfers comply with statutory frameworks, incorporating standard contractual clauses (SCCs) and robust data protection audits to guarantee an equivalent degree of privacy protection across foreign jurisdictions.
@@ -126,7 +126,7 @@ export default function PrivacyPage() {
                 6. Data Retention
               </h2>
               <p>
-                Iron Bridge retains client information only as long as necessary to perform platform operations or to comply with applicable statutory timelines.
+                Iron Bridge Finance retains client information only as long as necessary to perform platform operations or to comply with applicable statutory timelines.
               </p>
               <p>
                 Pursuant to financial regulations and anti-money laundering regulations, we are required to maintain customer identification records, ultimate beneficial ownership dossiers, and transaction logs for a minimum of five (5) to seven (7) years following account closure.

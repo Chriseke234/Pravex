@@ -53,10 +53,10 @@ export function RiskWarning() {
             Digital asset investment and trading are subject to extreme market volatility, technical complexities, and regulatory instability. Cryptocurrencies, security tokens, and stablecoins are highly speculative high-risk instruments and lack the regulatory guarantees, capital protections, and deposit insurance schemes common in traditional retail and commercial banking products.
           </p>
           <p>
-            The risk of total financial loss exists when holding, trading, or collateralizing digital assets. Iron Bridge provides high-performance execution, custody architectures, and order routing platforms on an as-is, zero-trust basis. No content, analysis, or market data provided on this platform constitutes professional financial, legal, tax, or investment advice.
+            The risk of total financial loss exists when holding, trading, or collateralizing digital assets. Iron Bridge Finance provides high-performance execution, custody architectures, and order routing platforms on an as-is, zero-trust basis. No content, analysis, or market data provided on this platform constitutes professional financial, legal, tax, or investment advice.
           </p>
           <p>
-            By accessing Iron Bridge, you acknowledge and agree that you possess the necessary sophistication, capital resilience, and technical understanding to evaluate these products, and that you assume full responsibility for all transactions, market exposure, and operations executed within your accounts.
+            By accessing Iron Bridge Finance, you acknowledge and agree that you possess the necessary sophistication, capital resilience, and technical understanding to evaluate these products, and that you assume full responsibility for all transactions, market exposure, and operations executed within your accounts.
           </p>
         </div>
 

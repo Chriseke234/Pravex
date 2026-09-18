@@ -1,5 +1,5 @@
 /**
- * Utility functions for Iron Bridge formatting
+ * Utility functions for Iron Bridge Finance formatting
  */
 
 export function formatCurrency(

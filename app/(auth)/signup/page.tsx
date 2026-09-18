@@ -23,7 +23,7 @@ export default function SignupPage() {
           Open an Account
         </h1>
         <p className="text-slate-400">
-          Join 2,500+ institutions on Iron Bridge.
+          Join 2,500+ institutions on Iron Bridge Finance.
         </p>
       </div>
 

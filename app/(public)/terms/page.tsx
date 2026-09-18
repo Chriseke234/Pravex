@@ -1,8 +1,8 @@
 ﻿import { FileText, Calendar, ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: "Terms of Service | Iron Bridge",
-  description: "Terms and conditions governing the use of Iron Bridge digital asset brokerage and custody services.",
+  title: "Terms of Service | Iron Bridge Finance",
+  description: "Terms and conditions governing the use of Iron Bridge Finance digital asset brokerage and custody services.",
 };
 
 const SECTIONS = [
@@ -68,7 +68,7 @@ export default function TermsPage() {
                 1. Introduction & Scope
               </h2>
               <p>
-                Welcome to Iron Bridge. These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding agreement between Iron Bridge Systems Ltd (&ldquo;Iron Bridge,&ldquo; &ldquo;we,&ldquo; &ldquo;us,&ldquo; or &ldquo;our&rdquo;) and the institutional entity or corporation (&ldquo;Client,&ldquo; &ldquo;you,&ldquo; or &ldquo;your&rdquo;) accessing or using the Iron Bridge digital asset brokerage, custody execution, and multi-party computation (MPC) vault platform.
+                Welcome to Iron Bridge Finance. These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding agreement between Iron Bridge Finance Systems Ltd (&ldquo;Iron Bridge Finance,&ldquo; &ldquo;we,&ldquo; &ldquo;us,&ldquo; or &ldquo;our&rdquo;) and the institutional entity or corporation (&ldquo;Client,&ldquo; &ldquo;you,&ldquo; or &ldquo;your&rdquo;) accessing or using the Iron Bridge Finance digital asset brokerage, custody execution, and multi-party computation (MPC) vault platform.
               </p>
               <p>
                 By executing an account agreement, accessing our application programming interfaces (APIs), or utilizing our portal interfaces, you confirm that you have read, understood, and agree to be bound by these Terms, alongside our Privacy Policy, Cookie Policy, and all applicable service schedules.
@@ -80,7 +80,7 @@ export default function TermsPage() {
                 2. Onboarding & Eligibility
               </h2>
               <p>
-                Iron Bridge caters exclusively to eligible institutional clients, including corporate entities, financial institutions, asset managers, hedge funds, family offices, and high-net-worth corporate partners. We do not provide retail investment services.
+                Iron Bridge Finance caters exclusively to eligible institutional clients, including corporate entities, financial institutions, asset managers, hedge funds, family offices, and high-net-worth corporate partners. We do not provide retail investment services.
               </p>
               <p>
                 To qualify, you must undergo mandatory Know Your Customer (KYC), Know Your Business (KYB), and Anti-Money Laundering (AML) checks. You represent that the entity you represent is duly organized, validly existing, and in good standing under the laws of its jurisdiction of incorporation, and that all corporate authorizations have been obtained to bind the entity to these Terms.
@@ -92,10 +92,10 @@ export default function TermsPage() {
                 3. Access & Account Security
               </h2>
               <p>
-                Access to the Iron Bridge platform is secured using advanced authentication and cryptographic keys. For custody vault access, Iron Bridge implements a state-of-the-art Multi-Party Computation (MPC-CMP) key share system.
+                Access to the Iron Bridge Finance platform is secured using advanced authentication and cryptographic keys. For custody vault access, Iron Bridge Finance implements a state-of-the-art Multi-Party Computation (MPC-CMP) key share system.
               </p>
               <p>
-                You are solely responsible for maintaining the confidentiality and integrity of your corporate credentials, API keys, and local MPC key shares. You must restrict platform access only to authorized personnel and immediately notify Iron Bridge at security@ironbridge.com if you detect or suspect any unauthorized access, breach of API key security, or compromise of local credentials.
+                You are solely responsible for maintaining the confidentiality and integrity of your corporate credentials, API keys, and local MPC key shares. You must restrict platform access only to authorized personnel and immediately notify Iron Bridge Finance at security@ironbridge.com if you detect or suspect any unauthorized access, breach of API key security, or compromise of local credentials.
               </p>
             </section>
 
@@ -104,10 +104,10 @@ export default function TermsPage() {
                 4. Execution & Order Routing
               </h2>
               <p>
-                Iron Bridge provides institutional order routing, liquidity aggregation, and OTC execution services. All orders routed through our smart order router (SOR) are executed according to our Best Execution Policy.
+                Iron Bridge Finance provides institutional order routing, liquidity aggregation, and OTC execution services. All orders routed through our smart order router (SOR) are executed according to our Best Execution Policy.
               </p>
               <p>
-                Orders, once placed and confirmed, are final and cannot be modified or canceled. Iron Bridge does not guarantee execution speeds, liquidity availability, or specific price margins during periods of extreme market volatility or network congestion. In the event of system failures or liquidity provider outages, Iron Bridge reserves the right to suspend order routing to protect customer assets.
+                Orders, once placed and confirmed, are final and cannot be modified or canceled. Iron Bridge Finance does not guarantee execution speeds, liquidity availability, or specific price margins during periods of extreme market volatility or network congestion. In the event of system failures or liquidity provider outages, Iron Bridge Finance reserves the right to suspend order routing to protect customer assets.
               </p>
             </section>
 
@@ -116,10 +116,10 @@ export default function TermsPage() {
                 5. Custody & MPC Vaults
               </h2>
               <p>
-                Custodial assets are segregated and stored across our cold, warm, and hot vault architectures. Iron Bridge utilizes MPC technology where key shares are distributed across independent security modules and geographical jurisdictions to eliminate single points of failure.
+                Custodial assets are segregated and stored across our cold, warm, and hot vault architectures. Iron Bridge Finance utilizes MPC technology where key shares are distributed across independent security modules and geographical jurisdictions to eliminate single points of failure.
               </p>
               <p>
-                Iron Bridge acts as a bailee of digital assets in custody and does not acquire any proprietary interest in your digital assets. All custodial transactions are governed by specific cold-storage delay times, multi-signature approval rules, and institutional threshold consensus protocols configured by your appointed administrators.
+                Iron Bridge Finance acts as a bailee of digital assets in custody and does not acquire any proprietary interest in your digital assets. All custodial transactions are governed by specific cold-storage delay times, multi-signature approval rules, and institutional threshold consensus protocols configured by your appointed administrators.
               </p>
             </section>
 
@@ -131,7 +131,7 @@ export default function TermsPage() {
                 You agree to pay all applicable transaction fees, custody fees, withdrawal fees, and administration charges as outlined in your signed Fee Schedule or within the account dashboard.
               </p>
               <p>
-                Fees are denominated in the respective digital asset or fiat currency and will be automatically deducted from your account balances upon transaction execution or monthly billing cycles. Iron Bridge reserves the right to modify fee schedules upon thirty (30) days written notice to the client.
+                Fees are denominated in the respective digital asset or fiat currency and will be automatically deducted from your account balances upon transaction execution or monthly billing cycles. Iron Bridge Finance reserves the right to modify fee schedules upon thirty (30) days written notice to the client.
               </p>
             </section>
 
@@ -152,10 +152,10 @@ export default function TermsPage() {
                 8. Intellectual Property
               </h2>
               <p>
-                All proprietary software, algorithms, user interface designs, logos, trade secrets, and API protocols used to deliver the Iron Bridge brokerage and custody services are the exclusive property of Iron Bridge Systems Ltd and its licensors.
+                All proprietary software, algorithms, user interface designs, logos, trade secrets, and API protocols used to deliver the Iron Bridge Finance brokerage and custody services are the exclusive property of Iron Bridge Finance Systems Ltd and its licensors.
               </p>
               <p>
-                Subject to compliance with these Terms, Iron Bridge grants you a limited, non-exclusive, non-transferable, revocable license to access the platform interface and APIs solely for the execution of your institutional digital asset operations. No other rights, explicit or implied, are granted under these Terms.
+                Subject to compliance with these Terms, Iron Bridge Finance grants you a limited, non-exclusive, non-transferable, revocable license to access the platform interface and APIs solely for the execution of your institutional digital asset operations. No other rights, explicit or implied, are granted under these Terms.
               </p>
             </section>
 
@@ -164,10 +164,10 @@ export default function TermsPage() {
                 9. Liability & Indemnity
               </h2>
               <p>
-                TO THE MAXIMUM EXTENT PERMITTED BY LAW, IRON BRIDGE SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, REVENUE, DATA, OR ASSET VALUE, ARISING OUT OF OR IN CONNECTION WITH PLATFORM USE, NETWORK FORKS, PROTOCOL VULNERABILITIES, OR FORCE MAJEURE EVENTS.
+                TO THE MAXIMUM EXTENT PERMITTED BY LAW, IRON BRIDGE FINANCE SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, REVENUE, DATA, OR ASSET VALUE, ARISING OUT OF OR IN CONNECTION WITH PLATFORM USE, NETWORK FORKS, PROTOCOL VULNERABILITIES, OR FORCE MAJEURE EVENTS.
               </p>
               <p>
-                You agree to indemnify, defend, and hold harmless Iron Bridge, its affiliates, directors, officers, and employees from and against any claims, losses, liabilities, costs, and expenses (including legal fees) arising from your breach of these Terms, unauthorized account use, or violation of applicable laws and regulations.
+                You agree to indemnify, defend, and hold harmless Iron Bridge Finance, its affiliates, directors, officers, and employees from and against any claims, losses, liabilities, costs, and expenses (including legal fees) arising from your breach of these Terms, unauthorized account use, or violation of applicable laws and regulations.
               </p>
             </section>
 

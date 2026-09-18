@@ -7,18 +7,18 @@ import { ToastProvider } from "@/components/ui/toast";
 export const metadata: Metadata = {
   metadataBase: new URL("https://ironbridgebanking.vercel.app"),
   title: {
-    default: "Iron Bridge | Premium Enterprise Digital Banking",
-    template: "%s | Iron Bridge",
+    default: "Iron Bridge Finance | Premium Enterprise Digital Banking",
+    template: "%s | Iron Bridge Finance",
   },
   description:
-    "Iron Bridge — Modern enterprise banking, private wealth management, commercial financing, personal savings, and competitive loans.",
+    "Iron Bridge Finance — Modern enterprise banking, private wealth management, commercial financing, personal savings, and competitive loans.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
     apple: "/favicon.svg",
   },
   keywords: [
-    "Iron Bridge",
+    "Iron Bridge Finance",
     "digital banking",
     "personal accounts",
     "private banking",
@@ -30,14 +30,14 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: "website",
-    siteName: "Iron Bridge",
+    siteName: "Iron Bridge Finance",
     locale: "en_US",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Iron Bridge — Modern Digital Banking Platform",
+        alt: "Iron Bridge Finance — Modern Digital Banking Platform",
       },
     ],
   },

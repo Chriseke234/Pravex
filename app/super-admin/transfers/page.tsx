@@ -123,7 +123,7 @@ export default function AdminTransfersPage() {
         .from("transfers")
         .insert([{
           sender_id: selectedUser,
-          recipient_name: recipientName || "Iron Bridge Client",
+          recipient_name: recipientName || "Iron Bridge Finance Client",
           recipient_account: recipientAccount || "ACC-PRIMARY",
           bank_name: bankName || "Clearing House",
           amount: numAmount,

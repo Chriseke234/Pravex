@@ -55,7 +55,7 @@ export function BankCardWidget() {
       showToast({
         type: "success",
         title: "Virtual Card Issued",
-        description: "Your new Iron Bridge Visa Platinum card is active.",
+        description: "Your new Iron Bridge Finance Visa Platinum card is active.",
       });
     } catch (e: any) {
       showToast({

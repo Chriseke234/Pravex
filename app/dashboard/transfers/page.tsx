@@ -30,7 +30,7 @@ export default function TransfersPage() {
       await createTransfer.mutateAsync({
         recipient_name: recipientName,
         recipient_account: recipientAccount,
-        bank_name: bankName || (transferType === "internal" ? "Iron Bridge" : "External Bank"),
+        bank_name: bankName || (transferType === "internal" ? "Iron Bridge Finance" : "External Bank"),
         amount: Number(amount),
         currency: "USD",
         type: transferType,
@@ -83,7 +83,7 @@ export default function TransfersPage() {
               <TabsList className="w-full grid grid-cols-3 mb-6">
                 <TabsTrigger value="domestic">Domestic Wire</TabsTrigger>
                 <TabsTrigger value="international">International SWIFT</TabsTrigger>
-                <TabsTrigger value="internal">Iron Bridge Internal</TabsTrigger>
+                <TabsTrigger value="internal">Iron Bridge Finance Internal</TabsTrigger>
               </TabsList>
 
               {/* Domestic Form */}
