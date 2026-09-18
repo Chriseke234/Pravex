@@ -37,7 +37,7 @@ export default function ContactPage() {
     <div className="bg-slate-50 text-slate-900 min-h-screen py-20">
       <div className="max-w-6xl mx-auto px-4 space-y-16">
         <div className="space-y-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-slate-900">Contact Iron Bridge Banking</h1>
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-slate-900">Contact Iron Bridge</h1>
           <p className="text-slate-600 text-lg max-w-xl mx-auto">
             Get in touch with our personal advisors, private wealth managers, or corporate trade desk.
           </p>

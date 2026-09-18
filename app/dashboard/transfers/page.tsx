@@ -30,7 +30,7 @@ export default function TransfersPage() {
       await createTransfer.mutateAsync({
         recipient_name: recipientName,
         recipient_account: recipientAccount,
-        bank_name: bankName || (transferType === "internal" ? "Iron Bridge Banking" : "External Bank"),
+        bank_name: bankName || (transferType === "internal" ? "Iron Bridge" : "External Bank"),
         amount: Number(amount),
         currency: "USD",
         type: transferType,

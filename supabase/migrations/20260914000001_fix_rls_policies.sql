@@ -1,5 +1,5 @@
 -- =============================================================
--- Iron Bridge Banking — Fix Missing RLS Policies
+-- Iron Bridge — Fix Missing RLS Policies
 -- Version: 20260914000001
 -- Fixes:
 --   1. Cards table was missing INSERT and UPDATE policies for users

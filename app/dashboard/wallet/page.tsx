@@ -15,7 +15,7 @@ export default function WalletPage() {
 
   const handleExportStatement = () => {
     const content =
-      "IRON BRIDGE BANKING PLC — CASH TREASURY AUDIT STATEMENT\n" +
+      "IRON BRIDGE PLC — CASH TREASURY AUDIT STATEMENT\n" +
       `Generated: ${new Date().toUTCString()}\n` +
       `============================================================\n` +
       `Primary Cash Balance: ${formatCurrency(wallet?.balance || 0)}\n` +

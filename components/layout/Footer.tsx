@@ -113,13 +113,13 @@ export function Footer() {
       <div className="border-t border-slate-200 bg-slate-100/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4 text-xs text-slate-600 leading-relaxed">
           <p>
-            <strong className="text-slate-900 font-semibold">Regulatory &amp; Security Disclosure:</strong> Iron Bridge Banking is a premier digital banking platform providing corporate treasury, private wealth management, and commercial settlement solutions. All digital infrastructure and treasury vaults operate under zero-trust protocols and multi-institution security architectures.
+            <strong className="text-slate-900 font-semibold">Regulatory &amp; Security Disclosure:</strong> Iron Bridge is a premier digital banking platform providing corporate treasury, private wealth management, and commercial settlement solutions. All digital infrastructure and treasury vaults operate under zero-trust protocols and multi-institution security architectures.
           </p>
           <p>
             <strong className="text-slate-900 font-semibold">Lending &amp; Investment Risk Warning:</strong> Mortgages, loans, and credit facilities are subject to status and affordability assessment. Your home or property may be repossessed if you do not keep up repayments on your mortgage or other debt secured on it. Discretionary portfolio investments and foreign exchange contracts may fluctuate in value; past performance is no guarantee of future returns.
           </p>
           <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-600 text-[11px] font-medium">
-            <p>&copy; {new Date().getFullYear()} Iron Bridge Banking Ltd. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Iron Bridge Ltd. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <Link href="/privacy" className="hover:text-amber-600 transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-amber-600 transition-colors">Terms of Service</Link>

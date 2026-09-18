@@ -1,5 +1,5 @@
 -- =============================================================
--- Iron Bridge Banking — Banking Platform Tables Migration
+-- Iron Bridge — Banking Platform Tables Migration
 -- Version: 20260803000002
 -- Additive only — no existing tables modified
 -- =============================================================

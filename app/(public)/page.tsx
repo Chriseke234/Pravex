@@ -57,7 +57,7 @@ function HeroSection() {
 
         <AnimateIn delay={200}>
           <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
-            Iron Bridge Banking delivers sophisticated personal banking, private wealth management, commercial financing, and competitive credit solutions.
+            Iron Bridge delivers sophisticated personal banking, private wealth management, commercial financing, and competitive credit solutions.
           </p>
         </AnimateIn>
 
@@ -176,7 +176,7 @@ function PillarsGrid() {
         </AnimateIn>
         <AnimateIn delay={100}>
           <p className="text-slate-600 max-w-2xl mx-auto text-base md:text-lg">
-            Whether you need a daily current account or complex international trade finance, Iron Bridge Banking has a solution engineered for you.
+            Whether you need a daily current account or complex international trade finance, Iron Bridge has a solution engineered for you.
           </p>
         </AnimateIn>
       </div>
@@ -262,7 +262,7 @@ function Testimonials() {
     {
       name: "Marcus Vance",
       role: "Managing Director, Vance Group",
-      quote: "Iron Bridge Banking's Trade Finance team processed our cross-border machinery letter of credit in under 24 hours. Phenomenal efficiency.",
+      quote: "Iron Bridge's Trade Finance team processed our cross-border machinery letter of credit in under 24 hours. Phenomenal efficiency.",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80",
     },
     {

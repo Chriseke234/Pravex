@@ -67,7 +67,7 @@ export default function APIKeysPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">API Management</h1>
-          <p className="text-muted-foreground">Provision secure keys for programmatic access to the Iron Bridge Banking infrastructure.</p>
+          <p className="text-muted-foreground">Provision secure keys for programmatic access to the Iron Bridge infrastructure.</p>
         </div>
         <Button variant="premium" className="gap-2" onClick={() => setShowNewKeyModal(true)}>
           <Plus className="w-4 h-4" /> Create New Key
@@ -139,7 +139,7 @@ export default function APIKeysPage() {
             <h3 className="text-xl font-bold">API Documentation</h3>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Integrate Iron Bridge Banking into your proprietary trading systems, order management software, or institutional custodians. 
+            Integrate Iron Bridge into your proprietary trading systems, order management software, or institutional custodians. 
             Supports REST and WebSocket streams.
           </p>
           <Button variant="outline" className="w-full gap-2">

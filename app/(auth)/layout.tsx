@@ -61,7 +61,7 @@ export default function AuthLayout({
 
         {/* Footer */}
         <div className="relative z-10 text-xs text-slate-600">
-          &copy; {new Date().getFullYear()} Iron Bridge Banking. All rights reserved.
+          &copy; {new Date().getFullYear()} Iron Bridge. All rights reserved.
         </div>
       </div>
 

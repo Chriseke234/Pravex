@@ -2,7 +2,7 @@
 
 export const metadata: Metadata = {
   title: "Open Institutional Account",
-  description: "Start your institutional investment journey with Iron Bridge Banking.",
+  description: "Start your institutional investment journey with Iron Bridge.",
   alternates: {
     canonical: "/signup",
   },

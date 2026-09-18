@@ -135,7 +135,7 @@ export default function AboutPage() {
             <div className="lg:col-span-6 space-y-6 text-muted-foreground text-lg leading-relaxed pt-2">
               <AnimateIn direction="up" delay={100}>
                 <p>
-                  Iron Bridge Banking was founded in 2020 by a group of veteran financial systems engineers and quantitative traders who saw a critical gap in the market. While digital assets promised to revolutionize global capital markets, the underlying infrastructure lacked the safety, predictability, and compliance required by institutional allocators.
+                  Iron Bridge was founded in 2020 by a group of veteran financial systems engineers and quantitative traders who saw a critical gap in the market. While digital assets promised to revolutionize global capital markets, the underlying infrastructure lacked the safety, predictability, and compliance required by institutional allocators.
                 </p>
               </AnimateIn>
               <AnimateIn direction="up" delay={200}>
@@ -145,7 +145,7 @@ export default function AboutPage() {
               </AnimateIn>
               <AnimateIn direction="up" delay={300}>
                 <p>
-                  Today, Iron Bridge Banking is a leading digital capital operating system, securing billions of dollars in transaction volume. Our platform enables institutions to access deep aggregated liquidity, manage multi-party approval custody workflows, and execute trading strategies with absolute operational certainty.
+                  Today, Iron Bridge is a leading digital capital operating system, securing billions of dollars in transaction volume. Our platform enables institutions to access deep aggregated liquidity, manage multi-party approval custody workflows, and execute trading strategies with absolute operational certainty.
                 </p>
               </AnimateIn>
             </div>
@@ -261,7 +261,7 @@ export default function AboutPage() {
           <AnimateIn direction="up" delay={400}>
             <div className="bg-card/[0.02] border border-border/20 p-6 rounded-2xl max-w-3xl mx-auto text-center">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Iron Bridge Banking Ltd is authorised and regulated by the Financial Conduct Authority (FCA), reference number XXXXXXX.
+                Iron Bridge Ltd is authorised and regulated by the Financial Conduct Authority (FCA), reference number XXXXXXX.
               </p>
             </div>
           </AnimateIn>
