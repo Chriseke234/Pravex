@@ -69,12 +69,6 @@ function HeroSection() {
             >
               Open Account <ArrowRight className="w-5 h-5" />
             </Link>
-            <Link
-              href="/contact"
-              className="flex items-center justify-center gap-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-900 font-bold py-4 px-8 rounded-xl transition-all duration-200 hover:scale-[1.02] shadow-sm"
-            >
-              Talk to a Manager
-            </Link>
           </div>
         </AnimateIn>
 
