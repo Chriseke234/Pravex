@@ -85,7 +85,7 @@ export default function AdminRolesPage() {
         >
           <option value="user">User (Standard Member)</option>
           <option value="admin">Admin (Desk Operator)</option>
-          <option value="super_admin">Super Admin (Root Authority)</option>
+          <option value="superuser">Super Admin (Root Authority)</option>
         </select>
       ),
     },
