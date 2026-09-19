@@ -247,10 +247,10 @@ export function Sidebar() {
               <SectionLabel accent>Administration</SectionLabel>
               <ul className="space-y-0.5">
                 <NavLink
-                  href="/admin"
+                  href={profile?.role === "admin" ? "/admin/users" : "/super-admin"}
                   icon={Shield}
-                  label="Super Admin Panel"
-                  active={isActive("/admin")}
+                  label={profile?.role === "admin" ? "Admin Panel" : "Super Admin Panel"}
+                  active={isActive("/admin") || isActive("/super-admin")}
                   onClickMobile={mobileClose}
                 />
               </ul>

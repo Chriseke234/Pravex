@@ -19,15 +19,10 @@ const navLinks = [
   {
     section: "Platform Control",
     items: [
-      { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/super-admin", label: "Super Admin Desk", icon: LayoutDashboard },
       { href: "/admin/users", label: "User Management", icon: Users },
-      { href: "/admin/transactions", label: "Audit & Logs", icon: Activity },
-    ],
-  },
-  {
-    section: "Risk & Compliance",
-    items: [
-      { href: "/admin/compliance", label: "KYC Verifications", icon: ShieldCheck },
+      { href: "/admin/transactions", label: "Transaction History", icon: Activity },
+      { href: "/admin/monitoring", label: "System Monitoring", icon: ShieldCheck },
     ],
   },
 ];
@@ -43,7 +38,7 @@ export default function AdminLayout({
     <>
       {/* Logo */}
       <div className="p-5 border-b border-white/5 flex items-center justify-between">
-        <Logo size="sm" href="/admin" />
+        <Logo size="sm" href="/admin/users" />
         <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
           Admin
         </span>
@@ -130,7 +125,7 @@ export default function AdminLayout({
           >
             <Menu className="w-5 h-5" />
           </button>
-          <Logo size="sm" href="/admin" />
+          <Logo size="sm" href="/admin/users" />
           <span className="ml-auto text-[10px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
             Admin
           </span>
