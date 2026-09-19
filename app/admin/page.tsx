@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function AdminRootPage() {
+export default async function AdminRootRedirectPage() {
   const supabase = await createClient();
   const {
     data: { user },
