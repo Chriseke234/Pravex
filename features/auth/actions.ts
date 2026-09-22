@@ -38,6 +38,7 @@ export async function signup(prevState: any, formData: FormData) {
       data: {
         first_name: firstName,
         last_name: lastName,
+        full_name: `${firstName || ''} ${lastName || ''}`.trim() || undefined,
         role: 'user', // Default role
       },
     },
