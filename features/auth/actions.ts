@@ -45,7 +45,17 @@ export async function signup(prevState: any, formData: FormData) {
   })
 
   if (error) {
-    return { error: error.message }
+    const isRateLimit = error.message.toLowerCase().includes('rate limit') || error.message.toLowerCase().includes('rate_limit');
+    if (isRateLimit) {
+      // Auto log-in fallback if Supabase rate-limited the confirmation email
+      const { error: loginErr } = await supabase.auth.signInWithPassword({ email, password });
+      if (!loginErr) {
+        revalidatePath('/', 'layout');
+        redirect('/dashboard');
+      }
+      return { success: 'Account created! Please log in with your credentials.' };
+    }
+    return { error: error.message };
   }
 
   revalidatePath('/', 'layout')

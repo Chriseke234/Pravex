@@ -24,7 +24,9 @@ import {
   XCircle,
   DollarSign,
   ArrowDownLeft,
-  ArrowUpRight
+  ArrowUpRight,
+  Trash2,
+  ShieldAlert
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -65,6 +67,7 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
   const [showIncreaseBalanceModal, setShowIncreaseBalanceModal] = useState(false);
   const [showCreateTxModal, setShowCreateTxModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editingTx, setEditingTx] = useState<WalletTx | null>(null);
 
   // Form States - Increase Balance
@@ -363,6 +366,24 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
     }
   });
 
+  // Permanently delete user account
+  const deleteUserMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      const { error: rpcErr } = await supabase.rpc("delete_user_by_admin", { target_user_id: userId });
+      if (rpcErr) {
+        // Fallback: Delete profile directly if RPC function not yet applied
+        const { error: profErr } = await supabase.from("profiles").delete().eq("id", userId);
+        if (profErr) throw profErr;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-users-list"] });
+      queryClient.invalidateQueries({ queryKey: ["super-admin-users"] });
+      setShowDeleteModal(false);
+      setSelectedUser(null);
+    },
+  });
+
   if (usersQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -506,6 +527,15 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                         >
                           {user.suspended ? <UserCheck className="w-4 h-4" /> : <Ban className="w-4 h-4" />}
                         </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 rounded-lg border border-white/5 text-rose-400 hover:bg-rose-500/20"
+                          onClick={() => { setSelectedUser(user); setErrorMsg(""); setShowDeleteModal(true); }}
+                          title="Permanently Delete User Account"
+                        >
+                          <Trash2 className="w-4 h-4 text-rose-400" />
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -623,6 +653,14 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                 >
                   {user.suspended ? <UserCheck className="w-3.5 h-3.5" /> : <Ban className="w-3.5 h-3.5" />}
                   {user.suspended ? "Activate" : "Suspend"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 text-xs text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 rounded-xl gap-1.5 justify-center col-span-2 w-full"
+                  onClick={() => { setSelectedUser(user); setErrorMsg(""); setShowDeleteModal(true); }}
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Delete Account
                 </Button>
               </div>
             </GlassCard>
@@ -1010,6 +1048,61 @@ export function UserTable({ isAdminOnly = false }: UserTableProps) {
                   </div>
                 </>
               )}
+            </div>
+          </GlassCard>
+        </div>
+      )}
+      {/* ── MODAL 4: DELETE USER CONFIRMATION ───────────────────── */}
+      {showDeleteModal && selectedUser && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+          <GlassCard className="max-w-md w-full p-6 space-y-6 relative border-rose-500/30">
+            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+              <h2 className="text-base font-bold flex items-center gap-2 text-rose-500">
+                <Trash2 className="w-5 h-5" /> Delete Account Permanently
+              </h2>
+              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setShowDeleteModal(false)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl space-y-2">
+                <div className="flex items-center gap-2 font-bold text-rose-400 text-sm">
+                  <ShieldAlert className="w-4 h-4 shrink-0" /> Irreversible Action Warning
+                </div>
+                <p className="text-slate-300 leading-relaxed">
+                  You are about to permanently delete the account for <strong className="text-white">{selectedUser.full_name || selectedUser.email}</strong> (<span className="font-mono text-slate-400">{selectedUser.email}</span>).
+                </p>
+                <p className="text-rose-400 font-semibold">
+                  This will wipe out all user profiles, wallets, transactions, deposits, withdrawals, and bank accounts linked to this user.
+                </p>
+              </div>
+
+              {errorMsg && (
+                <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
+                  <span className="text-xs text-rose-400">{errorMsg}</span>
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2 border-t border-white/10">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="flex-1 rounded-xl text-xs border border-white/10"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  className="flex-1 rounded-xl text-xs bg-rose-600 hover:bg-rose-500 text-white font-bold"
+                  disabled={deleteUserMutation.isPending}
+                  onClick={() => deleteUserMutation.mutate(selectedUser.id)}
+                >
+                  {deleteUserMutation.isPending ? "Deleting..." : "Confirm Delete"}
+                </Button>
+              </div>
             </div>
           </GlassCard>
         </div>
